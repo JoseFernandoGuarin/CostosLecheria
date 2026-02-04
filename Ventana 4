@@ -1,0 +1,22 @@
+<section class="container">
+  <h1>Sanidad y reproducción</h1>
+
+  <div class="group">
+    <label>Costo anual de sanidad ($)</label>
+    <input type="number" id="sanidad" value="18000000" step="500000">
+
+    <label>Costo anual de reproducción ($)</label>
+    <input type="number" id="repro" value="12000000" step="500000">
+  </div>
+
+  <div class="results">
+    <p><strong>Total anual:</strong> $<span id="san_total">0</span></p>
+  </div>
+</section>
+
+<script>
+function calcSan(){
+  san_total.textContent=((+sanidad.value||0)+(+repro.value||0)).toFixed(0);
+}
+sanidad.oninput=repro.oninput=calcSan; calcSan();
+</script>
