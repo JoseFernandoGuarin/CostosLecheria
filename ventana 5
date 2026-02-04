@@ -1,0 +1,23 @@
+<section class="container">
+  <h1>Costos indirectos y administrativos</h1>
+
+  <div class="group">
+    <label>Energía ($/año)</label><input type="number" id="ene" value="9000000">
+    <label>Agua ($/año)</label><input type="number" id="agua" value="3500000">
+    <label>Mantenimiento ($/año)</label><input type="number" id="mant" value="12000000">
+    <label>Combustible ($/año)</label><input type="number" id="comb" value="8000000">
+    <label>Administración ($/año)</label><input type="number" id="adm" value="10000000">
+  </div>
+
+  <div class="results">
+    <p><strong>Total anual:</strong> $<span id="ind_total">0</span></p>
+  </div>
+</section>
+
+<script>
+function calcInd(){
+  ind_total.textContent=(+ene.value+ +agua.value+ +mant.value+ +comb.value+ +adm.value).toFixed(0);
+}
+document.querySelectorAll("#ene,#agua,#mant,#comb,#adm").forEach(e=>e.oninput=calcInd);
+calcInd();
+</script>
