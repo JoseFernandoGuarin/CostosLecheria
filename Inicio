@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Costeo Hacienda Lechera – Inicio</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f7f7f7;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.08);
+    }
+    h1 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 10px;
+    }
+    .group {
+      margin-bottom: 25px;
+    }
+    .group h2 {
+      font-size: 1.1em;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+    }
+    .results {
+      background-color: #eef5ff;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    .note {
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Inicio – Caracterización del sistema productivo</h1>
+
+  <div class="group">
+    <h2>Identificación</h2>
+
+    <label>Nombre de la hacienda</label>
+    <input type="text" id="nombreHacienda" value="Hacienda La Montaña – UdeA">
+
+    <label>Año de análisis</label>
+    <input type="number" id="anio" value="2025">
+  </div>
+
+  <div class="group">
+    <h2>Tipo de sistema productivo</h2>
+
+    <label>Sistema</label>
+    <select id="sistema">
+      <option value="especializado">Especializado en leche</option>
+      <option value="doble">Doble propósito</option>
+      <option value="academico" selected>Académico / experimental</option>
+    </select>
+  </div>
+
+  <div class="group">
+    <h2>Escala y productividad</h2>
+
+    <label>Vacas en ordeño promedio</label>
+    <input type="number" id="vacas" value="120" min="1">
+
+    <label>Producción promedio por vaca (L/vaca/día)</label>
+    <input type="number" id="prodVaca" value="22" step="0.1" min="0">
+
+    <label>Días de producción al año</label>
+    <input type="number" id="dias" value="365" min="1">
+  </div>
+
+  <div class="results">
+    <h2>Producción estimada</h2>
+    <p><strong>Producción diaria total:</strong> <span id="prodDiaria">0</span> L/día</p>
+    <p><strong>Producción anual total:</strong> <span id="prodAnual">0</span> L/año</p>
+  </div>
+
+  <p class="note">
+    Los valores precargados corresponden a un sistema universitario real y se presentan
+    únicamente como referencia para orientar al usuario sobre el tipo y magnitud de los datos requeridos.
+  </p>
+
+</div>
+
+<script>
+  function calcularProduccion() {
+    const vacas = parseFloat(document.getElementById("vacas").value) || 0;
+    const prodVaca = parseFloat(document.getElementById("prodVaca").value) || 0;
+    const dias = parseFloat(document.getElementById("dias").value) || 0;
+
+    const diaria = vacas * prodVaca;
+    const anual = diaria * dias;
+
+    document.getElementById("prodDiaria").innerText = diaria.toFixed(1);
+    document.getElementById("prodAnual").innerText = anual.toFixed(0);
+  }
+
+  document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", calcularProduccion);
+  });
+
+  calcularProduccion();
+</script>
+
+</body>
+</html>
