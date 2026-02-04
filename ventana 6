@@ -1,0 +1,29 @@
+<section class="container">
+  <h1>Resultados económicos</h1>
+
+  <div class="results">
+    <p><strong>Costo total anual:</strong> $<span id="ct_total">0</span></p>
+    <p><strong>Costo por litro:</strong> $<span id="ct_litro">0</span></p>
+  </div>
+
+  <p class="note">
+    El costo por litro se calcula dividiendo el costo total anual entre
+    la producción anual estimada del sistema.
+  </p>
+</section>
+
+<script>
+function calcResultados(){
+  const prodAnual = +document.getElementById("prodAnual")?.innerText||1;
+
+  const alimAnual = (+document.getElementById("costoTotal")?.innerText||0)*365;
+  const mo = +document.getElementById("mo_anual")?.innerText||0;
+  const san = +document.getElementById("san_total")?.innerText||0;
+  const ind = +document.getElementById("ind_total")?.innerText||0;
+
+  const total = alimAnual + mo + san + ind;
+  ct_total.textContent = total.toFixed(0);
+  ct_litro.textContent = (total/prodAnual).toFixed(0);
+}
+setInterval(calcResultados,1000);
+</script>
