@@ -1,0 +1,32 @@
+<section class="container">
+  <h1>Mano de obra</h1>
+
+  <div class="group">
+    <label>Número de empleados</label>
+    <input type="number" id="mo_n" value="6" min="0">
+
+    <label>Salario mensual promedio ($)</label>
+    <input type="number" id="mo_sal" value="1800000" step="50000">
+
+    <label>Prestaciones (%)</label>
+    <input type="number" id="mo_prest" value="35" step="1">
+  </div>
+
+  <div class="results">
+    <p><strong>Costo mensual total:</strong> $<span id="mo_mensual">0</span></p>
+    <p><strong>Costo anual total:</strong> $<span id="mo_anual">0</span></p>
+  </div>
+</section>
+
+<script>
+function calcMO(){
+  const n = +mo_n.value||0;
+  const sal = +mo_sal.value||0;
+  const p = (+mo_prest.value||0)/100;
+  const mensual = n*sal*(1+p);
+  mo_mensual.textContent = mensual.toFixed(0);
+  mo_anual.textContent = (mensual*12).toFixed(0);
+}
+document.querySelectorAll("#mo_n,#mo_sal,#mo_prest").forEach(e=>e.oninput=calcMO);
+calcMO();
+</script>
