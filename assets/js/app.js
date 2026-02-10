@@ -1,0 +1,1 @@
+console.log('App Hacienda La Montaña cargada');
