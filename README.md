@@ -1,5 +1,7 @@
 # Hacienda La Montaña – App de Gestión
 
+ https://josefernandoguarin.github.io/CostosLecheria/
+ 
 Aplicación web para la **gestión operativa y financiera** de la Hacienda La Montaña, desarrollada como proyecto académico y administrativo de la **Facultad de Ciencias Agrarias de la Universidad de Antioquia**.
 
 El sitio está diseñado como una **app web estática**, alojable en **GitHub Pages**, con una estructura clara y escalable para integrar procesos como ingresos, egresos, cuentas y reportes.
