@@ -1,0 +1,55 @@
+<section id="resultados-module">
+  <h2>Módulo de Resultados</h2>
+
+  <h3>Período de análisis</h3>
+  <div class="periodo">
+    <label>
+      Año
+      <input type="number" id="anio-res" value="2026" min="2000" max="2100">
+    </label>
+
+    <label>
+      Mes
+      <select id="mes-res">
+        <option value="">Seleccione</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+    </label>
+
+    <button id="calcular-resultados">Calcular resultados</button>
+  </div>
+
+  <h3>Resumen económico</h3>
+
+  <table class="tabla-resultados">
+    <tr>
+      <th>Ingresos totales</th>
+      <td id="res-ingresos">$0</td>
+    </tr>
+    <tr>
+      <th>Egresos totales</th>
+      <td id="res-egresos">$0</td>
+    </tr>
+    <tr>
+      <th>Resultado neto</th>
+      <td id="res-neto">$0</td>
+    </tr>
+    <tr>
+      <th>Margen (%)</th>
+      <td id="res-margen">0%</td>
+    </tr>
+  </table>
+
+  <button id="exportar-resultados">Exportar CSV</button>
+</section>
