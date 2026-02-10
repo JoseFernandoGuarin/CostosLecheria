@@ -1,0 +1,55 @@
+<section id="ingresos-module">
+  <h2>Módulo de Ingresos</h2>
+
+  <form id="ingresos-form">
+    <label>
+      Fecha
+      <input type="date" id="fecha" required>
+    </label>
+
+    <label>
+      Tipo de ingreso
+      <select id="tipo" required>
+        <option value="">Seleccione</option>
+        <option value="Leche">Venta de leche</option>
+        <option value="Animales">Venta de animales</option>
+        <option value="Subproductos">Subproductos</option>
+        <option value="Otros">Otros</option>
+      </select>
+    </label>
+
+    <label>
+      Cantidad
+      <input type="number" id="cantidad" step="0.01" required>
+    </label>
+
+    <label>
+      Precio unitario
+      <input type="number" id="precio" step="0.01" required>
+    </label>
+
+    <label>
+      Observación
+      <input type="text" id="obs">
+    </label>
+
+    <button type="submit">Registrar ingreso</button>
+  </form>
+
+  <h3>Ingresos registrados</h3>
+
+  <table id="tabla-ingresos">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Cantidad</th>
+        <th>Precio</th>
+        <th>Total</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Total ingresos: <span id="total-ingresos">$0</span></h3>
+</section>
