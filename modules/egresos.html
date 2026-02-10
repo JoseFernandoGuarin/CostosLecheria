@@ -1,0 +1,94 @@
+<section id="egresos-module">
+  <h2>Módulo de Egresos (Costos)</h2>
+
+  <h3>Período contable</h3>
+  <div class="periodo">
+    <label>
+      Año
+      <input type="number" id="anio-egreso" value="2026" min="2000" max="2100" required>
+    </label>
+
+    <label>
+      Mes
+      <select id="mes-egreso" required>
+        <option value="">Seleccione</option>
+        <option value="1">Enero</option>
+        <option value="2">Febrero</option>
+        <option value="3">Marzo</option>
+        <option value="4">Abril</option>
+        <option value="5">Mayo</option>
+        <option value="6">Junio</option>
+        <option value="7">Julio</option>
+        <option value="8">Agosto</option>
+        <option value="9">Septiembre</option>
+        <option value="10">Octubre</option>
+        <option value="11">Noviembre</option>
+        <option value="12">Diciembre</option>
+      </select>
+    </label>
+  </div>
+
+  <h3>Registro de egresos</h3>
+
+  <form id="egresos-form">
+    <label>
+      Fecha
+      <input type="date" id="fecha-egreso" required>
+    </label>
+
+    <label>
+      Tipo de costo
+      <select id="tipo-costo" required>
+        <option value="">Seleccione</option>
+        <option value="Directo">Directo</option>
+        <option value="Indirecto">Indirecto</option>
+      </select>
+    </label>
+
+    <label>
+      Categoría
+      <select id="categoria" required>
+        <option value="">Seleccione</option>
+        <option value="Alimentación">Alimentación</option>
+        <option value="Mano de obra">Mano de obra</option>
+        <option value="Sanidad">Sanidad</option>
+        <option value="Reproducción">Reproducción</option>
+        <option value="Energía">Energía y servicios</option>
+        <option value="Mantenimiento">Mantenimiento</option>
+        <option value="Administración">Administración</option>
+        <option value="Otros">Otros</option>
+      </select>
+    </label>
+
+    <label>
+      Descripción
+      <input type="text" id="descripcion">
+    </label>
+
+    <label>
+      Valor
+      <input type="number" id="valor" step="0.01" value="500000" required>
+    </label>
+
+    <button type="submit">Registrar egreso</button>
+  </form>
+
+  <h3>Egresos registrados</h3>
+
+  <table id="tabla-egresos">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Tipo</th>
+        <th>Categoría</th>
+        <th>Descripción</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <h3>Total de egresos del período: <span id="total-egresos">$0</span></h3>
+
+  <button id="exportar-egresos">Exportar CSV</button>
+</section>
