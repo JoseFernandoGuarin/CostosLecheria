@@ -1,33 +1,55 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Hacienda La Montaña – Gestión</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hacienda La Montaña – App de Gestión</title>
+
+  <!-- CSS -->
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
+
 <body>
-  <header>
-    <img src="assets/img/udea.png" alt="Universidad de Antioquia">
-    <img src="assets/img/facultad.png" alt="Facultad de Ciencias Agrarias">
-    <h1>App de Gestión – Hacienda La Montaña</h1>
+
+  <header class="header">
+    <div class="header-logos">
+      <img src="assets/img/udea.png" alt="Universidad de Antioquia">
+      <img src="assets/img/facultad.png" alt="Facultad de Ciencias Agrarias">
+    </div>
+    <h1>App de Gestión<br>Hacienda La Montaña</h1>
   </header>
 
-  <nav>
-    <ul>
-      <li><a href="#ingresos">Ingresos</a></li>
-      <li><a href="#egresos">Egresos</a></li>
-      <li><a href="#cuentas">Cuentas</a></li>
-      <li><a href="#reportes">Reportes</a></li>
-    </ul>
+  <nav class="nav">
+    <a href="#ingresos">Ingresos</a>
+    <a href="#egresos">Egresos</a>
+    <a href="#cuentas">Cuentas</a>
+    <a href="#reportes">Reportes</a>
   </nav>
 
-  <main>
-    <section id="ingresos"><h2>Ingresos</h2></section>
-    <section id="egresos"><h2>Egresos</h2></section>
-    <section id="cuentas"><h2>Cuentas</h2></section>
-    <section id="reportes"><h2>Exportar Información</h2></section>
+  <main class="main">
+    <section id="ingresos">
+      <h2>Ingresos</h2>
+      <p>Registro de entradas económicas.</p>
+    </section>
+
+    <section id="egresos">
+      <h2>Egresos</h2>
+      <p>Registro de salidas y gastos.</p>
+    </section>
+
+    <section id="cuentas">
+      <h2>Cuentas</h2>
+      <p>Consolidado de cuentas y balances.</p>
+    </section>
+
+    <section id="reportes">
+      <h2>Reportes</h2>
+      <p>Exportación de información financiera.</p>
+    </section>
   </main>
 
+  <!-- JS -->
   <script src="assets/js/app.js"></script>
+
 </body>
 </html>
