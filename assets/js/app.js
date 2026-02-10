@@ -18,3 +18,12 @@ fetch("modules/egresos.html")
     script.src = "assets/js/egresos.js";
     document.body.appendChild(script);
   });
+fetch("modules/resultados.html")
+  .then(r => r.text())
+  .then(html => {
+    document.getElementById("modulo-resultados").innerHTML = html;
+
+    const script = document.createElement("script");
+    script.src = "assets/js/resultados.js";
+    document.body.appendChild(script);
+  });
