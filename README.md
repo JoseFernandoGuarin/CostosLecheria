@@ -1,108 +1,5285 @@
-# Hacienda La Montaña – App de Gestión
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Costos - Hacienda La Montaña</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ========================================
+       SECCIÓN 1: VARIABLES Y RESET
+       ======================================== */
+    
+    :root {
+      --verde-udea: #006341;
+      --verde-claro: #00854d;
+      --verde-oscuro: #004a2f;
+      --crema: #f8f6f0;
+      --gris-claro: #e8e6e0;
+      --gris-medio: #6b7280;
+      --negro: #1a1a1a;
+      --blanco: #ffffff;
+      --azul: #3b82f6;
+      --amarillo: #f59e0b;
+      --rojo: #ef4444;
+      
+      --sombra: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --sombra-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      
+      --font-display: 'Crimson Pro', serif;
+      --font-body: 'Work Sans', sans-serif;
+    }
 
- https://josefernandoguarin.github.io/CostosLecheria/
- 
-# Instalación del Sistema Hacienda La Montaña
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
- - Guía completa de desarrollo
+    body {
+      font-family: var(--font-body);
+      background: var(--crema);
+      color: var(--negro);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
----
+    /* ========================================
+       SECCIÓN 2: HEADER Y NAVEGACIÓN
+       ======================================== */
+
+    .header {
+      background: linear-gradient(135deg, var(--verde-udea) 0%, var(--verde-oscuro) 100%);
+      color: var(--blanco);
+      padding: 2rem 2rem 3rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .logos {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .logo-container {
+      background: var(--blanco);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .logo-container:hover {
+      transform: translateY(-2px);
+    }
+
+    .header-title {
+      text-align: center;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .header-title h1 {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .header-title p {
+      font-size: 1.125rem;
+      opacity: 0.95;
+      font-weight: 400;
+    }
+
+    .user-info {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 0.875rem;
+      white-space: nowrap;
+    }
+
+    .nav-bar {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--gris-claro);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .nav-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--gris-medio);
+    }
+
+    .nav-breadcrumb a {
+      color: var(--verde-udea);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-breadcrumb a:hover {
+      color: var(--verde-claro);
+    }
+
+    .nav-breadcrumb span {
+      opacity: 0.5;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 1rem;
+    }
+
+    /* ========================================
+       SECCIÓN 3: BOTONES Y ELEMENTOS UI
+       ======================================== */
+
+    .btn {
+      padding: 0.625rem 1.25rem;
+      border: none;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: var(--verde-udea);
+      color: var(--blanco);
+    }
+
+    .btn-primary:hover {
+      background: var(--verde-claro);
+      transform: translateY(-1px);
+      box-shadow: var(--sombra);
+    }
+
+    .btn-secondary {
+      background: var(--gris-claro);
+      color: var(--negro);
+    }
+
+    .btn-secondary:hover {
+      background: #d1cfc9;
+    }
+
+    .btn-danger {
+      background: var(--rojo);
+      color: var(--blanco);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    .btn-small {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+    }
+
+    .btn-icon {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      transition: transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon:hover {
+      transform: scale(1.2);
+    }
+
+    /* ========================================
+       SECCIÓN 4: CONTENEDOR PRINCIPAL
+       ======================================== */
+
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .dashboard-header {
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.6s ease;
+    }
+
+    .dashboard-title {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--negro);
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard-subtitle {
+      color: var(--gris-medio);
+      font-size: 1rem;
+    }
+
+    /* ========================================
+       SECCIÓN 5: TARJETAS DE MÓDULOS
+       ======================================== */
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.5rem;
+      animation: fadeIn 0.8s ease;
+    }
+
+    .module-card {
+      background: var(--blanco);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: var(--sombra);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid transparent;
+    }
+
+    .module-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--verde-udea);
+      transform: scaleY(0);
+      transition: transform 0.3s ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sombra-lg);
+      border-color: var(--verde-udea);
+    }
+
+    .module-card:hover::before {
+      transform: scaleY(1);
+    }
+
+    .module-icon {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--verde-udea), var(--verde-claro));
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 4px 12px rgba(0, 99, 65, 0.2);
+    }
+
+    .module-title {
+      font-family: var(--font-display);
+      font-size: 1.375rem;
+      font-weight: 600;
+      color: var(--negro);
+      margin-bottom: 0.5rem;
+    }
+
+    .module-description {
+      color: var(--gris-medio);
+      font-size: 0.875rem;
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    .module-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid var(--gris-claro);
+    }
+
+    .module-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--verde-udea);
+    }
+
+    .status-dot.pending {
+      background: #f59e0b;
+    }
+
+    .module-arrow {
+      color: var(--verde-udea);
+      font-size: 1.25rem;
+      transition: transform 0.3s ease;
+    }
+
+    .module-card:hover .module-arrow {
+      transform: translateX(4px);
+    }
+
+    /* ========================================
+       SECCIÓN 6: ESTADÍSTICAS
+       ======================================== */
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+
+    .stat-card {
+      background: var(--blanco);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--verde-udea), var(--verde-claro));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .stat-content {
+      flex: 1;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--gris-medio);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--negro);
+      line-height: 1;
+    }
+
+    .stat-subtitle {
+      font-size: 0.75rem;
+      color: var(--gris-medio);
+      margin-top: 0.5rem;
+    }
+
+    /* ========================================
+       SECCIÓN 7: TABS Y TARJETAS
+       ======================================== */
+
+    .tabs {
+      background: var(--blanco);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--sombra);
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-button {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid transparent;
+      background: transparent;
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--gris-medio);
+    }
+
+    .tab-button:hover {
+      background: var(--crema);
+      color: var(--negro);
+    }
+
+    .tab-button.active {
+      background: var(--verde-udea);
+      color: var(--blanco);
+      border-color: var(--verde-udea);
+    }
+
+    .content-section {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--blanco);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: var(--sombra);
+      margin-bottom: 2rem;
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--negro);
+    }
+
+    /* ========================================
+       SECCIÓN 8: FORMULARIOS
+       ======================================== */
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--negro);
+    }
+
+    .form-group label .required {
+      color: var(--rojo);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 0.75rem;
+      border: 2px solid var(--gris-claro);
+      border-radius: 8px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      transition: all 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--verde-udea);
+      box-shadow: 0 0 0 3px rgba(0, 99, 65, 0.1);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 1.5rem;
+    }
+
+    /* ========================================
+       SECCIÓN 9: FILTROS Y TABLAS
+       ======================================== */
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .filter-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gris-medio);
+    }
+
+    .filter-group select,
+    .filter-group input {
+      padding: 0.5rem 1rem;
+      border: 2px solid var(--gris-claro);
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--gris-claro);
+      margin-bottom: 1rem;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--blanco);
+    }
+
+    .data-table thead {
+      background: var(--verde-udea);
+      color: var(--blanco);
+    }
+
+    .data-table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      white-space: nowrap;
+    }
+
+    .data-table td {
+      padding: 1rem;
+      border-top: 1px solid var(--gris-claro);
+    }
+
+    .data-table tbody tr:hover {
+      background: var(--crema);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    /* ========================================
+       SECCIÓN 10: BADGES Y ESTADOS
+       ======================================== */
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .badge-cria { background: #dbeafe; color: #1e40af; }
+    .badge-recria { background: #e0e7ff; color: #4338ca; }
+    .badge-levante { background: #fef3c7; color: #92400e; }
+    .badge-novilla { background: #fce7f3; color: #9f1239; }
+    .badge-produccion { background: #d1fae5; color: #065f46; }
+    .badge-secas { background: #f3f4f6; color: #374151; }
+    .badge-activo { background: #d1fae5; color: #065f46; }
+    .badge-vendido { background: #fee2e2; color: #991b1b; }
+    .badge-muerto { background: #f3f4f6; color: #374151; }
+
+    /* ========================================
+       SECCIÓN 11: EMPTY STATES Y MODALES
+       ======================================== */
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem 2rem;
+      color: var(--gris-medio);
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    .empty-state h3 {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: var(--negro);
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--blanco);
+      border-radius: 16px;
+      padding: 2rem;
+      max-width: 600px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--sombra-lg);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--gris-medio);
+      padding: 0.25rem;
+    }
+
+    .modal-close:hover {
+      color: var(--negro);
+    }
+
+    /* ========================================
+       SECCIÓN 12: NOTIFICACIONES
+       ======================================== */
+
+    .notification {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: var(--blanco);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: var(--sombra-lg);
+      border-left: 4px solid var(--verde-udea);
+      z-index: 1000;
+      animation: slideIn 0.3s ease;
+      max-width: 400px;
+    }
+
+    .notification.success {
+      border-left-color: #10b981;
+    }
+
+    .notification.error {
+      border-left-color: var(--rojo);
+    }
+
+    .notification.warning {
+      border-left-color: var(--amarillo);
+    }
+
+    /* ========================================
+       SECCIÓN 13: ANIMACIONES
+       ======================================== */
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* ========================================
+       SECCIÓN 14: RESPONSIVE
+       ======================================== */
+
+    @media (max-width: 768px) {
+      .header {
+        padding: 1.5rem 1rem 2rem;
+      }
+
+      .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .header-title h1 {
+        font-size: 2rem;
+      }
+
+      .logos {
+        width: 100%;
+      }
+
+      .logo-container {
+        flex: 1;
+        min-width: 140px;
+      }
+
+      .nav-bar {
+        padding: 1rem;
+      }
+
+      .nav-content {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .main-container {
+        padding: 1rem;
+      }
+
+      .modules-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        overflow-x: auto;
+      }
+
+      .notification {
+        left: 1rem;
+        right: 1rem;
+      }
+    }
+
+    /* ========================================
+       SECCIÓN 15: UTILITY CLASSES
+       ======================================== */
+
+    .hidden {
+      display: none !important;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .mt-1 { margin-top: 0.5rem; }
+    .mt-2 { margin-top: 1rem; }
+    .mt-3 { margin-top: 1.5rem; }
+    .mb-1 { margin-bottom: 0.5rem; }
+    .mb-2 { margin-bottom: 1rem; }
+    .mb-3 { margin-bottom: 1.5rem; }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       SECCIÓN HTML 1: HEADER
+       ========================================== -->
+  
+  <header class="header">
+    <div class="header-content">
+      <div class="header-top">
+        <div class="logos">
+          <div class="logo-container">
+            <div style="font-size: 2rem;">🏛️</div>
+            <div style="font-family: var(--font-display); font-size: 0.75rem; font-weight: 600; color: var(--negro); line-height: 1.3;">
+              Universidad<br>de Antioquia
+            </div>
+          </div>
+        </div>
+
+        <div class="header-title">
+          <h1>Hacienda La Montaña</h1>
+          <p>Sistema de Gestión de Costos</p>
+        </div>
+
+        <div class="user-info">
+          📅 Febrero 2026<br>
+          👤 Usuario: Admin
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       SECCIÓN HTML 2: BARRA DE NAVEGACIÓN
+       ========================================== -->
+  
+  <nav class="nav-bar">
+    <div class="nav-content">
+      <div class="nav-breadcrumb">
+        <a onclick="mostrarDashboard()">🏠 Dashboard</a>
+        <span id="breadcrumb-separator" class="hidden">›</span>
+        <span id="breadcrumb-current" class="hidden"></span>
+      </div>
+      <div class="nav-actions">
+        <button class="btn btn-secondary" onclick="mostrarDashboard()">
+          ← Volver al Dashboard
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==========================================
+       SECCIÓN HTML 3: CONTENEDOR PRINCIPAL
+       ========================================== -->
+  
+  <main class="main-container">
+    
+    <!-- ==========================================
+         VISTA DEL DASHBOARD
+         ========================================== -->
+    
+    <div id="dashboard-view">
+      
+      <!-- Estadísticas principales -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <div class="stat-label">Módulos</div>
+            <div class="stat-value">9</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-content">
+            <div class="stat-label">Configurados</div>
+            <div class="stat-value">5</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⏳</div>
+          <div class="stat-content">
+            <div class="stat-label">Pendientes</div>
+            <div class="stat-value">4</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📈</div>
+          <div class="stat-content">
+            <div class="stat-label">Progreso</div>
+            <div class="stat-value">50%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Encabezado -->
+      <div class="dashboard-header">
+        <h2 class="dashboard-title">Módulos del Sistema</h2>
+        <p class="dashboard-subtitle">Seleccione un módulo para comenzar a trabajar</p>
+      </div>
+
+      <!-- Grid de módulos -->
+      <div class="modules-grid">
+        
+        <!-- Módulo 1: Inventario de Animales -->
+        <div class="module-card" onclick="abrirModulo('inventario')">
+          <div class="module-icon">🐄</div>
+          <h3 class="module-title">Inventario de Animales</h3>
+          <p class="module-description">Gestión de animales por etapa: Cría, Recría, Levante, Novilla Vientre, Producción y Secas.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot"></span>
+              <span>Activo</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 2: Estructura de Costos -->
+        <div class="module-card" onclick="abrirModulo('estructura-costos')">
+          <div class="module-icon">📊</div>
+          <h3 class="module-title">Estructura de Costos</h3>
+          <p class="module-description">Clasificación de costos directos e indirectos, variables y fijos por etapa del ganado.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot"></span>
+              <span>Activo</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 3: Recursos por Etapa -->
+        <div class="module-card" onclick="abrirModulo('recursos-etapa')">
+          <div class="module-icon">📋</div>
+          <h3 class="module-title">Recursos por Etapa</h3>
+          <p class="module-description">Control de recursos consumidos por cada etapa: alimentación, sanidad, mano de obra.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot "></span>
+              <span>Activo</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 4: Producción de Leche -->
+        <div class="module-card" onclick="abrirModulo('produccion-leche')">
+          <div class="module-icon">🥛</div>
+          <h3 class="module-title">Producción de Leche</h3>
+          <p class="module-description">Registro diario de producción, cálculo de costo por litro y análisis de rentabilidad.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot"></span>
+              <span>Activo</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 5: Costo de Concentrado -->
+        <div class="module-card" onclick="abrirModulo('costo-concentrado')">
+          <div class="module-icon">🌾</div>
+          <h3 class="module-title">Costo de Concentrado</h3>
+          <p class="module-description">Desglose de materias primas y cálculo del costo por kilogramo de alimento.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot"></span>
+              <span>Activo</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 6: Potreros y Pastos -->
+        <div class="module-card" onclick="abrirModulo('potreros')">
+          <div class="module-icon">🌱</div>
+          <h3 class="module-title">Potreros y Pastos</h3>
+          <p class="module-description">Gestión de potreros, fertilización, fumigación y producción de forraje verde.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot pending"></span>
+              <span>Pendiente</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 7: Personal -->
+        <div class="module-card" onclick="abrirModulo('personal')">
+          <div class="module-icon">👥</div>
+          <h3 class="module-title">Personal</h3>
+          <p class="module-description">Presupuesto de costos de personal, nómina, prestaciones y asignación a actividades.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot pending"></span>
+              <span>Pendiente</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 8: Sanidad y Reproducción -->
+        <div class="module-card" onclick="abrirModulo('sanidad')">
+          <div class="module-icon">💉</div>
+          <h3 class="module-title">Sanidad y Reproducción</h3>
+          <p class="module-description">Plan sanitario, vacunación, desparasitación, control reproductivo e inseminación.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot pending"></span>
+              <span>Pendiente</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+        <!-- Módulo 9: Reportes y Análisis -->
+        <div class="module-card" onclick="abrirModulo('reportes')">
+          <div class="module-icon">📈</div>
+          <h3 class="module-title">Reportes y Análisis</h3>
+          <p class="module-description">Dashboard ejecutivo, indicadores de gestión, comparativos y exportación de datos.</p>
+          <div class="module-meta">
+            <div class="module-status">
+              <span class="status-dot pending"></span>
+              <span>Pendiente</span>
+            </div>
+            <span class="module-arrow">→</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ==========================================
+         MÓDULO 1: INVENTARIO DE ANIMALES
+         ========================================== -->
+    
+    <div id="modulo-inventario" class="hidden">
+      
+      <!-- Estadísticas del módulo -->
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon">🐄</div>
+          <div class="stat-content">
+            <div class="stat-label">Total Animales</div>
+            <div class="stat-value" id="stat-total">0</div>
+            <div class="stat-subtitle">En todas las etapas</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🥛</div>
+          <div class="stat-content">
+            <div class="stat-label">En Producción</div>
+            <div class="stat-value" id="stat-produccion">0</div>
+            <div class="stat-subtitle">Vacas en ordeño</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📅</div>
+          <div class="stat-content">
+            <div class="stat-label">Promedio Días/Etapa</div>
+            <div class="stat-value" id="stat-promedio">0</div>
+            <div class="stat-subtitle">Duración promedio</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-content">
+            <div class="stat-label">Próximos Cambios</div>
+            <div class="stat-value" id="stat-proximos">0</div>
+            <div class="stat-subtitle">En los próximos 30 días</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab-button active" onclick="cambiarTab('registro')">
+          ➕ Registrar Animal
+        </button>
+        <button class="tab-button" onclick="cambiarTab('inventario')">
+          📋 Inventario Actual
+        </button>
+        <button class="tab-button" onclick="cambiarTab('movimientos')">
+          🔄 Movimientos
+        </button>
+        <button class="tab-button" onclick="cambiarTab('reportes')">
+          📊 Reportes
+        </button>
+      </div>
+
+      <!-- Tab 1: Registro -->
+      <div id="tab-registro" class="content-section active">
+        <div class="card">
+          <h2 class="card-title">Registrar Nuevo Animal</h2>
+          
+          <form id="form-registro">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>ID del Animal <span class="required">*</span></label>
+                <input type="text" id="animal-id" name="id" placeholder="A001" required>
+              </div>
+
+              <div class="form-group">
+                <label>Nombre/Identificación</label>
+                <input type="text" id="animal-nombre" name="nombre" placeholder="Vaca 1">
+              </div>
+
+              <div class="form-group">
+                <label>Fecha de Nacimiento <span class="required">*</span></label>
+                <input type="date" id="animal-fecha-nac" name="fecha_nacimiento" required>
+              </div>
+
+              <div class="form-group">
+                <label>Etapa Actual <span class="required">*</span></label>
+                <select id="animal-etapa" name="etapa" required>
+                  <option value="">Seleccione...</option>
+                  <option value="Cría">Cría (0-3 meses)</option>
+                  <option value="Recría">Recría (3-8 meses)</option>
+                  <option value="Levante">Levante (8-16 meses)</option>
+                  <option value="Novilla Vientre">Novilla Vientre (16 meses - Parto)</option>
+                  <option value="Producción">Producción</option>
+                  <option value="Secas">Secas</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Potrero Asignado</label>
+                <input type="text" id="animal-potrero" name="potrero" placeholder="P15-1">
+              </div>
+
+              <div class="form-group">
+                <label>Origen</label>
+                <select id="animal-origen" name="origen">
+                  <option value="">Seleccione...</option>
+                  <option value="Nacimiento">Nacimiento en la hacienda</option>
+                  <option value="Compra">Compra</option>
+                  <option value="Donación">Donación</option>
+                </select>
+              </div>
+
+              <div class="form-group full-width">
+                <label>Observaciones</label>
+                <textarea id="animal-observaciones" name="observaciones" rows="3" placeholder="Características especiales, historial médico, etc."></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="reset" class="btn btn-secondary">Limpiar</button>
+              <button type="submit" class="btn btn-primary">💾 Guardar Animal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tab 2: Inventario -->
+      <div id="tab-inventario" class="content-section">
+        <div class="card">
+          <h2 class="card-title">Inventario Actual</h2>
+          
+          <div class="filters">
+            <div class="filter-group">
+              <label>Etapa</label>
+              <select id="filter-etapa" onchange="filtrarInventario()">
+                <option value="">Todas las etapas</option>
+                <option value="Cría">Cría</option>
+                <option value="Recría">Recría</option>
+                <option value="Levante">Levante</option>
+                <option value="Novilla Vientre">Novilla Vientre</option>
+                <option value="Producción">Producción</option>
+                <option value="Secas">Secas</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Estado</label>
+              <select id="filter-estado" onchange="filtrarInventario()">
+                <option value="">Todos</option>
+                <option value="Activo">Activo</option>
+                <option value="Vendido">Vendido</option>
+                <option value="Muerto">Muerto</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Buscar</label>
+              <input type="text" id="filter-buscar" placeholder="ID o nombre..." oninput="filtrarInventario()">
+            </div>
+
+            <div style="margin-left: auto;">
+              <button class="btn btn-secondary btn-small" onclick="exportarCSV()">
+                📥 Exportar CSV
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Etapa</th>
+                  <th>Edad</th>
+                  <th>Días en Etapa</th>
+                  <th>Potrero</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-inventario">
+                <!-- Se llenará con JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="empty-inventario" class="empty-state hidden">
+            <div class="empty-state-icon">🐄</div>
+            <h3>No hay animales registrados</h3>
+            <p>Comienza registrando tu primer animal en la pestaña "Registrar Animal"</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: Movimientos -->
+      <div id="tab-movimientos" class="content-section">
+        <div class="card">
+          <h2 class="card-title">Historial de Movimientos</h2>
+          
+          <div class="filters">
+            <div class="filter-group">
+              <label>Tipo de Movimiento</label>
+              <select id="filter-tipo-mov" onchange="filtrarMovimientos()">
+                <option value="">Todos</option>
+                <option value="Cambio Etapa">Cambio de Etapa</option>
+                <option value="Venta">Venta</option>
+                <option value="Muerte">Muerte</option>
+                <option value="Compra">Compra</option>
+              </select>
+            </div>
+
+            <div class="filter-group">
+              <label>Desde</label>
+              <input type="date" id="filter-fecha-desde" onchange="filtrarMovimientos()">
+            </div>
+
+            <div class="filter-group">
+              <label>Hasta</label>
+              <input type="date" id="filter-fecha-hasta" onchange="filtrarMovimientos()">
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Animal</th>
+                  <th>Tipo</th>
+                  <th>Detalle</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody id="tabla-movimientos">
+                <!-- Se llenará con JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div id="empty-movimientos" class="empty-state hidden">
+            <div class="empty-state-icon">🔄</div>
+            <h3>No hay movimientos registrados</h3>
+            <p>Los movimientos se registran automáticamente al cambiar etapas o estados</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 4: Reportes -->
+      <div id="tab-reportes" class="content-section">
+        <div class="card">
+          <h2 class="card-title">Reportes por Etapa</h2>
+          
+          <div class="stats-bar">
+            <div class="stat-card">
+              <div class="stat-label">Cría (0-3m)</div>
+              <div class="stat-value" id="report-cria">0</div>
+              <div class="stat-subtitle" id="report-cria-subtitle">animales</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Recría (3-8m)</div>
+              <div class="stat-value" id="report-recria">0</div>
+              <div class="stat-subtitle" id="report-recria-subtitle">animales</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Levante (8-16m)</div>
+              <div class="stat-value" id="report-levante">0</div>
+              <div class="stat-subtitle" id="report-levante-subtitle">animales</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Novilla Vientre</div>
+              <div class="stat-value" id="report-novilla">0</div>
+              <div class="stat-subtitle" id="report-novilla-subtitle">animales</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Producción</div>
+              <div class="stat-value" id="report-produccion">0</div>
+              <div class="stat-subtitle" id="report-produccion-subtitle">animales</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Secas</div>
+              <div class="stat-value" id="report-secas">0</div>
+              <div class="stat-subtitle" id="report-secas-subtitle">animales</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Alertas y Recomendaciones</h2>
+          <div id="alertas-container">
+            <!-- Se llenará con JavaScript -->
+          </div>
+        </div>
+      </div>
+
+    </div>
 
 
----
+    
+    <!-- Módulo 2: Estructura de Costos -->
+    <div id="modulo-estructura-costos" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <div class="stat-label">Total Conceptos</div>
+        <div class="stat-value" id="stat-costos-total">0</div>
+        <div class="stat-subtitle">Registrados</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <div class="stat-label">Costos Directos</div>
+        <div class="stat-value" id="stat-costos-directos">0</div>
+        <div class="stat-subtitle">Conceptos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📈</div>
+      <div class="stat-content">
+        <div class="stat-label">Costos Variables</div>
+        <div class="stat-value" id="stat-costos-variables">0</div>
+        <div class="stat-subtitle">Conceptos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🎯</div>
+      <div class="stat-content">
+        <div class="stat-label">Por Etapa</div>
+        <div class="stat-value" id="stat-costos-etapas">6</div>
+        <div class="stat-subtitle">Etapas activas</div>
+      </div>
+    </div>
+  </div>
 
-## 🌐 Navegadores Compatibles
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabCostos('registro')">
+      ➕ Registrar Costo
+    </button>
+    <button class="tab-button" onclick="cambiarTabCostos('conceptos')">
+      📋 Conceptos
+    </button>
+    <button class="tab-button" onclick="cambiarTabCostos('por-etapa')">
+      🐄 Por Etapa
+    </button>
+    <button class="tab-button" onclick="cambiarTabCostos('analisis')">
+      📊 Análisis
+    </button>
+  </div>
 
-- ✅ Google Chrome (recomendado)
-- ✅ Mozilla Firefox
-- ✅ Microsoft Edge
-- ✅ Safari
-- ✅ Opera
+  <!-- Tab 1: Registro -->
+  <div id="tab-costos-registro" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Concepto de Costo</h2>
+      
+      <form id="form-costo">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Código <span class="required">*</span></label>
+            <input type="text" id="costo-codigo" name="codigo" placeholder="C001" required>
+          </div>
 
----
+          <div class="form-group">
+            <label>Concepto <span class="required">*</span></label>
+            <input type="text" id="costo-concepto" name="concepto" placeholder="Ej: Concentrado" required>
+          </div>
 
-## 💾 Persistencia de Datos
+          <div class="form-group">
+            <label>Tipo de Costo <span class="required">*</span></label>
+            <select id="costo-tipo" name="tipo" required>
+              <option value="">Seleccione...</option>
+              <option value="Directo">Directo</option>
+              <option value="Indirecto">Indirecto</option>
+            </select>
+          </div>
 
-El sistema guarda automáticamente los datos en **LocalStorage** del navegador.
+          <div class="form-group">
+            <label>Naturaleza <span class="required">*</span></label>
+            <select id="costo-naturaleza" name="naturaleza" required>
+              <option value="">Seleccione...</option>
+              <option value="Variable">Variable</option>
+              <option value="Fijo">Fijo</option>
+            </select>
+          </div>
 
-**IMPORTANTE:** 
-- Los datos se guardan POR NAVEGADOR
-- Si cambias de navegador, los datos no se transferirán
-- Para respaldo, exporta los datos regularmente (función disponible en cada módulo)
+          <div class="form-group">
+            <label>Categoría <span class="required">*</span></label>
+            <select id="costo-categoria" name="categoria" required>
+              <option value="">Seleccione...</option>
+              <option value="Alimentación">Alimentación</option>
+              <option value="Sanidad">Sanidad</option>
+              <option value="Mano de Obra">Mano de Obra</option>
+              <option value="Infraestructura">Infraestructura</option>
+              <option value="Servicios">Servicios</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
 
----
+          <div class="form-group">
+            <label>Etapa Aplicable <span class="required">*</span></label>
+            <select id="costo-etapa" name="etapa" required>
+              <option value="">Seleccione...</option>
+              <option value="Todas">Todas las etapas</option>
+              <option value="Cría">Cría</option>
+              <option value="Recría">Recría</option>
+              <option value="Levante">Levante</option>
+              <option value="Novilla Vientre">Novilla Vientre</option>
+              <option value="Producción">Producción</option>
+              <option value="Secas">Secas</option>
+            </select>
+          </div>
 
-## 📱 Uso en Móviles/Tablets
+          <div class="form-group">
+            <label>Unidad de Medida</label>
+            <select id="costo-unidad" name="unidad">
+              <option value="">Seleccione...</option>
+              <option value="kg">Kilogramo (kg)</option>
+              <option value="litro">Litro</option>
+              <option value="unidad">Unidad</option>
+              <option value="mes">Mes</option>
+              <option value="día">Día</option>
+              <option value="hora">Hora</option>
+            </select>
+          </div>
 
-El sistema es completamente responsive y funciona en:
-- 📱 Teléfonos móviles
-- 📱 Tablets
-- 💻 Laptops
-- 🖥️ Computadores de escritorio
+          <div class="form-group">
+            <label>Valor Unitario</label>
+            <input type="number" id="costo-valor" name="valor" step="0.01" placeholder="0.00">
+          </div>
 
----
+          <div class="form-group full-width">
+            <label>Descripción</label>
+            <textarea id="costo-descripcion" name="descripcion" rows="3" placeholder="Descripción detallada del concepto de costo..."></textarea>
+          </div>
+        </div>
 
-## 🔧 Solución de Problemas
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Concepto</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
-### No se guardan los datos
-**Solución:** Verifica que el navegador permita LocalStorage. En configuración del navegador, habilita cookies y almacenamiento local.
+  <!-- Tab 2: Conceptos -->
+  <div id="tab-costos-conceptos" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Conceptos de Costo Registrados</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Tipo</label>
+          <select id="filter-costo-tipo" onchange="filtrarConceptos()">
+            <option value="">Todos</option>
+            <option value="Directo">Directo</option>
+            <option value="Indirecto">Indirecto</option>
+          </select>
+        </div>
 
-### Los logos no se ven
-**Solución:** Verifica que la estructura de carpetas sea correcta y que las rutas en el HTML coincidan con la ubicación de las imágenes.
+        <div class="filter-group">
+          <label>Naturaleza</label>
+          <select id="filter-costo-naturaleza" onchange="filtrarConceptos()">
+            <option value="">Todos</option>
+            <option value="Variable">Variable</option>
+            <option value="Fijo">Fijo</option>
+          </select>
+        </div>
 
-### No funciona offline
-**Solución:** El sistema es completamente standalone y funciona sin conexión. Si no funciona, verifica que el archivo HTML esté completo.
+        <div class="filter-group">
+          <label>Categoría</label>
+          <select id="filter-costo-categoria" onchange="filtrarConceptos()">
+            <option value="">Todas</option>
+            <option value="Alimentación">Alimentación</option>
+            <option value="Sanidad">Sanidad</option>
+            <option value="Mano de Obra">Mano de Obra</option>
+            <option value="Infraestructura">Infraestructura</option>
+            <option value="Servicios">Servicios</option>
+            <option value="Otros">Otros</option>
+          </select>
+        </div>
 
----
+        <div class="filter-group">
+          <label>Buscar</label>
+          <input type="text" id="filter-costo-buscar" placeholder="Código o concepto..." oninput="filtrarConceptos()">
+        </div>
 
-## 📞 Próximos Pasos
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" onclick="exportarCSVCostos()">
+            📥 Exportar CSV
+          </button>
+        </div>
+      </div>
 
-1. ✅ Revisar el sistema y familiarizarse con la interfaz
-2. ⏳ Implementar el Módulo de Inventario de Animales (primera prioridad)
-3. ⏳ Implementar el Módulo de Producción de Leche
-4. ⏳ Implementar el Módulo de Estructura de Costos
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Concepto</th>
+              <th>Tipo</th>
+              <th>Naturaleza</th>
+              <th>Categoría</th>
+              <th>Etapa</th>
+              <th>Valor Unit.</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-conceptos">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
 
-Consultar **GUIA_SISTEMA_NUEVO.md** para instrucciones detalladas de desarrollo.
+      <div id="empty-conceptos" class="empty-state hidden">
+        <div class="empty-state-icon">💰</div>
+        <h3>No hay conceptos registrados</h3>
+        <p>Comienza registrando tu primer concepto de costo</p>
+      </div>
+    </div>
+  </div>
 
----
+  <!-- Tab 3: Por Etapa -->
+  <div id="tab-costos-por-etapa" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Costos por Etapa del Ganado</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Etapa</label>
+          <select id="filter-etapa-costos" onchange="renderizarCostosPorEtapa()">
+            <option value="Todas">Todas las etapas</option>
+            <option value="Cría">Cría</option>
+            <option value="Recría">Recría</option>
+            <option value="Levante">Levante</option>
+            <option value="Novilla Vientre">Novilla Vientre</option>
+            <option value="Producción">Producción</option>
+            <option value="Secas">Secas</option>
+          </select>
+        </div>
+      </div>
 
-## 📊 Estado Actual
+      <div id="costos-por-etapa-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
 
-```
-Dashboard Principal:        ✅ Completado
-Navegación:                 ✅ Completado  
-Sistema de Persistencia:    ✅ Preparado
-Diseño Responsive:          ✅ Completado
+  <!-- Tab 4: Análisis -->
+  <div id="tab-costos-analisis" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Análisis de Estructura de Costos</h2>
+      
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Total Directos</div>
+          <div class="stat-value" id="analisis-directos">0</div>
+          <div class="stat-subtitle" id="analisis-directos-pct">0%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Indirectos</div>
+          <div class="stat-value" id="analisis-indirectos">0</div>
+          <div class="stat-subtitle" id="analisis-indirectos-pct">0%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Variables</div>
+          <div class="stat-value" id="analisis-variables">0</div>
+          <div class="stat-subtitle" id="analisis-variables-pct">0%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Fijos</div>
+          <div class="stat-value" id="analisis-fijos">0</div>
+          <div class="stat-subtitle" id="analisis-fijos-pct">0%</div>
+        </div>
+      </div>
 
-Módulos Implementados:      0/9  (0%)
-Módulos Pendientes:         9/9  (100%)
-```
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Alimentación</div>
+          <div class="stat-value" id="analisis-alimentacion">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Sanidad</div>
+          <div class="stat-value" id="analisis-sanidad">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Mano de Obra</div>
+          <div class="stat-value" id="analisis-mano-obra">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Otros</div>
+          <div class="stat-value" id="analisis-otros">0</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
----
+</div>
 
-## 🎯 Roadmap
 
-### Fase 1 (Crítica) - Mes 1-2
-- [ ] Inventario de Animales
-- [ ] Producción de Leche
-- [ ] Estructura de Costos
+    <!-- Módulo 3: Recursos por Etapa -->
+<div id="modulo-recursos-etapa" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <div class="stat-label">Total Recursos</div>
+        <div class="stat-value" id="stat-recursos-total">0</div>
+        <div class="stat-subtitle">Registrados</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌾</div>
+      <div class="stat-content">
+        <div class="stat-label">Alimentación</div>
+        <div class="stat-value" id="stat-recursos-alimentacion">0</div>
+        <div class="stat-subtitle">Recursos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💉</div>
+      <div class="stat-content">
+        <div class="stat-label">Sanidad</div>
+        <div class="stat-value" id="stat-recursos-sanidad">0</div>
+        <div class="stat-subtitle">Recursos</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">👷</div>
+      <div class="stat-content">
+        <div class="stat-label">Mano de Obra</div>
+        <div class="stat-value" id="stat-recursos-mano-obra">0</div>
+        <div class="stat-subtitle">Recursos</div>
+      </div>
+    </div>
+  </div>
 
-### Fase 2 (Importante) - Mes 3-4
-- [ ] Recursos por Etapa
-- [ ] Costo de Concentrado
-- [ ] Potreros y Pastos
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabRecursos('registro')">
+      ➕ Registrar Recurso
+    </button>
+    <button class="tab-button" onclick="cambiarTabRecursos('inventario')">
+      📋 Inventario
+    </button>
+    <button class="tab-button" onclick="cambiarTabRecursos('consumo')">
+      📊 Consumo por Etapa
+    </button>
+    <button class="tab-button" onclick="cambiarTabRecursos('movimientos')">
+      🔄 Movimientos
+    </button>
+  </div>
 
-### Fase 3 (Complementaria) - Mes 5-6
-- [ ] Personal
-- [ ] Sanidad y Reproducción
-- [ ] Reportes y Análisis
+  <!-- Tab 1: Registro -->
+  <div id="tab-recursos-registro" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Recurso</h2>
+      
+      <form id="form-recurso">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Código <span class="required">*</span></label>
+            <input type="text" id="recurso-codigo" name="codigo" placeholder="R001" required>
+          </div>
 
----
+          <div class="form-group">
+            <label>Nombre del Recurso <span class="required">*</span></label>
+            <input type="text" id="recurso-nombre" name="nombre" placeholder="Ej: Concentrado Levante" required>
+          </div>
 
-**Sistema desarrollado para:**  
-Universidad de Antioquia  
-Facultad de Ciencias Agrarias  
-Hacienda La Montaña
+          <div class="form-group">
+            <label>Tipo de Recurso <span class="required">*</span></label>
+            <select id="recurso-tipo" name="tipo" required>
+              <option value="">Seleccione...</option>
+              <option value="Alimentación">Alimentación</option>
+              <option value="Sanidad">Sanidad</option>
+              <option value="Mano de Obra">Mano de Obra</option>
+            </select>
+          </div>
 
-**Versión:** 1.0  
-**Fecha:** Febrero 2026
+          <div class="form-group">
+            <label>Subcategoría</label>
+            <select id="recurso-subcategoria" name="subcategoria">
+              <option value="">Seleccione...</option>
+              <!-- Se llenará dinámicamente según el tipo -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Unidad de Medida <span class="required">*</span></label>
+            <select id="recurso-unidad" name="unidad" required>
+              <option value="">Seleccione...</option>
+              <option value="kg">Kilogramo (kg)</option>
+              <option value="litro">Litro</option>
+              <option value="unidad">Unidad</option>
+              <option value="dosis">Dosis</option>
+              <option value="bulto">Bulto</option>
+              <option value="hora">Hora</option>
+              <option value="día">Día</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Cantidad Inicial</label>
+            <input type="number" id="recurso-cantidad" name="cantidad" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label>Costo Unitario</label>
+            <input type="number" id="recurso-costo" name="costo_unitario" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label>Etapa de Uso Principal</label>
+            <select id="recurso-etapa" name="etapa_uso">
+              <option value="">Seleccione...</option>
+              <option value="Todas">Todas las etapas</option>
+              <option value="Cría">Cría</option>
+              <option value="Recría">Recría</option>
+              <option value="Levante">Levante</option>
+              <option value="Novilla Vientre">Novilla Vientre</option>
+              <option value="Producción">Producción</option>
+              <option value="Secas">Secas</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Descripción</label>
+            <textarea id="recurso-descripcion" name="descripcion" rows="3" placeholder="Descripción del recurso, especificaciones, proveedor, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Recurso</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tab 2: Inventario -->
+  <div id="tab-recursos-inventario" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Inventario de Recursos</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Tipo</label>
+          <select id="filter-recurso-tipo" onchange="filtrarRecursos()">
+            <option value="">Todos</option>
+            <option value="Alimentación">Alimentación</option>
+            <option value="Sanidad">Sanidad</option>
+            <option value="Mano de Obra">Mano de Obra</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Etapa</label>
+          <select id="filter-recurso-etapa" onchange="filtrarRecursos()">
+            <option value="">Todas</option>
+            <option value="Cría">Cría</option>
+            <option value="Recría">Recría</option>
+            <option value="Levante">Levante</option>
+            <option value="Novilla Vientre">Novilla Vientre</option>
+            <option value="Producción">Producción</option>
+            <option value="Secas">Secas</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Buscar</label>
+          <input type="text" id="filter-recurso-buscar" placeholder="Código o nombre..." oninput="filtrarRecursos()">
+        </div>
+
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" onclick="exportarCSVRecursos()">
+            📥 Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Cantidad</th>
+              <th>Unidad</th>
+              <th>Costo Unit.</th>
+              <th>Valor Total</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-recursos">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-recursos" class="empty-state hidden">
+        <div class="empty-state-icon">📦</div>
+        <h3>No hay recursos registrados</h3>
+        <p>Comienza registrando tu primer recurso</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Consumo por Etapa -->
+  <div id="tab-recursos-consumo" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Registrar Consumo de Recurso</h2>
+      
+      <form id="form-consumo">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Recurso <span class="required">*</span></label>
+            <select id="consumo-recurso" name="recurso_id" required>
+              <option value="">Seleccione un recurso...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Etapa <span class="required">*</span></label>
+            <select id="consumo-etapa" name="etapa" required>
+              <option value="">Seleccione...</option>
+              <option value="Cría">Cría</option>
+              <option value="Recría">Recría</option>
+              <option value="Levante">Levante</option>
+              <option value="Novilla Vientre">Novilla Vientre</option>
+              <option value="Producción">Producción</option>
+              <option value="Secas">Secas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Cantidad Consumida <span class="required">*</span></label>
+            <input type="number" id="consumo-cantidad" name="cantidad" step="0.01" placeholder="0.00" required>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="consumo-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="consumo-observaciones" name="observaciones" rows="2" placeholder="Detalles del consumo..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Consumo</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Resumen de Consumo por Etapa</h2>
+      
+      <div id="resumen-consumo-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Movimientos -->
+  <div id="tab-recursos-movimientos" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Historial de Movimientos</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Tipo</label>
+          <select id="filter-mov-tipo" onchange="filtrarMovimientosRecursos()">
+            <option value="">Todos</option>
+            <option value="Entrada">Entrada</option>
+            <option value="Consumo">Consumo</option>
+            <option value="Ajuste">Ajuste</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Desde</label>
+          <input type="date" id="filter-mov-desde" onchange="filtrarMovimientosRecursos()">
+        </div>
+
+        <div class="filter-group">
+          <label>Hasta</label>
+          <input type="date" id="filter-mov-hasta" onchange="filtrarMovimientosRecursos()">
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Recurso</th>
+              <th>Tipo</th>
+              <th>Cantidad</th>
+              <th>Etapa</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-movimientos-recursos">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-movimientos-recursos" class="empty-state hidden">
+        <div class="empty-state-icon">🔄</div>
+        <h3>No hay movimientos registrados</h3>
+        <p>Los movimientos se registran automáticamente</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+    <!-- Módulo 4: Producción de Leche -->
+   <div id="modulo-produccion-leche" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">🥛</div>
+      <div class="stat-content">
+        <div class="stat-label">Producción Hoy</div>
+        <div class="stat-value" id="stat-leche-hoy">0</div>
+        <div class="stat-subtitle">Litros</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-content">
+        <div class="stat-label">Promedio Diario</div>
+        <div class="stat-value" id="stat-leche-promedio">0</div>
+        <div class="stat-subtitle">Últimos 30 días</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <div class="stat-label">Costo por Litro</div>
+        <div class="stat-value" id="stat-leche-costo">$0</div>
+        <div class="stat-subtitle">Promedio</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🐄</div>
+      <div class="stat-content">
+        <div class="stat-label">Vacas Producción</div>
+        <div class="stat-value" id="stat-leche-vacas">0</div>
+        <div class="stat-subtitle">Activas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabLeche('registro')">
+      ➕ Registrar Producción
+    </button>
+    <button class="tab-button" onclick="cambiarTabLeche('historial')">
+      📋 Historial
+    </button>
+    <button class="tab-button" onclick="cambiarTabLeche('por-animal')">
+      🐄 Por Animal
+    </button>
+    <button class="tab-button" onclick="cambiarTabLeche('analisis')">
+      📊 Análisis
+    </button>
+  </div>
+
+  <!-- Tab 1: Registro -->
+  <div id="tab-leche-registro" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Producción Diaria</h2>
+      
+      <form id="form-produccion-leche">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="leche-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Registro <span class="required">*</span></label>
+            <select id="leche-tipo-registro" name="tipo_registro" required onchange="toggleRegistroLeche()">
+              <option value="">Seleccione...</option>
+              <option value="Lote">Por Lote (Total del día)</option>
+              <option value="Individual">Por Animal Individual</option>
+            </select>
+          </div>
+
+          <!-- Campos para registro por lote -->
+          <div id="campos-lote" class="form-group full-width hidden">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Ordeño AM (Litros) <span class="required">*</span></label>
+                <input type="number" id="leche-am" name="ordeno_am" step="0.1" placeholder="0.0">
+              </div>
+
+              <div class="form-group">
+                <label>Ordeño PM (Litros) <span class="required">*</span></label>
+                <input type="number" id="leche-pm" name="ordeno_pm" step="0.1" placeholder="0.0">
+              </div>
+
+              <div class="form-group">
+                <label>Total del Día (Litros)</label>
+                <input type="number" id="leche-total" name="total_dia" step="0.1" placeholder="0.0" readonly style="background: var(--gris-claro);">
+              </div>
+
+              <div class="form-group">
+                <label>Número de Vacas</label>
+                <input type="number" id="leche-num-vacas" name="num_vacas" placeholder="0">
+              </div>
+            </div>
+          </div>
+
+          <!-- Campos para registro individual -->
+          <div id="campos-individual" class="form-group full-width hidden">
+            <div class="form-grid">
+              <div class="form-group">
+                <label>Animal <span class="required">*</span></label>
+                <select id="leche-animal" name="animal_id">
+                  <option value="">Seleccione un animal...</option>
+                  <!-- Se llenará con JavaScript -->
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Ordeño AM (Litros) <span class="required">*</span></label>
+                <input type="number" id="leche-individual-am" name="individual_am" step="0.1" placeholder="0.0">
+              </div>
+
+              <div class="form-group">
+                <label>Ordeño PM (Litros) <span class="required">*</span></label>
+                <input type="number" id="leche-individual-pm" name="individual_pm" step="0.1" placeholder="0.0">
+              </div>
+
+              <div class="form-group">
+                <label>Total (Litros)</label>
+                <input type="number" id="leche-individual-total" name="individual_total" step="0.1" placeholder="0.0" readonly style="background: var(--gris-claro);">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Calidad de Leche</label>
+            <select id="leche-calidad" name="calidad">
+              <option value="">Seleccione...</option>
+              <option value="Excelente">Excelente</option>
+              <option value="Buena">Buena</option>
+              <option value="Regular">Regular</option>
+              <option value="Rechazada">Rechazada</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Precio por Litro</label>
+            <input type="number" id="leche-precio" name="precio_litro" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="leche-observaciones" name="observaciones" rows="2" placeholder="Notas sobre la producción, calidad, etc."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Producción</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tab 2: Historial -->
+  <div id="tab-leche-historial" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Historial de Producción</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Desde</label>
+          <input type="date" id="filter-leche-desde" onchange="filtrarProduccionLeche()">
+        </div>
+
+        <div class="filter-group">
+          <label>Hasta</label>
+          <input type="date" id="filter-leche-hasta" onchange="filtrarProduccionLeche()">
+        </div>
+
+        <div class="filter-group">
+          <label>Tipo</label>
+          <select id="filter-leche-tipo" onchange="filtrarProduccionLeche()">
+            <option value="">Todos</option>
+            <option value="Lote">Por Lote</option>
+            <option value="Individual">Individual</option>
+          </select>
+        </div>
+
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" onclick="exportarCSVLeche()">
+            📥 Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Tipo</th>
+              <th>AM</th>
+              <th>PM</th>
+              <th>Total (L)</th>
+              <th>Calidad</th>
+              <th>Precio/L</th>
+              <th>Valor Total</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-produccion-leche">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-leche" class="empty-state hidden">
+        <div class="empty-state-icon">🥛</div>
+        <h3>No hay registros de producción</h3>
+        <p>Comienza registrando la producción diaria</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Por Animal -->
+  <div id="tab-leche-por-animal" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Producción por Animal</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Período</label>
+          <select id="filter-animal-periodo" onchange="renderizarProduccionPorAnimal()">
+            <option value="7">Últimos 7 días</option>
+            <option value="30" selected>Últimos 30 días</option>
+            <option value="90">Últimos 90 días</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="produccion-por-animal-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Análisis -->
+  <div id="tab-leche-analisis" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Análisis de Producción</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Período</label>
+          <select id="filter-analisis-periodo" onchange="renderizarAnalisisLeche()">
+            <option value="7">Últimos 7 días</option>
+            <option value="30" selected>Últimos 30 días</option>
+            <option value="90">Últimos 90 días</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Producción Total</div>
+          <div class="stat-value" id="analisis-total">0 L</div>
+          <div class="stat-subtitle">En el período</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Promedio Diario</div>
+          <div class="stat-value" id="analisis-promedio">0 L</div>
+          <div class="stat-subtitle">Por día</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Mejor Día</div>
+          <div class="stat-value" id="analisis-mejor">0 L</div>
+          <div class="stat-subtitle" id="analisis-mejor-fecha">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ingreso Total</div>
+          <div class="stat-value" id="analisis-ingreso">$0</div>
+          <div class="stat-subtitle">En el período</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 1rem;">Tendencia de Producción</h3>
+        <div id="grafico-tendencia" style="min-height: 200px; display: flex; align-items: center; justify-content: center; color: var(--gris-medio);">
+          📊 Gráfico de tendencia (últimos 30 días)
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+    <!-- Módulo 5: Costo de Concentrado -->
+ <div id="modulo-costo-concentrado" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">🌾</div>
+      <div class="stat-content">
+        <div class="stat-label">Fórmulas Activas</div>
+        <div class="stat-value" id="stat-formulas">0</div>
+        <div class="stat-subtitle">Registradas</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📦</div>
+      <div class="stat-content">
+        <div class="stat-label">Ingredientes</div>
+        <div class="stat-value" id="stat-ingredientes">0</div>
+        <div class="stat-subtitle">Disponibles</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <div class="stat-label">Costo Promedio</div>
+        <div class="stat-value" id="stat-costo-kg">$0</div>
+        <div class="stat-subtitle">Por kilogramo</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <div class="stat-label">Producción Mes</div>
+        <div class="stat-value" id="stat-produccion-mes">0</div>
+        <div class="stat-subtitle">Kilogramos</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabConcentrado('ingredientes')">
+      📦 Ingredientes
+    </button>
+    <button class="tab-button" onclick="cambiarTabConcentrado('formulas')">
+      🌾 Fórmulas
+    </button>
+    <button class="tab-button" onclick="cambiarTabConcentrado('produccion')">
+      ⚙️ Producción
+    </button>
+    <button class="tab-button" onclick="cambiarTabConcentrado('analisis')">
+      📊 Análisis de Costos
+    </button>
+  </div>
+
+  <!-- Tab 1: Ingredientes -->
+  <div id="tab-concentrado-ingredientes" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Ingrediente</h2>
+      
+      <form id="form-ingrediente">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Código <span class="required">*</span></label>
+            <input type="text" id="ingrediente-codigo" name="codigo" placeholder="ING001" required>
+          </div>
+
+          <div class="form-group">
+            <label>Nombre del Ingrediente <span class="required">*</span></label>
+            <input type="text" id="ingrediente-nombre" name="nombre" placeholder="Ej: Maíz molido" required>
+          </div>
+
+          <div class="form-group">
+            <label>Categoría <span class="required">*</span></label>
+            <select id="ingrediente-categoria" name="categoria" required>
+              <option value="">Seleccione...</option>
+              <option value="Cereal">Cereal</option>
+              <option value="Proteína">Fuente de Proteína</option>
+              <option value="Mineral">Mineral</option>
+              <option value="Vitamina">Vitamina</option>
+              <option value="Aditivo">Aditivo</option>
+              <option value="Fibra">Fuente de Fibra</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Costo por kg <span class="required">*</span></label>
+            <input type="number" id="ingrediente-costo" name="costo_kg" step="0.01" placeholder="0.00" required>
+          </div>
+
+          <div class="form-group">
+            <label>Stock Actual (kg)</label>
+            <input type="number" id="ingrediente-stock" name="stock" step="0.1" placeholder="0.0">
+          </div>
+
+          <div class="form-group">
+            <label>Proveedor</label>
+            <input type="text" id="ingrediente-proveedor" name="proveedor" placeholder="Nombre del proveedor">
+          </div>
+
+          <div class="form-group">
+            <label>% Proteína Cruda</label>
+            <input type="number" id="ingrediente-proteina" name="proteina" step="0.1" placeholder="0.0">
+          </div>
+
+          <div class="form-group">
+            <label>% Fibra</label>
+            <input type="number" id="ingrediente-fibra" name="fibra" step="0.1" placeholder="0.0">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Descripción</label>
+            <textarea id="ingrediente-descripcion" name="descripcion" rows="2" placeholder="Características nutricionales, especificaciones..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Ingrediente</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Ingredientes Registrados</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Categoría</label>
+          <select id="filter-ing-categoria" onchange="filtrarIngredientes()">
+            <option value="">Todas</option>
+            <option value="Cereal">Cereal</option>
+            <option value="Proteína">Proteína</option>
+            <option value="Mineral">Mineral</option>
+            <option value="Vitamina">Vitamina</option>
+            <option value="Aditivo">Aditivo</option>
+            <option value="Fibra">Fibra</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Buscar</label>
+          <input type="text" id="filter-ing-buscar" placeholder="Código o nombre..." oninput="filtrarIngredientes()">
+        </div>
+
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" onclick="exportarCSVIngredientes()">
+            📥 Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Ingrediente</th>
+              <th>Categoría</th>
+              <th>Costo/kg</th>
+              <th>Stock (kg)</th>
+              <th>Valor Stock</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-ingredientes">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-ingredientes" class="empty-state hidden">
+        <div class="empty-state-icon">📦</div>
+        <h3>No hay ingredientes registrados</h3>
+        <p>Registra los ingredientes para crear fórmulas de concentrado</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: Fórmulas -->
+  <div id="tab-concentrado-formulas" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Crear Fórmula de Concentrado</h2>
+      
+      <form id="form-formula">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Código de Fórmula <span class="required">*</span></label>
+            <input type="text" id="formula-codigo" name="codigo" placeholder="F001" required>
+          </div>
+
+          <div class="form-group">
+            <label>Nombre de la Fórmula <span class="required">*</span></label>
+            <input type="text" id="formula-nombre" name="nombre" placeholder="Ej: Concentrado Producción" required>
+          </div>
+
+          <div class="form-group">
+            <label>Etapa de Uso <span class="required">*</span></label>
+            <select id="formula-etapa" name="etapa" required>
+              <option value="">Seleccione...</option>
+              <option value="Cría">Cría</option>
+              <option value="Recría">Recría</option>
+              <option value="Levante">Levante</option>
+              <option value="Novilla Vientre">Novilla Vientre</option>
+              <option value="Producción">Producción</option>
+              <option value="Secas">Secas</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Cantidad Base (kg)</label>
+            <input type="number" id="formula-cantidad" name="cantidad_base" step="1" placeholder="100" value="100">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Descripción</label>
+            <textarea id="formula-descripcion" name="descripcion" rows="2" placeholder="Objetivo nutricional, características..."></textarea>
+          </div>
+        </div>
+
+        <h3 style="margin: 2rem 0 1rem; color: var(--verde-udea);">Composición de la Fórmula</h3>
+        
+        <div id="ingredientes-formula">
+          <div class="form-grid ingrediente-item" style="margin-bottom: 1rem; padding: 1rem; background: var(--crema); border-radius: 8px;">
+            <div class="form-group">
+              <label>Ingrediente</label>
+              <select name="ingrediente_codigo[]" class="ingrediente-select" onchange="actualizarCostoFormula()">
+                <option value="">Seleccione...</option>
+                <!-- Se llenará con JavaScript -->
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Cantidad (kg)</label>
+              <input type="number" name="ingrediente_cantidad[]" step="0.1" placeholder="0.0" class="ingrediente-cantidad" onchange="actualizarCostoFormula()">
+            </div>
+
+            <div class="form-group">
+              <label>% de la Fórmula</label>
+              <input type="number" step="0.01" placeholder="0.00" class="ingrediente-porcentaje" readonly style="background: var(--gris-claro);">
+            </div>
+
+            <div class="form-group">
+              <label>Costo</label>
+              <input type="number" step="0.01" placeholder="0.00" class="ingrediente-costo-parcial" readonly style="background: var(--gris-claro);">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1rem;">
+          <button type="button" class="btn btn-secondary btn-small" onclick="agregarIngredienteFormula()">
+            ➕ Agregar Ingrediente
+          </button>
+        </div>
+
+        <div class="stats-bar" style="margin-top: 2rem;">
+          <div class="stat-card">
+            <div class="stat-label">Total kg Fórmula</div>
+            <div class="stat-value" id="formula-total-kg">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Costo Total</div>
+            <div class="stat-value" id="formula-costo-total">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Costo por kg</div>
+            <div class="stat-value" id="formula-costo-kg">$0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">% Proteína</div>
+            <div class="stat-value" id="formula-proteina">0%</div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Fórmula</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Fórmulas Registradas</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Fórmula</th>
+              <th>Etapa</th>
+              <th>Ingredientes</th>
+              <th>Costo/kg</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-formulas">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-formulas" class="empty-state hidden">
+        <div class="empty-state-icon">🌾</div>
+        <h3>No hay fórmulas registradas</h3>
+        <p>Crea tu primera fórmula de concentrado</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Producción -->
+  <div id="tab-concentrado-produccion" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Registrar Producción de Concentrado</h2>
+      
+      <form id="form-produccion-concentrado">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="prod-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Fórmula <span class="required">*</span></label>
+            <select id="prod-formula" name="formula_codigo" required onchange="cargarDetallesFormula()">
+              <option value="">Seleccione una fórmula...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Cantidad Producida (kg) <span class="required">*</span></label>
+            <input type="number" id="prod-cantidad" name="cantidad" step="1" placeholder="0" required>
+          </div>
+
+          <div class="form-group">
+            <label>Costo Total Estimado</label>
+            <input type="number" id="prod-costo-total" step="0.01" placeholder="0.00" readonly style="background: var(--gris-claro);">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="prod-observaciones" name="observaciones" rows="2" placeholder="Notas sobre la producción..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Producción</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Historial de Producción</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Fórmula</th>
+              <th>Cantidad (kg)</th>
+              <th>Costo Total</th>
+              <th>Costo/kg</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-produccion-concentrado">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-produccion-conc" class="empty-state hidden">
+        <div class="empty-state-icon">⚙️</div>
+        <h3>No hay producción registrada</h3>
+        <p>Registra la producción de concentrado</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Análisis -->
+  <div id="tab-concentrado-analisis" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Análisis de Costos</h2>
+      
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Costo Mínimo/kg</div>
+          <div class="stat-value" id="analisis-conc-min">$0</div>
+          <div class="stat-subtitle" id="analisis-conc-min-formula">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Costo Máximo/kg</div>
+          <div class="stat-value" id="analisis-conc-max">$0</div>
+          <div class="stat-subtitle" id="analisis-conc-max-formula">-</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ingrediente + Caro</div>
+          <div class="stat-value" id="analisis-ing-caro">-</div>
+          <div class="stat-subtitle" id="analisis-ing-caro-precio">$0/kg</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Ingrediente + Barato</div>
+          <div class="stat-value" id="analisis-ing-barato">-</div>
+          <div class="stat-subtitle" id="analisis-ing-barato-precio">$0/kg</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom: 1rem;">Distribución de Costos por Fórmula</h3>
+        <div id="distribucion-costos-container">
+          <!-- Se llenará con JavaScript -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+    <!-- ==========================================
+         MÓDULOS PENDIENTES (6-9)
+         ========================================== -->
+
+    <!-- Módulo 6: Potreros y Pastos -->
+    <div id="modulo-potreros" class="hidden">
+      <div class="card">
+        <h2 class="card-title">🌱 Potreros y Pastos</h2>
+        <div class="empty-state">
+          <div class="empty-state-icon">🌱</div>
+          <h3>Módulo en Construcción</h3>
+          <p>Este módulo incluirá la gestión de potreros y pastos.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulo 7: Personal -->
+    <div id="modulo-personal" class="hidden">
+      <div class="card">
+        <h2 class="card-title">👥 Personal</h2>
+        <div class="empty-state">
+          <div class="empty-state-icon">👥</div>
+          <h3>Módulo en Construcción</h3>
+          <p>Este módulo incluirá la gestión de personal.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulo 8: Sanidad y Reproducción -->
+    <div id="modulo-sanidad" class="hidden">
+      <div class="card">
+        <h2 class="card-title">💉 Sanidad y Reproducción</h2>
+        <div class="empty-state">
+          <div class="empty-state-icon">💉</div>
+          <h3>Módulo en Construcción</h3>
+          <p>Este módulo incluirá sanidad y reproducción.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Módulo 9: Reportes y Análisis -->
+    <div id="modulo-reportes" class="hidden">
+      <div class="card">
+        <h2 class="card-title">📈 Reportes y Análisis</h2>
+        <div class="empty-state">
+          <div class="empty-state-icon">📈</div>
+          <h3>Módulo en Construcción</h3>
+          <p>Este módulo incluirá reportes completos y dashboard ejecutivo.</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ==========================================
+       MODALES
+       ========================================== -->
+
+  <!-- Modal para cambiar etapa -->
+  <div id="modal-cambiar-etapa" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Cambiar Etapa</h3>
+        <button class="modal-close" onclick="cerrarModal('modal-cambiar-etapa')">✕</button>
+      </div>
+
+      <form id="form-cambiar-etapa">
+        <input type="hidden" id="cambio-animal-id">
+        
+        <div class="form-group">
+          <label>Animal: <strong id="cambio-animal-nombre"></strong></label>
+          <p style="color: var(--gris-medio); font-size: 0.875rem;">
+            Etapa actual: <span id="cambio-etapa-actual"></span>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>Nueva Etapa <span class="required">*</span></label>
+          <select id="cambio-nueva-etapa" required>
+            <option value="">Seleccione...</option>
+            <option value="Cría">Cría (0-3 meses)</option>
+            <option value="Recría">Recría (3-8 meses)</option>
+            <option value="Levante">Levante (8-16 meses)</option>
+            <option value="Novilla Vientre">Novilla Vientre (16 meses - Parto)</option>
+            <option value="Producción">Producción</option>
+            <option value="Secas">Secas</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Fecha del Cambio</label>
+          <input type="date" id="cambio-fecha">
+        </div>
+
+        <div class="form-group">
+          <label>Observaciones</label>
+          <textarea id="cambio-observaciones" rows="3"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-cambiar-etapa')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar Cambio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para cambiar estado -->
+  <div id="modal-cambiar-estado" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">Cambiar Estado</h3>
+        <button class="modal-close" onclick="cerrarModal('modal-cambiar-estado')">✕</button>
+      </div>
+
+      <form id="form-cambiar-estado">
+        <input type="hidden" id="estado-animal-id">
+        
+        <div class="form-group">
+          <label>Animal: <strong id="estado-animal-nombre"></strong></label>
+        </div>
+
+        <div class="form-group">
+          <label>Nuevo Estado <span class="required">*</span></label>
+          <select id="estado-nuevo-estado" required onchange="toggleCamposEstado()">
+            <option value="">Seleccione...</option>
+            <option value="Vendido">Vendido</option>
+            <option value="Muerto">Muerto</option>
+            <option value="Activo">Reactivar (volver a Activo)</option>
+          </select>
+        </div>
+
+        <div class="form-group hidden" id="campo-precio-venta">
+          <label>Precio de Venta</label>
+          <input type="number" id="estado-precio-venta" step="0.01" placeholder="0.00">
+        </div>
+
+        <div class="form-group">
+          <label>Fecha</label>
+          <input type="date" id="estado-fecha">
+        </div>
+
+        <div class="form-group">
+          <label>Observaciones</label>
+          <textarea id="estado-observaciones" rows="3"></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal('modal-cambiar-estado')">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Confirmar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       JAVASCRIPT - SECCIÓN 1: VARIABLES Y DATOS
+       ========================================== -->
+
+  <script>
+    // Variables globales
+    let inventario = [];
+    let movimientos = [];
+    let configuracion = {
+      duraciones_etapas: {
+        'Cría': 90,
+        'Recría': 150,
+        'Levante': 240,
+        'Novilla Vientre': 365,
+        'Producción': 305,
+        'Secas': 60
+      }
+    };
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 2: SISTEMA DE ALMACENAMIENTO
+    // ==========================================
+
+    const DataStore = {
+      save: function(key, data) {
+        try {
+          localStorage.setItem(`hacienda_${key}`, JSON.stringify(data));
+          return true;
+        } catch (e) {
+          console.error('Error guardando datos:', e);
+          return false;
+        }
+      },
+      
+      load: function(key) {
+        try {
+          const data = localStorage.getItem(`hacienda_${key}`);
+          return data ? JSON.parse(data) : null;
+        } catch (e) {
+          console.error('Error cargando datos:', e);
+          return null;
+        }
+      }
+    };
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 3: UTILIDADES
+    // ==========================================
+
+    function calcularEdad(fechaNacimiento) {
+      const hoy = new Date();
+      const nacimiento = new Date(fechaNacimiento);
+      const diff = hoy - nacimiento;
+      const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      if (dias < 30) return `${dias} días`;
+      if (dias < 365) return `${Math.floor(dias / 30)} meses`;
+      const años = Math.floor(dias / 365);
+      const meses = Math.floor((dias % 365) / 30);
+      return `${años}a ${meses}m`;
+    }
+
+    function calcularDiasEnEtapa(animal) {
+      const hoy = new Date();
+      const ingreso = new Date(animal.fecha_ingreso_etapa || animal.fecha_registro);
+      const diff = hoy - ingreso;
+      return Math.floor(diff / (1000 * 60 * 60 * 24));
+    }
+
+    function obtenerBadgeEtapa(etapa) {
+      const badges = {
+        'Cría': 'badge-cria',
+        'Recría': 'badge-recria',
+        'Levante': 'badge-levante',
+        'Novilla Vientre': 'badge-novilla',
+        'Producción': 'badge-produccion',
+        'Secas': 'badge-secas'
+      };
+      return badges[etapa] || 'badge-cria';
+    }
+
+    function obtenerBadgeEstado(estado) {
+      const badges = {
+        'Activo': 'badge-activo',
+        'Vendido': 'badge-vendido',
+        'Muerto': 'badge-muerto'
+      };
+      return badges[estado] || 'badge-activo';
+    }
+
+    function mostrarNotificacion(mensaje, tipo = 'success') {
+      const notif = document.createElement('div');
+      notif.className = `notification ${tipo}`;
+      notif.innerHTML = `
+        <strong>${tipo === 'success' ? '✓' : tipo === 'error' ? '✗' : 'ℹ'}</strong>
+        ${mensaje}
+      `;
+      document.body.appendChild(notif);
+      
+      setTimeout(() => {
+        notif.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => notif.remove(), 300);
+      }, 3000);
+    }
+
+    function generarID() {
+      const num = inventario.length + 1;
+      return `A${num.toString().padStart(3, '0')}`;
+    }
+
+    function formatearFecha(fecha) {
+      if (!fecha) return '-';
+      const date = new Date(fecha);
+      return date.toLocaleDateString('es-CO');
+    }
+
+    function obtenerFechaHoy() {
+      return new Date().toISOString().split('T')[0];
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 4: NAVEGACIÓN
+    // ==========================================
+
+    function mostrarDashboard() {
+      // Ocultar todos los módulos
+      document.querySelectorAll('[id^="modulo-"]').forEach(modulo => {
+        modulo.classList.add('hidden');
+      });
+      
+      // Mostrar dashboard
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      
+      // Actualizar breadcrumb
+      document.getElementById('breadcrumb-separator').classList.add('hidden');
+      document.getElementById('breadcrumb-current').classList.add('hidden');
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function abrirModulo(nombreModulo) {
+      // Ocultar dashboard
+      document.getElementById('dashboard-view').classList.add('hidden');
+      
+      // Ocultar todos los módulos
+      document.querySelectorAll('[id^="modulo-"]').forEach(modulo => {
+        modulo.classList.add('hidden');
+      });
+      
+      // Mostrar módulo seleccionado
+      const modulo = document.getElementById(`modulo-${nombreModulo}`);
+      if (modulo) {
+        modulo.classList.remove('hidden');
+      }
+      
+      // Actualizar breadcrumb
+      const nombres = {
+        'inventario': 'Inventario de Animales',
+        'estructura-costos': 'Estructura de Costos',
+        'recursos-etapa': 'Recursos por Etapa',
+        'produccion-leche': 'Producción de Leche',
+        'costo-concentrado': 'Costo de Concentrado',
+        'potreros': 'Potreros y Pastos',
+        'personal': 'Personal',
+        'sanidad': 'Sanidad y Reproducción',
+        'reportes': 'Reportes y Análisis'
+      };
+      
+      document.getElementById('breadcrumb-separator').classList.remove('hidden');
+      document.getElementById('breadcrumb-current').classList.remove('hidden');
+      document.getElementById('breadcrumb-current').textContent = nombres[nombreModulo];
+      
+      // Si es el módulo de inventario, inicializarlo
+      if (nombreModulo === 'inventario') {
+        inicializarModuloInventario();
+      }
+      
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 5: MÓDULO INVENTARIO
+    // ==========================================
+
+    function inicializarModuloInventario() {
+      // Cargar datos
+      inventario = DataStore.load('inventario') || [];
+      movimientos = DataStore.load('movimientos') || [];
+      const config = DataStore.load('config');
+      if (config) {
+        configuracion = config;
+      }
+      
+      // Configurar formularios
+      configurarFormularios();
+      
+      // Actualizar estadísticas
+      actualizarEstadisticas();
+      
+      // Renderizar inventario
+      renderizarInventario();
+      
+      // Sugerir ID automático
+      const inputId = document.getElementById('animal-id');
+      if (inputId) {
+        inputId.value = generarID();
+      }
+    }
+
+    function configurarFormularios() {
+      // Formulario de registro
+      const formRegistro = document.getElementById('form-registro');
+      if (formRegistro) {
+        formRegistro.onsubmit = function(e) {
+          e.preventDefault();
+          
+          const formData = new FormData(this);
+          const datos = Object.fromEntries(formData);
+          
+          if (inventario.find(a => a.id === datos.id)) {
+            mostrarNotificacion('Ya existe un animal con ese ID', 'error');
+            return;
+          }
+          
+          const nuevoAnimal = {
+            ...datos,
+            fecha_registro: obtenerFechaHoy(),
+            fecha_ingreso_etapa: obtenerFechaHoy(),
+            estado: 'Activo',
+            historial_etapas: [{
+              etapa: datos.etapa,
+              fecha_inicio: obtenerFechaHoy(),
+              fecha_fin: null
+            }]
+          };
+          
+          inventario.push(nuevoAnimal);
+          DataStore.save('inventario', inventario);
+          
+          const movimiento = {
+            id: Date.now(),
+            fecha: nuevoAnimal.fecha_registro,
+            animal_id: nuevoAnimal.id,
+            animal_nombre: nuevoAnimal.nombre || nuevoAnimal.id,
+            tipo: datos.origen === 'Nacimiento' ? 'Nacimiento' : 'Compra',
+            detalle: `Ingreso a etapa: ${datos.etapa}`,
+            observaciones: datos.observaciones || ''
+          };
+          
+          movimientos.push(movimiento);
+          DataStore.save('movimientos', movimientos);
+          
+          mostrarNotificacion(`Animal ${datos.id} registrado exitosamente`, 'success');
+          this.reset();
+          document.getElementById('animal-id').value = generarID();
+          actualizarEstadisticas();
+        };
+      }
+
+      // Formulario de cambio de etapa
+      const formCambioEtapa = document.getElementById('form-cambiar-etapa');
+      if (formCambioEtapa) {
+        formCambioEtapa.onsubmit = function(e) {
+          e.preventDefault();
+          
+          const animalId = document.getElementById('cambio-animal-id').value;
+          const nuevaEtapa = document.getElementById('cambio-nueva-etapa').value;
+          const fecha = document.getElementById('cambio-fecha').value;
+          const observaciones = document.getElementById('cambio-observaciones').value;
+          
+          const animal = inventario.find(a => a.id === animalId);
+          if (!animal) return;
+          
+          const etapaAnterior = animal.etapa;
+          
+          animal.etapa = nuevaEtapa;
+          animal.fecha_ingreso_etapa = fecha;
+          
+          if (animal.historial_etapas) {
+            const ultimaEtapa = animal.historial_etapas[animal.historial_etapas.length - 1];
+            ultimaEtapa.fecha_fin = fecha;
+            
+            animal.historial_etapas.push({
+              etapa: nuevaEtapa,
+              fecha_inicio: fecha,
+              fecha_fin: null
+            });
+          }
+          
+          DataStore.save('inventario', inventario);
+          
+          const movimiento = {
+            id: Date.now(),
+            fecha: fecha,
+            animal_id: animal.id,
+            animal_nombre: animal.nombre || animal.id,
+            tipo: 'Cambio Etapa',
+            detalle: `${etapaAnterior} → ${nuevaEtapa}`,
+            observaciones: observaciones
+          };
+          
+          movimientos.push(movimiento);
+          DataStore.save('movimientos', movimientos);
+          
+          mostrarNotificacion(`Etapa actualizada: ${nuevaEtapa}`, 'success');
+          cerrarModal('modal-cambiar-etapa');
+          renderizarInventario();
+          actualizarEstadisticas();
+          this.reset();
+        };
+      }
+
+      // Formulario de cambio de estado
+      const formCambioEstado = document.getElementById('form-cambiar-estado');
+      if (formCambioEstado) {
+        formCambioEstado.onsubmit = function(e) {
+          e.preventDefault();
+          
+          const animalId = document.getElementById('estado-animal-id').value;
+          const nuevoEstado = document.getElementById('estado-nuevo-estado').value;
+          const fecha = document.getElementById('estado-fecha').value;
+          const observaciones = document.getElementById('estado-observaciones').value;
+          const precioVenta = document.getElementById('estado-precio-venta')?.value;
+          
+          const animal = inventario.find(a => a.id === animalId);
+          if (!animal) return;
+          
+          animal.estado = nuevoEstado;
+          
+          if (nuevoEstado === 'Vendido' && precioVenta) {
+            animal.precio_venta = parseFloat(precioVenta);
+            animal.fecha_venta = fecha;
+          } else if (nuevoEstado === 'Muerto') {
+            animal.fecha_muerte = fecha;
+          }
+          
+          DataStore.save('inventario', inventario);
+          
+          const movimiento = {
+            id: Date.now(),
+            fecha: fecha,
+            animal_id: animal.id,
+            animal_nombre: animal.nombre || animal.id,
+            tipo: nuevoEstado,
+            detalle: nuevoEstado === 'Vendido' && precioVenta ? 
+              `Vendido por $${parseFloat(precioVenta).toLocaleString()}` : 
+              nuevoEstado,
+            observaciones: observaciones
+          };
+          
+          movimientos.push(movimiento);
+          DataStore.save('movimientos', movimientos);
+          
+          mostrarNotificacion(`Estado actualizado: ${nuevoEstado}`, 'success');
+          cerrarModal('modal-cambiar-estado');
+          renderizarInventario();
+          actualizarEstadisticas();
+          this.reset();
+        };
+      }
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 6: TABS DEL MÓDULO
+    // ==========================================
+
+    function cambiarTab(tabName) {
+      // Actualizar botones
+      document.querySelectorAll('.tab-button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.target.classList.add('active');
+      
+      // Actualizar contenido
+      document.querySelectorAll('.content-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+      
+      // Renderizar según tab
+      if (tabName === 'inventario') {
+        renderizarInventario();
+      } else if (tabName === 'movimientos') {
+        renderizarMovimientos();
+      } else if (tabName === 'reportes') {
+        renderizarReportes();
+      }
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 7: RENDERIZADO DE INVENTARIO
+    // ==========================================
+
+    function renderizarInventario(datos = null) {
+      const tbody = document.getElementById('tabla-inventario');
+      const empty = document.getElementById('empty-inventario');
+      
+      if (!tbody) return;
+      
+      const animales = datos || inventario.filter(a => a.estado === 'Activo');
+      
+      if (animales.length === 0) {
+        tbody.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        return;
+      }
+      
+      if (empty) empty.classList.add('hidden');
+      
+      tbody.innerHTML = animales.map(animal => {
+        const edad = calcularEdad(animal.fecha_nacimiento);
+        const diasEtapa = calcularDiasEnEtapa(animal);
+        
+        return `
+          <tr>
+            <td><strong>${animal.id}</strong></td>
+            <td>${animal.nombre || '-'}</td>
+            <td><span class="badge ${obtenerBadgeEtapa(animal.etapa)}">${animal.etapa}</span></td>
+            <td>${edad}</td>
+            <td>${diasEtapa} días</td>
+            <td>${animal.potrero || '-'}</td>
+            <td><span class="badge ${obtenerBadgeEstado(animal.estado)}">${animal.estado}</span></td>
+            <td class="table-actions">
+              <button class="btn-icon" onclick="abrirModalCambiarEtapa('${animal.id}')" title="Cambiar etapa">
+                🔄
+              </button>
+              <button class="btn-icon" onclick="abrirModalCambiarEstado('${animal.id}')" title="Cambiar estado">
+                ⚙️
+              </button>
+              <button class="btn-icon" onclick="verDetalles('${animal.id}')" title="Ver detalles">
+                👁️
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function filtrarInventario() {
+      const etapa = document.getElementById('filter-etapa')?.value;
+      const estado = document.getElementById('filter-estado')?.value;
+      const buscar = document.getElementById('filter-buscar')?.value.toLowerCase();
+      
+      let animalesFiltrados = inventario;
+      
+      if (etapa) {
+        animalesFiltrados = animalesFiltrados.filter(a => a.etapa === etapa);
+      }
+      
+      if (estado) {
+        animalesFiltrados = animalesFiltrados.filter(a => a.estado === estado);
+      }
+      
+      if (buscar) {
+        animalesFiltrados = animalesFiltrados.filter(a => 
+          a.id.toLowerCase().includes(buscar) ||
+          (a.nombre && a.nombre.toLowerCase().includes(buscar))
+        );
+      }
+      
+      renderizarInventario(animalesFiltrados);
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 8: MOVIMIENTOS
+    // ==========================================
+
+    function renderizarMovimientos(datos = null) {
+      const tbody = document.getElementById('tabla-movimientos');
+      const empty = document.getElementById('empty-movimientos');
+      
+      if (!tbody) return;
+      
+      const movs = (datos || movimientos).sort((a, b) => 
+        new Date(b.fecha) - new Date(a.fecha)
+      );
+      
+      if (movs.length === 0) {
+        tbody.innerHTML = '';
+        if (empty) empty.classList.remove('hidden');
+        return;
+      }
+      
+      if (empty) empty.classList.add('hidden');
+      
+      tbody.innerHTML = movs.map(mov => `
+        <tr>
+          <td>${formatearFecha(mov.fecha)}</td>
+          <td><strong>${mov.animal_nombre}</strong><br><small>${mov.animal_id}</small></td>
+          <td><span class="badge badge-cria">${mov.tipo}</span></td>
+          <td>${mov.detalle}</td>
+          <td>${mov.observaciones || '-'}</td>
+        </tr>
+      `).join('');
+    }
+
+    function filtrarMovimientos() {
+      const tipo = document.getElementById('filter-tipo-mov')?.value;
+      const desde = document.getElementById('filter-fecha-desde')?.value;
+      const hasta = document.getElementById('filter-fecha-hasta')?.value;
+      
+      let movsFiltrados = movimientos;
+      
+      if (tipo) {
+        movsFiltrados = movsFiltrados.filter(m => m.tipo === tipo);
+      }
+      
+      if (desde) {
+        movsFiltrados = movsFiltrados.filter(m => m.fecha >= desde);
+      }
+      
+      if (hasta) {
+        movsFiltrados = movsFiltrados.filter(m => m.fecha <= hasta);
+      }
+      
+      renderizarMovimientos(movsFiltrados);
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 9: REPORTES
+    // ==========================================
+
+    function renderizarReportes() {
+      const activos = inventario.filter(a => a.estado === 'Activo');
+      const porEtapa = {
+        'Cría': activos.filter(a => a.etapa === 'Cría'),
+        'Recría': activos.filter(a => a.etapa === 'Recría'),
+        'Levante': activos.filter(a => a.etapa === 'Levante'),
+        'Novilla Vientre': activos.filter(a => a.etapa === 'Novilla Vientre'),
+        'Producción': activos.filter(a => a.etapa === 'Producción'),
+        'Secas': activos.filter(a => a.etapa === 'Secas')
+      };
+      
+      Object.keys(porEtapa).forEach(etapa => {
+        const id = etapa.toLowerCase().replace(' ', '-');
+        const count = porEtapa[etapa].length;
+        const promedioDias = count > 0 ? 
+          Math.round(porEtapa[etapa].reduce((sum, a) => sum + calcularDiasEnEtapa(a), 0) / count) : 
+          0;
+        
+        const elemId = id === 'novilla-vientre' ? 'novilla' : id;
+        const elem = document.getElementById(`report-${elemId}`);
+        const subtitle = document.getElementById(`report-${elemId}-subtitle`);
+        
+        if (elem) elem.textContent = count;
+        if (subtitle) subtitle.textContent = `${promedioDias} días promedio`;
+      });
+      
+      // Generar alertas
+      const alertas = [];
+      
+      activos.forEach(animal => {
+        const diasEtapa = calcularDiasEnEtapa(animal);
+        const duracionEsperada = configuracion.duraciones_etapas[animal.etapa];
+        
+        if (diasEtapa >= duracionEsperada - 30) {
+          alertas.push({
+            tipo: 'warning',
+            mensaje: `${animal.nombre || animal.id} lleva ${diasEtapa} días en ${animal.etapa}. Considerar cambio de etapa.`
+          });
+        }
+      });
+      
+      const novillas = activos.filter(a => a.etapa === 'Novilla Vientre');
+      novillas.forEach(animal => {
+        const edad = calcularEdad(animal.fecha_nacimiento);
+        if (edad.includes('a')) {
+          alertas.push({
+            tipo: 'info',
+            mensaje: `${animal.nombre || animal.id} (Novilla) podría estar próxima al primer parto.`
+          });
+        }
+      });
+      
+      const container = document.getElementById('alertas-container');
+      if (container) {
+        if (alertas.length === 0) {
+          container.innerHTML = '<p style="color: var(--gris-medio);">No hay alertas en este momento.</p>';
+        } else {
+          container.innerHTML = alertas.map(alerta => `
+            <div style="padding: 1rem; background: ${alerta.tipo === 'warning' ? '#fef3c7' : '#dbeafe'}; 
+                 border-left: 4px solid ${alerta.tipo === 'warning' ? '#f59e0b' : '#3b82f6'}; 
+                 border-radius: 8px; margin-bottom: 1rem;">
+              ${alerta.tipo === 'warning' ? '⚠️' : 'ℹ️'} ${alerta.mensaje}
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 10: ESTADÍSTICAS
+    // ==========================================
+
+    function actualizarEstadisticas() {
+      const activos = inventario.filter(a => a.estado === 'Activo');
+      const produccion = activos.filter(a => a.etapa === 'Producción');
+      
+      const elemTotal = document.getElementById('stat-total');
+      const elemProduccion = document.getElementById('stat-produccion');
+      
+      if (elemTotal) elemTotal.textContent = activos.length;
+      if (elemProduccion) elemProduccion.textContent = produccion.length;
+      
+      if (activos.length > 0) {
+        const promedio = Math.round(
+          activos.reduce((sum, a) => sum + calcularDiasEnEtapa(a), 0) / activos.length
+        );
+        const elemPromedio = document.getElementById('stat-promedio');
+        if (elemPromedio) elemPromedio.textContent = promedio;
+      }
+      
+      const proximos = activos.filter(animal => {
+        const diasEtapa = calcularDiasEnEtapa(animal);
+        const duracionEsperada = configuracion.duraciones_etapas[animal.etapa];
+        return diasEtapa >= duracionEsperada - 30;
+      });
+      
+      const elemProximos = document.getElementById('stat-proximos');
+      if (elemProximos) elemProximos.textContent = proximos.length;
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 11: MODALES
+    // ==========================================
+
+    function abrirModalCambiarEtapa(animalId) {
+      const animal = inventario.find(a => a.id === animalId);
+      if (!animal) return;
+      
+      document.getElementById('cambio-animal-id').value = animal.id;
+      document.getElementById('cambio-animal-nombre').textContent = animal.nombre || animal.id;
+      document.getElementById('cambio-etapa-actual').textContent = animal.etapa;
+      document.getElementById('cambio-fecha').value = obtenerFechaHoy();
+      
+      document.getElementById('modal-cambiar-etapa').classList.add('active');
+    }
+
+    function abrirModalCambiarEstado(animalId) {
+      const animal = inventario.find(a => a.id === animalId);
+      if (!animal) return;
+      
+      document.getElementById('estado-animal-id').value = animal.id;
+      document.getElementById('estado-animal-nombre').textContent = animal.nombre || animal.id;
+      document.getElementById('estado-fecha').value = obtenerFechaHoy();
+      
+      document.getElementById('modal-cambiar-estado').classList.add('active');
+    }
+
+    function cerrarModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function toggleCamposEstado() {
+      const estado = document.getElementById('estado-nuevo-estado')?.value;
+      const campoPrecio = document.getElementById('campo-precio-venta');
+      
+      if (campoPrecio) {
+        if (estado === 'Vendido') {
+          campoPrecio.classList.remove('hidden');
+        } else {
+          campoPrecio.classList.add('hidden');
+        }
+      }
+    }
+
+    // Cerrar modales al hacer clic en el fondo
+    document.querySelectorAll('.modal').forEach(modal => {
+      modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+          this.classList.remove('active');
+        }
+      });
+    });
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 12: FUNCIONES ADICIONALES
+    // ==========================================
+
+    function verDetalles(animalId) {
+      const animal = inventario.find(a => a.id === animalId);
+      if (!animal) return;
+      
+      const diasEtapa = calcularDiasEnEtapa(animal);
+      
+      alert(`
+DETALLES DEL ANIMAL
+
+ID: ${animal.id}
+Nombre: ${animal.nombre || '-'}
+Etapa: ${animal.etapa}
+Edad: ${calcularEdad(animal.fecha_nacimiento)}
+Días en etapa actual: ${diasEtapa} días
+Potrero: ${animal.potrero || '-'}
+Estado: ${animal.estado}
+Fecha nacimiento: ${formatearFecha(animal.fecha_nacimiento)}
+Fecha registro: ${formatearFecha(animal.fecha_registro)}
+Observaciones: ${animal.observaciones || '-'}
+      `);
+    }
+
+    function exportarCSV() {
+      const headers = ['ID', 'Nombre', 'Etapa', 'Edad', 'Días en Etapa', 'Potrero', 'Estado', 'Fecha Nacimiento', 'Fecha Registro'];
+      
+      const rows = inventario.map(animal => [
+        animal.id,
+        animal.nombre || '',
+        animal.etapa,
+        calcularEdad(animal.fecha_nacimiento),
+        calcularDiasEnEtapa(animal),
+        animal.potrero || '',
+        animal.estado,
+        animal.fecha_nacimiento,
+        animal.fecha_registro
+      ]);
+      
+      const csv = [headers, ...rows]
+        .map(row => row.map(cell => `"${cell}"`).join(','))
+        .join('\n');
+      
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `inventario_${obtenerFechaHoy()}.csv`;
+      link.click();
+      
+      URL.revokeObjectURL(url);
+      mostrarNotificacion('Archivo CSV exportado', 'success');
+    }
+
+    // ==========================================
+    // JAVASCRIPT - SECCIÓN 13: INICIALIZACIÓN
+    // ==========================================
+	let conceptosCostos = [];
+
+function inicializarModuloCostos() {
+  conceptosCostos = DataStore.load('conceptos_costos') || [];
+  
+  configurarFormularioCostos();
+  actualizarEstadisticasCostos();
+  renderizarConceptos();
+  
+  const inputCodigo = document.getElementById('costo-codigo');
+  if (inputCodigo) {
+    inputCodigo.value = generarCodigoCosto();
+  }
+}
+
+function generarCodigoCosto() {
+  const num = conceptosCostos.length + 1;
+  return `C${num.toString().padStart(3, '0')}`;
+}
+
+function configurarFormularioCostos() {
+  const form = document.getElementById('form-costo');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      if (conceptosCostos.find(c => c.codigo === datos.codigo)) {
+        mostrarNotificacion('Ya existe un concepto con ese código', 'error');
+        return;
+      }
+      
+      const nuevoCosto = {
+        ...datos,
+        fecha_registro: obtenerFechaHoy(),
+        valor: parseFloat(datos.valor) || 0
+      };
+      
+      conceptosCostos.push(nuevoCosto);
+      DataStore.save('conceptos_costos', conceptosCostos);
+      
+      mostrarNotificacion(`Concepto ${datos.codigo} registrado exitosamente`, 'success');
+      this.reset();
+      document.getElementById('costo-codigo').value = generarCodigoCosto();
+      actualizarEstadisticasCostos();
+      renderizarConceptos();
+    };
+  }
+}
+
+function cambiarTabCostos(tabName) {
+  document.querySelectorAll('#modulo-estructura-costos .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-estructura-costos .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-costos-${tabName}`).classList.add('active');
+  
+  if (tabName === 'conceptos') {
+    renderizarConceptos();
+  } else if (tabName === 'por-etapa') {
+    renderizarCostosPorEtapa();
+  } else if (tabName === 'analisis') {
+    renderizarAnalisisCostos();
+  }
+}
+
+function renderizarConceptos(datos = null) {
+  const tbody = document.getElementById('tabla-conceptos');
+  const empty = document.getElementById('empty-conceptos');
+  
+  if (!tbody) return;
+  
+  const conceptos = datos || conceptosCostos;
+  
+  if (conceptos.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = conceptos.map(concepto => `
+    <tr>
+      <td><strong>${concepto.codigo}</strong></td>
+      <td>${concepto.concepto}</td>
+      <td><span class="badge ${concepto.tipo === 'Directo' ? 'badge-produccion' : 'badge-secas'}">${concepto.tipo}</span></td>
+      <td><span class="badge ${concepto.naturaleza === 'Variable' ? 'badge-levante' : 'badge-novilla'}">${concepto.naturaleza}</span></td>
+      <td>${concepto.categoria}</td>
+      <td>${concepto.etapa}</td>
+      <td>$${parseFloat(concepto.valor || 0).toLocaleString()}</td>
+      <td class="table-actions">
+        <button class="btn-icon" onclick="verDetallesCosto('${concepto.codigo}')" title="Ver detalles">
+          👁️
+        </button>
+        <button class="btn-icon" onclick="eliminarCosto('${concepto.codigo}')" title="Eliminar">
+          🗑️
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filtrarConceptos() {
+  const tipo = document.getElementById('filter-costo-tipo')?.value;
+  const naturaleza = document.getElementById('filter-costo-naturaleza')?.value;
+  const categoria = document.getElementById('filter-costo-categoria')?.value;
+  const buscar = document.getElementById('filter-costo-buscar')?.value.toLowerCase();
+  
+  let filtrados = conceptosCostos;
+  
+  if (tipo) filtrados = filtrados.filter(c => c.tipo === tipo);
+  if (naturaleza) filtrados = filtrados.filter(c => c.naturaleza === naturaleza);
+  if (categoria) filtrados = filtrados.filter(c => c.categoria === categoria);
+  if (buscar) {
+    filtrados = filtrados.filter(c => 
+      c.codigo.toLowerCase().includes(buscar) ||
+      c.concepto.toLowerCase().includes(buscar)
+    );
+  }
+  
+  renderizarConceptos(filtrados);
+}
+
+function renderizarCostosPorEtapa() {
+  const etapa = document.getElementById('filter-etapa-costos')?.value || 'Todas';
+  const container = document.getElementById('costos-por-etapa-container');
+  
+  if (!container) return;
+  
+  let costosEtapa = conceptosCostos;
+  if (etapa !== 'Todas') {
+    costosEtapa = conceptosCostos.filter(c => c.etapa === etapa || c.etapa === 'Todas');
+  }
+  
+  const porCategoria = {};
+  costosEtapa.forEach(costo => {
+    if (!porCategoria[costo.categoria]) {
+      porCategoria[costo.categoria] = [];
+    }
+    porCategoria[costo.categoria].push(costo);
+  });
+  
+  let html = `<h3 style="margin-bottom: 1rem;">Etapa: ${etapa}</h3>`;
+  
+  Object.keys(porCategoria).forEach(categoria => {
+    const costos = porCategoria[categoria];
+    html += `
+      <div class="card" style="margin-bottom: 1rem;">
+        <h4 style="margin-bottom: 1rem; color: var(--verde-udea);">${categoria}</h4>
+        <ul style="list-style: none; padding: 0;">
+          ${costos.map(c => `
+            <li style="padding: 0.5rem; border-bottom: 1px solid var(--gris-claro);">
+              <strong>${c.concepto}</strong> - 
+              ${c.tipo} / ${c.naturaleza} - 
+              $${parseFloat(c.valor || 0).toLocaleString()} / ${c.unidad || 'unidad'}
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html || '<p style="color: var(--gris-medio);">No hay costos para esta etapa.</p>';
+}
+
+function renderizarAnalisisCostos() {
+  const directos = conceptosCostos.filter(c => c.tipo === 'Directo');
+  const indirectos = conceptosCostos.filter(c => c.tipo === 'Indirecto');
+  const variables = conceptosCostos.filter(c => c.naturaleza === 'Variable');
+  const fijos = conceptosCostos.filter(c => c.naturaleza === 'Fijo');
+  
+  const total = conceptosCostos.length;
+  
+  document.getElementById('analisis-directos').textContent = directos.length;
+  document.getElementById('analisis-directos-pct').textContent = `${Math.round(directos.length / total * 100)}%`;
+  
+  document.getElementById('analisis-indirectos').textContent = indirectos.length;
+  document.getElementById('analisis-indirectos-pct').textContent = `${Math.round(indirectos.length / total * 100)}%`;
+  
+  document.getElementById('analisis-variables').textContent = variables.length;
+  document.getElementById('analisis-variables-pct').textContent = `${Math.round(variables.length / total * 100)}%`;
+  
+  document.getElementById('analisis-fijos').textContent = fijos.length;
+  document.getElementById('analisis-fijos-pct').textContent = `${Math.round(fijos.length / total * 100)}%`;
+  
+  // Por categoría
+  const categorias = ['Alimentación', 'Sanidad', 'Mano de Obra'];
+  categorias.forEach(cat => {
+    const count = conceptosCostos.filter(c => c.categoria === cat).length;
+    const elemId = cat.toLowerCase().replace(' ', '-').replace('ó', 'o');
+    const elem = document.getElementById(`analisis-${elemId}`);
+    if (elem) elem.textContent = count;
+  });
+  
+  const otros = conceptosCostos.filter(c => !categorias.includes(c.categoria)).length;
+  const elemOtros = document.getElementById('analisis-otros');
+  if (elemOtros) elemOtros.textContent = otros;
+}
+
+function actualizarEstadisticasCostos() {
+  const total = conceptosCostos.length;
+  const directos = conceptosCostos.filter(c => c.tipo === 'Directo').length;
+  const variables = conceptosCostos.filter(c => c.naturaleza === 'Variable').length;
+  
+  document.getElementById('stat-costos-total').textContent = total;
+  document.getElementById('stat-costos-directos').textContent = directos;
+  document.getElementById('stat-costos-variables').textContent = variables;
+}
+
+function verDetallesCosto(codigo) {
+  const costo = conceptosCostos.find(c => c.codigo === codigo);
+  if (!costo) return;
+  
+  alert(`
+DETALLES DEL CONCEPTO
+
+Código: ${costo.codigo}
+Concepto: ${costo.concepto}
+Tipo: ${costo.tipo}
+Naturaleza: ${costo.naturaleza}
+Categoría: ${costo.categoria}
+Etapa: ${costo.etapa}
+Valor Unitario: $${parseFloat(costo.valor || 0).toLocaleString()}
+Unidad: ${costo.unidad || '-'}
+Descripción: ${costo.descripcion || '-'}
+  `);
+}
+
+function eliminarCosto(codigo) {
+  if (!confirm('¿Está seguro de eliminar este concepto?')) return;
+  
+  conceptosCostos = conceptosCostos.filter(c => c.codigo !== codigo);
+  DataStore.save('conceptos_costos', conceptosCostos);
+  
+  mostrarNotificacion('Concepto eliminado', 'success');
+  renderizarConceptos();
+  actualizarEstadisticasCostos();
+}
+
+function exportarCSVCostos() {
+  const headers = ['Código', 'Concepto', 'Tipo', 'Naturaleza', 'Categoría', 'Etapa', 'Valor Unitario', 'Unidad'];
+  const rows = conceptosCostos.map(c => [
+    c.codigo,
+    c.concepto,
+    c.tipo,
+    c.naturaleza,
+    c.categoria,
+    c.etapa,
+    c.valor || 0,
+    c.unidad || ''
+  ]);
+  
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `costos_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('Archivo CSV exportado', 'success');
+}
+
+// ==========================================
+// MÓDULO 3: RECURSOS POR ETAPA - JAVASCRIPT
+// ==========================================
+
+let recursos = [];
+let consumosRecursos = [];
+let movimientosRecursos = [];
+
+function inicializarModuloRecursos() {
+  recursos = DataStore.load('recursos') || [];
+  consumosRecursos = DataStore.load('consumos_recursos') || [];
+  movimientosRecursos = DataStore.load('movimientos_recursos') || [];
+  
+  configurarFormularioRecursos();
+  actualizarEstadisticasRecursos();
+  renderizarRecursos();
+  actualizarSelectRecursos();
+  
+  const inputCodigo = document.getElementById('recurso-codigo');
+  if (inputCodigo) {
+    inputCodigo.value = generarCodigoRecurso();
+  }
+  
+  // Configurar subcategorías dinámicas
+  const tipoSelect = document.getElementById('recurso-tipo');
+  if (tipoSelect) {
+    tipoSelect.addEventListener('change', actualizarSubcategorias);
+  }
+}
+
+function generarCodigoRecurso() {
+  const num = recursos.length + 1;
+  return `R${num.toString().padStart(3, '0')}`;
+}
+
+function actualizarSubcategorias() {
+  const tipo = document.getElementById('recurso-tipo')?.value;
+  const subSelect = document.getElementById('recurso-subcategoria');
+  
+  if (!subSelect) return;
+  
+  const subcategorias = {
+    'Alimentación': ['Concentrado', 'Forraje', 'Suplemento', 'Sal mineralizada'],
+    'Sanidad': ['Vacuna', 'Antiparasitario', 'Antibiótico', 'Vitamina', 'Desinfectante'],
+    'Mano de Obra': ['Ordeñador', 'Vaquero', 'Veterinario', 'Administrador']
+  };
+  
+  const opciones = subcategorias[tipo] || [];
+  subSelect.innerHTML = '<option value="">Seleccione...</option>' +
+    opciones.map(sub => `<option value="${sub}">${sub}</option>`).join('');
+}
+
+function configurarFormularioRecursos() {
+  const formRecurso = document.getElementById('form-recurso');
+  if (formRecurso) {
+    formRecurso.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      if (recursos.find(r => r.codigo === datos.codigo)) {
+        mostrarNotificacion('Ya existe un recurso con ese código', 'error');
+        return;
+      }
+      
+      const nuevoRecurso = {
+        ...datos,
+        fecha_registro: obtenerFechaHoy(),
+        cantidad: parseFloat(datos.cantidad) || 0,
+        costo_unitario: parseFloat(datos.costo_unitario) || 0
+      };
+      
+      recursos.push(nuevoRecurso);
+      DataStore.save('recursos', recursos);
+      
+      // Registrar movimiento de entrada
+      const movimiento = {
+        id: Date.now(),
+        fecha: obtenerFechaHoy(),
+        recurso_codigo: nuevoRecurso.codigo,
+        recurso_nombre: nuevoRecurso.nombre,
+        tipo: 'Entrada',
+        cantidad: nuevoRecurso.cantidad,
+        etapa: '-',
+        observaciones: 'Registro inicial'
+      };
+      
+      movimientosRecursos.push(movimiento);
+      DataStore.save('movimientos_recursos', movimientosRecursos);
+      
+      mostrarNotificacion(`Recurso ${datos.codigo} registrado exitosamente`, 'success');
+      this.reset();
+      document.getElementById('recurso-codigo').value = generarCodigoRecurso();
+      actualizarEstadisticasRecursos();
+      renderizarRecursos();
+      actualizarSelectRecursos();
+    };
+  }
+  
+  const formConsumo = document.getElementById('form-consumo');
+  if (formConsumo) {
+    formConsumo.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const recurso = recursos.find(r => r.codigo === datos.recurso_id);
+      if (!recurso) return;
+      
+      const cantidad = parseFloat(datos.cantidad);
+      
+      if (cantidad > recurso.cantidad) {
+        mostrarNotificacion('Cantidad insuficiente en inventario', 'error');
+        return;
+      }
+      
+      // Registrar consumo
+      const consumo = {
+        id: Date.now(),
+        fecha: datos.fecha,
+        recurso_codigo: recurso.codigo,
+        recurso_nombre: recurso.nombre,
+        etapa: datos.etapa,
+        cantidad: cantidad,
+        costo: cantidad * parseFloat(recurso.costo_unitario),
+        observaciones: datos.observaciones || ''
+      };
+      
+      consumosRecursos.push(consumo);
+      DataStore.save('consumos_recursos', consumosRecursos);
+      
+      // Actualizar inventario
+      recurso.cantidad -= cantidad;
+      DataStore.save('recursos', recursos);
+      
+      // Registrar movimiento
+      const movimiento = {
+        id: Date.now(),
+        fecha: datos.fecha,
+        recurso_codigo: recurso.codigo,
+        recurso_nombre: recurso.nombre,
+        tipo: 'Consumo',
+        cantidad: cantidad,
+        etapa: datos.etapa,
+        observaciones: datos.observaciones || ''
+      };
+      
+      movimientosRecursos.push(movimiento);
+      DataStore.save('movimientos_recursos', movimientosRecursos);
+      
+      mostrarNotificacion('Consumo registrado exitosamente', 'success');
+      this.reset();
+      renderizarRecursos();
+      renderizarResumenConsumo();
+    };
+  }
+}
+
+function cambiarTabRecursos(tabName) {
+  document.querySelectorAll('#modulo-recursos-etapa .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-recursos-etapa .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-recursos-${tabName}`).classList.add('active');
+  
+  if (tabName === 'inventario') {
+    renderizarRecursos();
+  } else if (tabName === 'consumo') {
+    document.getElementById('consumo-fecha').value = obtenerFechaHoy();
+    renderizarResumenConsumo();
+  } else if (tabName === 'movimientos') {
+    renderizarMovimientosRecursos();
+  }
+}
+
+function renderizarRecursos(datos = null) {
+  const tbody = document.getElementById('tabla-recursos');
+  const empty = document.getElementById('empty-recursos');
+  
+  if (!tbody) return;
+  
+  const recursosLista = datos || recursos;
+  
+  if (recursosLista.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = recursosLista.map(recurso => {
+    const valorTotal = recurso.cantidad * recurso.costo_unitario;
+    return `
+      <tr>
+        <td><strong>${recurso.codigo}</strong></td>
+        <td>${recurso.nombre}</td>
+        <td><span class="badge badge-cria">${recurso.tipo}</span></td>
+        <td>${recurso.cantidad}</td>
+        <td>${recurso.unidad}</td>
+        <td>$${parseFloat(recurso.costo_unitario).toLocaleString()}</td>
+        <td>$${valorTotal.toLocaleString()}</td>
+        <td class="table-actions">
+          <button class="btn-icon" onclick="verDetallesRecurso('${recurso.codigo}')" title="Ver detalles">
+            👁️
+          </button>
+          <button class="btn-icon" onclick="ajustarInventarioRecurso('${recurso.codigo}')" title="Ajustar">
+            ⚙️
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filtrarRecursos() {
+  const tipo = document.getElementById('filter-recurso-tipo')?.value;
+  const etapa = document.getElementById('filter-recurso-etapa')?.value;
+  const buscar = document.getElementById('filter-recurso-buscar')?.value.toLowerCase();
+  
+  let filtrados = recursos;
+  
+  if (tipo) filtrados = filtrados.filter(r => r.tipo === tipo);
+  if (etapa) filtrados = filtrados.filter(r => r.etapa_uso === etapa || r.etapa_uso === 'Todas');
+  if (buscar) {
+    filtrados = filtrados.filter(r => 
+      r.codigo.toLowerCase().includes(buscar) ||
+      r.nombre.toLowerCase().includes(buscar)
+    );
+  }
+  
+  renderizarRecursos(filtrados);
+}
+
+function actualizarSelectRecursos() {
+  const select = document.getElementById('consumo-recurso');
+  if (!select) return;
+  
+  select.innerHTML = '<option value="">Seleccione un recurso...</option>' +
+    recursos.map(r => `
+      <option value="${r.codigo}">
+        ${r.nombre} (Disponible: ${r.cantidad} ${r.unidad})
+      </option>
+    `).join('');
+}
+
+function renderizarResumenConsumo() {
+  const container = document.getElementById('resumen-consumo-container');
+  if (!container) return;
+  
+  const etapas = ['Cría', 'Recría', 'Levante', 'Novilla Vientre', 'Producción', 'Secas'];
+  
+  let html = '';
+  etapas.forEach(etapa => {
+    const consumosEtapa = consumosRecursos.filter(c => c.etapa === etapa);
+    const total = consumosEtapa.reduce((sum, c) => sum + c.costo, 0);
+    
+    html += `
+      <div class="card" style="margin-bottom: 1rem;">
+        <h4 style="margin-bottom: 0.5rem;">${etapa}</h4>
+        <p style="font-size: 1.25rem; font-weight: 700; color: var(--verde-udea);">
+          $${total.toLocaleString()}
+        </p>
+        <p style="color: var(--gris-medio); font-size: 0.875rem;">
+          ${consumosEtapa.length} consumos registrados
+        </p>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html || '<p style="color: var(--gris-medio);">No hay consumos registrados.</p>';
+}
+
+function renderizarMovimientosRecursos(datos = null) {
+  const tbody = document.getElementById('tabla-movimientos-recursos');
+  const empty = document.getElementById('empty-movimientos-recursos');
+  
+  if (!tbody) return;
+  
+  const movs = (datos || movimientosRecursos).sort((a, b) => 
+    new Date(b.fecha) - new Date(a.fecha)
+  );
+  
+  if (movs.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = movs.map(mov => `
+    <tr>
+      <td>${formatearFecha(mov.fecha)}</td>
+      <td><strong>${mov.recurso_nombre}</strong><br><small>${mov.recurso_codigo}</small></td>
+      <td><span class="badge ${mov.tipo === 'Entrada' ? 'badge-produccion' : 'badge-levante'}">${mov.tipo}</span></td>
+      <td>${mov.cantidad}</td>
+      <td>${mov.etapa}</td>
+      <td>${mov.observaciones || '-'}</td>
+    </tr>
+  `).join('');
+}
+
+function filtrarMovimientosRecursos() {
+  const tipo = document.getElementById('filter-mov-tipo')?.value;
+  const desde = document.getElementById('filter-mov-desde')?.value;
+  const hasta = document.getElementById('filter-mov-hasta')?.value;
+  
+  let filtrados = movimientosRecursos;
+  
+  if (tipo) filtrados = filtrados.filter(m => m.tipo === tipo);
+  if (desde) filtrados = filtrados.filter(m => m.fecha >= desde);
+  if (hasta) filtrados = filtrados.filter(m => m.fecha <= hasta);
+  
+  renderizarMovimientosRecursos(filtrados);
+}
+
+function actualizarEstadisticasRecursos() {
+  const total = recursos.length;
+  const alimentacion = recursos.filter(r => r.tipo === 'Alimentación').length;
+  const sanidad = recursos.filter(r => r.tipo === 'Sanidad').length;
+  const manoObra = recursos.filter(r => r.tipo === 'Mano de Obra').length;
+  
+  document.getElementById('stat-recursos-total').textContent = total;
+  document.getElementById('stat-recursos-alimentacion').textContent = alimentacion;
+  document.getElementById('stat-recursos-sanidad').textContent = sanidad;
+  document.getElementById('stat-recursos-mano-obra').textContent = manoObra;
+}
+
+function verDetallesRecurso(codigo) {
+  const recurso = recursos.find(r => r.codigo === codigo);
+  if (!recurso) return;
+  
+  const valorTotal = recurso.cantidad * recurso.costo_unitario;
+  
+  alert(`
+DETALLES DEL RECURSO
+
+Código: ${recurso.codigo}
+Nombre: ${recurso.nombre}
+Tipo: ${recurso.tipo}
+Subcategoría: ${recurso.subcategoria || '-'}
+Cantidad: ${recurso.cantidad} ${recurso.unidad}
+Costo Unitario: $${parseFloat(recurso.costo_unitario).toLocaleString()}
+Valor Total: $${valorTotal.toLocaleString()}
+Etapa de Uso: ${recurso.etapa_uso || '-'}
+Descripción: ${recurso.descripcion || '-'}
+  `);
+}
+
+function ajustarInventarioRecurso(codigo) {
+  const recurso = recursos.find(r => r.codigo === codigo);
+  if (!recurso) return;
+  
+  const nuevaCantidad = prompt(`Cantidad actual: ${recurso.cantidad}\nIngrese nueva cantidad:`, recurso.cantidad);
+  if (nuevaCantidad === null) return;
+  
+  const cantidad = parseFloat(nuevaCantidad);
+  if (isNaN(cantidad) || cantidad < 0) {
+    mostrarNotificacion('Cantidad inválida', 'error');
+    return;
+  }
+  
+  const diferencia = cantidad - recurso.cantidad;
+  recurso.cantidad = cantidad;
+  DataStore.save('recursos', recursos);
+  
+  // Registrar movimiento de ajuste
+  const movimiento = {
+    id: Date.now(),
+    fecha: obtenerFechaHoy(),
+    recurso_codigo: recurso.codigo,
+    recurso_nombre: recurso.nombre,
+    tipo: 'Ajuste',
+    cantidad: Math.abs(diferencia),
+    etapa: '-',
+    observaciones: `Ajuste de inventario: ${diferencia > 0 ? '+' : ''}${diferencia}`
+  };
+  
+  movimientosRecursos.push(movimiento);
+  DataStore.save('movimientos_recursos', movimientosRecursos);
+  
+  mostrarNotificacion('Inventario ajustado', 'success');
+  renderizarRecursos();
+}
+
+function exportarCSVRecursos() {
+  const headers = ['Código', 'Nombre', 'Tipo', 'Cantidad', 'Unidad', 'Costo Unit.', 'Valor Total'];
+  const rows = recursos.map(r => [
+    r.codigo,
+    r.nombre,
+    r.tipo,
+    r.cantidad,
+    r.unidad,
+    r.costo_unitario,
+    r.cantidad * r.costo_unitario
+  ]);
+  
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `recursos_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('Archivo CSV exportado', 'success');
+}
+
+
+let produccionLeche = [];
+
+function inicializarModuloLeche() {
+  produccionLeche = DataStore.load('produccion_leche') || [];
+  
+  configurarFormularioLeche();
+  actualizarEstadisticasLeche();
+  cargarAnimalesProduccion();
+  
+  document.getElementById('leche-fecha').value = obtenerFechaHoy();
+}
+
+function configurarFormularioLeche() {
+  const form = document.getElementById('form-produccion-leche');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const tipoRegistro = datos.tipo_registro;
+      
+      let registro = {
+        id: Date.now(),
+        fecha: datos.fecha,
+        tipo_registro: tipoRegistro,
+        calidad: datos.calidad || '',
+        precio_litro: parseFloat(datos.precio_litro) || 0,
+        observaciones: datos.observaciones || ''
+      };
+      
+      if (tipoRegistro === 'Lote') {
+        registro.ordeno_am = parseFloat(datos.ordeno_am) || 0;
+        registro.ordeno_pm = parseFloat(datos.ordeno_pm) || 0;
+        registro.total = registro.ordeno_am + registro.ordeno_pm;
+        registro.num_vacas = parseInt(datos.num_vacas) || 0;
+      } else {
+        registro.animal_id = datos.animal_id;
+        registro.ordeno_am = parseFloat(datos.individual_am) || 0;
+        registro.ordeno_pm = parseFloat(datos.individual_pm) || 0;
+        registro.total = registro.ordeno_am + registro.ordeno_pm;
+      }
+      
+      registro.valor_total = registro.total * registro.precio_litro;
+      
+      produccionLeche.push(registro);
+      DataStore.save('produccion_leche', produccionLeche);
+      
+      mostrarNotificacion('Producción registrada exitosamente', 'success');
+      this.reset();
+      document.getElementById('leche-fecha').value = obtenerFechaHoy();
+      actualizarEstadisticasLeche();
+      renderizarProduccionLeche();
+    };
+  }
+  
+  // Auto-calcular totales
+  const inputsLote = ['leche-am', 'leche-pm'];
+  inputsLote.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('input', () => {
+        const am = parseFloat(document.getElementById('leche-am').value) || 0;
+        const pm = parseFloat(document.getElementById('leche-pm').value) || 0;
+        document.getElementById('leche-total').value = (am + pm).toFixed(1);
+      });
+    }
+  });
+  
+  const inputsIndividual = ['leche-individual-am', 'leche-individual-pm'];
+  inputsIndividual.forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('input', () => {
+        const am = parseFloat(document.getElementById('leche-individual-am').value) || 0;
+        const pm = parseFloat(document.getElementById('leche-individual-pm').value) || 0;
+        document.getElementById('leche-individual-total').value = (am + pm).toFixed(1);
+      });
+    }
+  });
+}
+
+function toggleRegistroLeche() {
+  const tipo = document.getElementById('leche-tipo-registro').value;
+  const camposLote = document.getElementById('campos-lote');
+  const camposIndividual = document.getElementById('campos-individual');
+  
+  if (tipo === 'Lote') {
+    camposLote.classList.remove('hidden');
+    camposIndividual.classList.add('hidden');
+  } else if (tipo === 'Individual') {
+    camposLote.classList.add('hidden');
+    camposIndividual.classList.remove('hidden');
+  } else {
+    camposLote.classList.add('hidden');
+    camposIndividual.classList.add('hidden');
+  }
+}
+
+function cargarAnimalesProduccion() {
+  const select = document.getElementById('leche-animal');
+  if (!select || !inventario) return;
+  
+  const vacasProduccion = inventario.filter(a => 
+    a.estado === 'Activo' && a.etapa === 'Producción'
+  );
+  
+  select.innerHTML = '<option value="">Seleccione un animal...</option>' +
+    vacasProduccion.map(v => `
+      <option value="${v.id}">${v.nombre || v.id}</option>
+    `).join('');
+}
+
+function cambiarTabLeche(tabName) {
+  document.querySelectorAll('#modulo-produccion-leche .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-produccion-leche .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-leche-${tabName}`).classList.add('active');
+  
+  if (tabName === 'historial') {
+    renderizarProduccionLeche();
+  } else if (tabName === 'por-animal') {
+    renderizarProduccionPorAnimal();
+  } else if (tabName === 'analisis') {
+    renderizarAnalisisLeche();
+  }
+}
+
+function renderizarProduccionLeche(datos = null) {
+  const tbody = document.getElementById('tabla-produccion-leche');
+  const empty = document.getElementById('empty-leche');
+  
+  if (!tbody) return;
+  
+  const registros = (datos || produccionLeche).sort((a, b) => 
+    new Date(b.fecha) - new Date(a.fecha)
+  );
+  
+  if (registros.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = registros.map(reg => `
+    <tr>
+      <td>${formatearFecha(reg.fecha)}</td>
+      <td><span class="badge ${reg.tipo_registro === 'Lote' ? 'badge-produccion' : 'badge-cria'}">${reg.tipo_registro}</span></td>
+      <td>${reg.ordeno_am.toFixed(1)}</td>
+      <td>${reg.ordeno_pm.toFixed(1)}</td>
+      <td><strong>${reg.total.toFixed(1)}</strong></td>
+      <td>${reg.calidad || '-'}</td>
+      <td>$${reg.precio_litro.toFixed(2)}</td>
+      <td>$${reg.valor_total.toLocaleString()}</td>
+    </tr>
+  `).join('');
+}
+
+function filtrarProduccionLeche() {
+  const desde = document.getElementById('filter-leche-desde')?.value;
+  const hasta = document.getElementById('filter-leche-hasta')?.value;
+  const tipo = document.getElementById('filter-leche-tipo')?.value;
+  
+  let filtrados = produccionLeche;
+  
+  if (desde) filtrados = filtrados.filter(p => p.fecha >= desde);
+  if (hasta) filtrados = filtrados.filter(p => p.fecha <= hasta);
+  if (tipo) filtrados = filtrados.filter(p => p.tipo_registro === tipo);
+  
+  renderizarProduccionLeche(filtrados);
+}
+
+function renderizarProduccionPorAnimal() {
+  const periodo = parseInt(document.getElementById('filter-animal-periodo')?.value || 30);
+  const container = document.getElementById('produccion-por-animal-container');
+  
+  if (!container) return;
+  
+  const fechaLimite = new Date();
+  fechaLimite.setDate(fechaLimite.getDate() - periodo);
+  
+  const registrosIndividuales = produccionLeche.filter(p => 
+    p.tipo_registro === 'Individual' && new Date(p.fecha) >= fechaLimite
+  );
+  
+  const porAnimal = {};
+  registrosIndividuales.forEach(reg => {
+    if (!porAnimal[reg.animal_id]) {
+      porAnimal[reg.animal_id] = {
+        total: 0,
+        registros: 0,
+        promedio: 0
+      };
+    }
+    porAnimal[reg.animal_id].total += reg.total;
+    porAnimal[reg.animal_id].registros++;
+  });
+  
+  Object.keys(porAnimal).forEach(animalId => {
+    porAnimal[animalId].promedio = porAnimal[animalId].total / porAnimal[animalId].registros;
+  });
+  
+  if (Object.keys(porAnimal).length === 0) {
+    container.innerHTML = '<p style="color: var(--gris-medio);">No hay registros individuales en este período.</p>';
+    return;
+  }
+  
+  let html = '';
+  Object.keys(porAnimal).forEach(animalId => {
+    const animal = inventario?.find(a => a.id === animalId);
+    const datos = porAnimal[animalId];
+    
+    html += `
+      <div class="card" style="margin-bottom: 1rem;">
+        <h4>${animal ? (animal.nombre || animal.id) : animalId}</h4>
+        <div class="stats-bar">
+          <div class="stat-card">
+            <div class="stat-label">Total</div>
+            <div class="stat-value">${datos.total.toFixed(1)} L</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Promedio</div>
+            <div class="stat-value">${datos.promedio.toFixed(1)} L</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Registros</div>
+            <div class="stat-value">${datos.registros}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+}
+
+function renderizarAnalisisLeche() {
+  const periodo = parseInt(document.getElementById('filter-analisis-periodo')?.value || 30);
+  
+  const fechaLimite = new Date();
+  fechaLimite.setDate(fechaLimite.getDate() - periodo);
+  
+  const registrosPeriodo = produccionLeche.filter(p => new Date(p.fecha) >= fechaLimite);
+  
+  const total = registrosPeriodo.reduce((sum, p) => sum + p.total, 0);
+  const promedio = registrosPeriodo.length > 0 ? total / registrosPeriodo.length : 0;
+  
+  const mejor = registrosPeriodo.reduce((max, p) => p.total > max.total ? p : max, {total: 0, fecha: ''});
+  
+  const ingresoTotal = registrosPeriodo.reduce((sum, p) => sum + p.valor_total, 0);
+  
+  document.getElementById('analisis-total').textContent = `${total.toFixed(1)} L`;
+  document.getElementById('analisis-promedio').textContent = `${promedio.toFixed(1)} L`;
+  document.getElementById('analisis-mejor').textContent = `${mejor.total.toFixed(1)} L`;
+  document.getElementById('analisis-mejor-fecha').textContent = mejor.fecha ? formatearFecha(mejor.fecha) : '-';
+  document.getElementById('analisis-ingreso').textContent = `$${ingresoTotal.toLocaleString()}`;
+}
+
+function actualizarEstadisticasLeche() {
+  const hoy = obtenerFechaHoy();
+  const produccionHoy = produccionLeche.filter(p => p.fecha === hoy).reduce((sum, p) => sum + p.total, 0);
+  
+  const fecha30Dias = new Date();
+  fecha30Dias.setDate(fecha30Dias.getDate() - 30);
+  const ultimos30 = produccionLeche.filter(p => new Date(p.fecha) >= fecha30Dias);
+  const promedio30 = ultimos30.length > 0 ? 
+    ultimos30.reduce((sum, p) => sum + p.total, 0) / ultimos30.length : 0;
+  
+  const costoPromedio = ultimos30.length > 0 ?
+    ultimos30.reduce((sum, p) => sum + (p.precio_litro || 0), 0) / ultimos30.length : 0;
+  
+  const vacasProduccion = inventario?.filter(a => 
+    a.estado === 'Activo' && a.etapa === 'Producción'
+  ).length || 0;
+  
+  document.getElementById('stat-leche-hoy').textContent = produccionHoy.toFixed(1);
+  document.getElementById('stat-leche-promedio').textContent = promedio30.toFixed(1);
+  document.getElementById('stat-leche-costo').textContent = `$${costoPromedio.toFixed(2)}`;
+  document.getElementById('stat-leche-vacas').textContent = vacasProduccion;
+}
+
+function exportarCSVLeche() {
+  const headers = ['Fecha', 'Tipo', 'AM', 'PM', 'Total', 'Calidad', 'Precio/L', 'Valor Total'];
+  const rows = produccionLeche.map(p => [
+    p.fecha,
+    p.tipo_registro,
+    p.ordeno_am,
+    p.ordeno_pm,
+    p.total,
+    p.calidad || '',
+    p.precio_litro,
+    p.valor_total
+  ]);
+  
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `produccion_leche_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('Archivo CSV exportado', 'success');
+}
+
+// ==========================================
+// MÓDULO 5: COSTO DE CONCENTRADO - JAVASCRIPT
+// ==========================================
+
+let ingredientes = [];
+let formulas = [];
+let produccionConcentrado = [];
+
+function inicializarModuloConcentrado() {
+  ingredientes = DataStore.load('ingredientes') || [];
+  formulas = DataStore.load('formulas') || [];
+  produccionConcentrado = DataStore.load('produccion_concentrado') || [];
+  
+  configurarFormularioIngredientes();
+  configurarFormularioFormulas();
+  configurarFormularioProduccionConcentrado();
+  actualizarEstadisticasConcentrado();
+  renderizarIngredientes();
+  actualizarSelectsIngredientes();
+  
+  document.getElementById('ingrediente-codigo').value = generarCodigoIngrediente();
+  document.getElementById('formula-codigo').value = generarCodigoFormula();
+}
+
+function generarCodigoIngrediente() {
+  const num = ingredientes.length + 1;
+  return `ING${num.toString().padStart(3, '0')}`;
+}
+
+function generarCodigoFormula() {
+  const num = formulas.length + 1;
+  return `F${num.toString().padStart(3, '0')}`;
+}
+
+function configurarFormularioIngredientes() {
+  const form = document.getElementById('form-ingrediente');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      if (ingredientes.find(i => i.codigo === datos.codigo)) {
+        mostrarNotificacion('Ya existe un ingrediente con ese código', 'error');
+        return;
+      }
+      
+      const nuevoIngrediente = {
+        ...datos,
+        fecha_registro: obtenerFechaHoy(),
+        costo_kg: parseFloat(datos.costo_kg),
+        stock: parseFloat(datos.stock) || 0,
+        proteina: parseFloat(datos.proteina) || 0,
+        fibra: parseFloat(datos.fibra) || 0
+      };
+      
+      ingredientes.push(nuevoIngrediente);
+      DataStore.save('ingredientes', ingredientes);
+      
+      mostrarNotificacion(`Ingrediente ${datos.codigo} registrado`, 'success');
+      this.reset();
+      document.getElementById('ingrediente-codigo').value = generarCodigoIngrediente();
+      actualizarEstadisticasConcentrado();
+      renderizarIngredientes();
+      actualizarSelectsIngredientes();
+    };
+  }
+}
+
+function configurarFormularioFormulas() {
+  const form = document.getElementById('form-formula');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      
+      const codigo = formData.get('codigo');
+      if (formulas.find(f => f.codigo === codigo)) {
+        mostrarNotificacion('Ya existe una fórmula con ese código', 'error');
+        return;
+      }
+      
+      const composicion = [];
+      const ingredientesCodigos = formData.getAll('ingrediente_codigo[]');
+      const ingredientesCantidades = formData.getAll('ingrediente_cantidad[]');
+      
+      let totalKg = 0;
+      let costoTotal = 0;
+      let proteinaTotal = 0;
+      
+      ingredientesCodigos.forEach((codigo, index) => {
+        if (codigo) {
+          const cantidad = parseFloat(ingredientesCantidades[index]) || 0;
+          const ingrediente = ingredientes.find(i => i.codigo === codigo);
+          
+          if (ingrediente && cantidad > 0) {
+            totalKg += cantidad;
+            costoTotal += cantidad * ingrediente.costo_kg;
+            proteinaTotal += cantidad * (ingrediente.proteina || 0) / 100;
+            
+            composicion.push({
+              ingrediente_codigo: codigo,
+              ingrediente_nombre: ingrediente.nombre,
+              cantidad: cantidad,
+              costo_unitario: ingrediente.costo_kg
+            });
+          }
+        }
+      });
+      
+      if (composicion.length === 0) {
+        mostrarNotificacion('Debe agregar al menos un ingrediente', 'error');
+        return;
+      }
+      
+      const nuevaFormula = {
+        codigo: codigo,
+        nombre: formData.get('nombre'),
+        etapa: formData.get('etapa'),
+        cantidad_base: parseFloat(formData.get('cantidad_base')) || 100,
+        descripcion: formData.get('descripcion') || '',
+        composicion: composicion,
+        total_kg: totalKg,
+        costo_total: costoTotal,
+        costo_kg: totalKg > 0 ? costoTotal / totalKg : 0,
+        proteina_pct: totalKg > 0 ? (proteinaTotal / totalKg) * 100 : 0,
+        fecha_registro: obtenerFechaHoy()
+      };
+      
+      formulas.push(nuevaFormula);
+      DataStore.save('formulas', formulas);
+      
+      mostrarNotificacion(`Fórmula ${codigo} registrada`, 'success');
+      this.reset();
+      document.getElementById('formula-codigo').value = generarCodigoFormula();
+      
+      // Limpiar composición
+      document.getElementById('ingredientes-formula').innerHTML = `
+        <div class="form-grid ingrediente-item" style="margin-bottom: 1rem; padding: 1rem; background: var(--crema); border-radius: 8px;">
+          <div class="form-group">
+            <label>Ingrediente</label>
+            <select name="ingrediente_codigo[]" class="ingrediente-select" onchange="actualizarCostoFormula()">
+              <option value="">Seleccione...</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Cantidad (kg)</label>
+            <input type="number" name="ingrediente_cantidad[]" step="0.1" placeholder="0.0" class="ingrediente-cantidad" onchange="actualizarCostoFormula()">
+          </div>
+          <div class="form-group">
+            <label>% de la Fórmula</label>
+            <input type="number" step="0.01" placeholder="0.00" class="ingrediente-porcentaje" readonly style="background: var(--gris-claro);">
+          </div>
+          <div class="form-group">
+            <label>Costo</label>
+            <input type="number" step="0.01" placeholder="0.00" class="ingrediente-costo-parcial" readonly style="background: var(--gris-claro);">
+          </div>
+        </div>
+      `;
+      
+      actualizarSelectsIngredientes();
+      actualizarEstadisticasConcentrado();
+      renderizarFormulas();
+      actualizarCostoFormula();
+    };
+  }
+}
+
+function configurarFormularioProduccionConcentrado() {
+  const form = document.getElementById('form-produccion-concentrado');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const formula = formulas.find(f => f.codigo === datos.formula_codigo);
+      if (!formula) return;
+      
+      const cantidad = parseFloat(datos.cantidad);
+      const factor = cantidad / formula.total_kg;
+      const costoTotal = formula.costo_total * factor;
+      
+      const registro = {
+        id: Date.now(),
+        fecha: datos.fecha,
+        formula_codigo: formula.codigo,
+        formula_nombre: formula.nombre,
+        cantidad: cantidad,
+        costo_total: costoTotal,
+        costo_kg: formula.costo_kg,
+        observaciones: datos.observaciones || ''
+      };
+      
+      produccionConcentrado.push(registro);
+      DataStore.save('produccion_concentrado', produccionConcentrado);
+      
+      mostrarNotificacion('Producción registrada', 'success');
+      this.reset();
+      document.getElementById('prod-fecha').value = obtenerFechaHoy();
+      renderizarProduccionConcentrado();
+      actualizarEstadisticasConcentrado();
+    };
+  }
+  
+  document.getElementById('prod-fecha').value = obtenerFechaHoy();
+}
+
+function cambiarTabConcentrado(tabName) {
+  document.querySelectorAll('#modulo-costo-concentrado .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-costo-concentrado .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-concentrado-${tabName}`).classList.add('active');
+  
+  if (tabName === 'ingredientes') {
+    renderizarIngredientes();
+  } else if (tabName === 'formulas') {
+    renderizarFormulas();
+  } else if (tabName === 'produccion') {
+    renderizarProduccionConcentrado();
+  } else if (tabName === 'analisis') {
+    renderizarAnalisisConcentrado();
+  }
+}
+
+function renderizarIngredientes(datos = null) {
+  const tbody = document.getElementById('tabla-ingredientes');
+  const empty = document.getElementById('empty-ingredientes');
+  
+  if (!tbody) return;
+  
+  const ings = datos || ingredientes;
+  
+  if (ings.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = ings.map(ing => {
+    const valorStock = ing.stock * ing.costo_kg;
+    return `
+      <tr>
+        <td><strong>${ing.codigo}</strong></td>
+        <td>${ing.nombre}</td>
+        <td><span class="badge badge-cria">${ing.categoria}</span></td>
+        <td>$${ing.costo_kg.toFixed(2)}</td>
+        <td>${ing.stock.toFixed(1)}</td>
+        <td>$${valorStock.toLocaleString()}</td>
+        <td class="table-actions">
+          <button class="btn-icon" onclick="verDetallesIngrediente('${ing.codigo}')" title="Ver detalles">
+            👁️
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filtrarIngredientes() {
+  const categoria = document.getElementById('filter-ing-categoria')?.value;
+  const buscar = document.getElementById('filter-ing-buscar')?.value.toLowerCase();
+  
+  let filtrados = ingredientes;
+  
+  if (categoria) filtrados = filtrados.filter(i => i.categoria === categoria);
+  if (buscar) {
+    filtrados = filtrados.filter(i => 
+      i.codigo.toLowerCase().includes(buscar) ||
+      i.nombre.toLowerCase().includes(buscar)
+    );
+  }
+  
+  renderizarIngredientes(filtrados);
+}
+
+function renderizarFormulas() {
+  const tbody = document.getElementById('tabla-formulas');
+  const empty = document.getElementById('empty-formulas');
+  
+  if (!tbody) return;
+  
+  if (formulas.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = formulas.map(formula => `
+    <tr>
+      <td><strong>${formula.codigo}</strong></td>
+      <td>${formula.nombre}</td>
+      <td><span class="badge ${obtenerBadgeEtapa(formula.etapa)}">${formula.etapa}</span></td>
+      <td>${formula.composicion.length}</td>
+      <td>$${formula.costo_kg.toFixed(2)}</td>
+      <td class="table-actions">
+        <button class="btn-icon" onclick="verDetallesFormula('${formula.codigo}')" title="Ver detalles">
+          👁️
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function renderizarProduccionConcentrado() {
+  const tbody = document.getElementById('tabla-produccion-concentrado');
+  const empty = document.getElementById('empty-produccion-conc');
+  
+  if (!tbody) return;
+  
+  const registros = produccionConcentrado.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  if (registros.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = registros.map(reg => `
+    <tr>
+      <td>${formatearFecha(reg.fecha)}</td>
+      <td>${reg.formula_nombre}</td>
+      <td>${reg.cantidad}</td>
+      <td>$${reg.costo_total.toLocaleString()}</td>
+      <td>$${reg.costo_kg.toFixed(2)}</td>
+    </tr>
+  `).join('');
+}
+
+function actualizarSelectsIngredientes() {
+  const selects = document.querySelectorAll('.ingrediente-select');
+  const selectProd = document.getElementById('prod-formula');
+  
+  const opcionesIngredientes = '<option value="">Seleccione...</option>' +
+    ingredientes.map(ing => `
+      <option value="${ing.codigo}">${ing.nombre} - $${ing.costo_kg.toFixed(2)}/kg</option>
+    `).join('');
+  
+  selects.forEach(select => {
+    select.innerHTML = opcionesIngredientes;
+  });
+  
+  if (selectProd) {
+    selectProd.innerHTML = '<option value="">Seleccione una fórmula...</option>' +
+      formulas.map(f => `
+        <option value="${f.codigo}">${f.nombre} (${f.etapa}) - $${f.costo_kg.toFixed(2)}/kg</option>
+      `).join('');
+  }
+}
+
+function agregarIngredienteFormula() {
+  const container = document.getElementById('ingredientes-formula');
+  const nuevoItem = document.createElement('div');
+  nuevoItem.className = 'form-grid ingrediente-item';
+  nuevoItem.style.cssText = 'margin-bottom: 1rem; padding: 1rem; background: var(--crema); border-radius: 8px;';
+  nuevoItem.innerHTML = `
+    <div class="form-group">
+      <label>Ingrediente</label>
+      <select name="ingrediente_codigo[]" class="ingrediente-select" onchange="actualizarCostoFormula()">
+        <option value="">Seleccione...</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Cantidad (kg)</label>
+      <input type="number" name="ingrediente_cantidad[]" step="0.1" placeholder="0.0" class="ingrediente-cantidad" onchange="actualizarCostoFormula()">
+    </div>
+    <div class="form-group">
+      <label>% de la Fórmula</label>
+      <input type="number" step="0.01" placeholder="0.00" class="ingrediente-porcentaje" readonly style="background: var(--gris-claro);">
+    </div>
+    <div class="form-group">
+      <label>Costo</label>
+      <input type="number" step="0.01" placeholder="0.00" class="ingrediente-costo-parcial" readonly style="background: var(--gris-claro);">
+    </div>
+    <div class="form-group">
+      <button type="button" class="btn btn-danger btn-small" onclick="this.closest('.ingrediente-item').remove(); actualizarCostoFormula();">
+        ✕
+      </button>
+    </div>
+  `;
+  
+  container.appendChild(nuevoItem);
+  actualizarSelectsIngredientes();
+}
+
+function actualizarCostoFormula() {
+  const items = document.querySelectorAll('.ingrediente-item');
+  
+  let totalKg = 0;
+  let costoTotal = 0;
+  let proteinaTotal = 0;
+  
+  items.forEach(item => {
+    const select = item.querySelector('.ingrediente-select');
+    const inputCantidad = item.querySelector('.ingrediente-cantidad');
+    
+    const codigo = select?.value;
+    const cantidad = parseFloat(inputCantidad?.value) || 0;
+    
+    if (codigo && cantidad > 0) {
+      const ingrediente = ingredientes.find(i => i.codigo === codigo);
+      if (ingrediente) {
+        const costo = cantidad * ingrediente.costo_kg;
+        totalKg += cantidad;
+        costoTotal += costo;
+        proteinaTotal += cantidad * (ingrediente.proteina || 0) / 100;
+        
+        const inputPorcentaje = item.querySelector('.ingrediente-porcentaje');
+        const inputCostoParcial = item.querySelector('.ingrediente-costo-parcial');
+        
+        if (inputCostoParcial) inputCostoParcial.value = costo.toFixed(2);
+      }
+    }
+  });
+  
+  // Actualizar porcentajes después de calcular el total
+  items.forEach(item => {
+    const inputCantidad = item.querySelector('.ingrediente-cantidad');
+    const cantidad = parseFloat(inputCantidad?.value) || 0;
+    const inputPorcentaje = item.querySelector('.ingrediente-porcentaje');
+    
+    if (inputPorcentaje && totalKg > 0) {
+      inputPorcentaje.value = ((cantidad / totalKg) * 100).toFixed(2);
+    }
+  });
+  
+  const costoKg = totalKg > 0 ? costoTotal / totalKg : 0;
+  const proteinaPct = totalKg > 0 ? (proteinaTotal / totalKg) * 100 : 0;
+  
+  document.getElementById('formula-total-kg').textContent = totalKg.toFixed(1);
+  document.getElementById('formula-costo-total').textContent = `$${costoTotal.toLocaleString()}`;
+  document.getElementById('formula-costo-kg').textContent = `$${costoKg.toFixed(2)}`;
+  document.getElementById('formula-proteina').textContent = `${proteinaPct.toFixed(1)}%`;
+}
+
+function cargarDetallesFormula() {
+  const codigo = document.getElementById('prod-formula')?.value;
+  const formula = formulas.find(f => f.codigo === codigo);
+  const cantidad = parseFloat(document.getElementById('prod-cantidad')?.value) || 0;
+  
+  if (formula && cantidad > 0) {
+    const factor = cantidad / formula.total_kg;
+    const costoTotal = formula.costo_total * factor;
+    document.getElementById('prod-costo-total').value = costoTotal.toFixed(2);
+  } else {
+    document.getElementById('prod-costo-total').value = '';
+  }
+}
+
+function renderizarAnalisisConcentrado() {
+  if (formulas.length === 0) return;
+  
+  const costos = formulas.map(f => f.costo_kg);
+  const min = Math.min(...costos);
+  const max = Math.max(...costos);
+  
+  const formulaMin = formulas.find(f => f.costo_kg === min);
+  const formulaMax = formulas.find(f => f.costo_kg === max);
+  
+  document.getElementById('analisis-conc-min').textContent = `$${min.toFixed(2)}`;
+  document.getElementById('analisis-conc-min-formula').textContent = formulaMin?.nombre || '-';
+  
+  document.getElementById('analisis-conc-max').textContent = `$${max.toFixed(2)}`;
+  document.getElementById('analisis-conc-max-formula').textContent = formulaMax?.nombre || '-';
+  
+  if (ingredientes.length > 0) {
+    const costosIng = ingredientes.map(i => i.costo_kg);
+    const minIng = Math.min(...costosIng);
+    const maxIng = Math.max(...costosIng);
+    
+    const ingCaro = ingredientes.find(i => i.costo_kg === maxIng);
+    const ingBarato = ingredientes.find(i => i.costo_kg === minIng);
+    
+    document.getElementById('analisis-ing-caro').textContent = ingCaro?.nombre || '-';
+    document.getElementById('analisis-ing-caro-precio').textContent = `$${maxIng.toFixed(2)}/kg`;
+    
+    document.getElementById('analisis-ing-barato').textContent = ingBarato?.nombre || '-';
+    document.getElementById('analisis-ing-barato-precio').textContent = `$${minIng.toFixed(2)}/kg`;
+  }
+}
+
+function actualizarEstadisticasConcentrado() {
+  document.getElementById('stat-formulas').textContent = formulas.length;
+  document.getElementById('stat-ingredientes').textContent = ingredientes.length;
+  
+  if (formulas.length > 0) {
+    const costoPromedio = formulas.reduce((sum, f) => sum + f.costo_kg, 0) / formulas.length;
+    document.getElementById('stat-costo-kg').textContent = `$${costoPromedio.toFixed(2)}`;
+  }
+  
+  const fechaMes = new Date();
+  fechaMes.setDate(1);
+  const produccionMes = produccionConcentrado
+    .filter(p => new Date(p.fecha) >= fechaMes)
+    .reduce((sum, p) => sum + p.cantidad, 0);
+  
+  document.getElementById('stat-produccion-mes').textContent = produccionMes.toFixed(0);
+}
+
+function verDetallesIngrediente(codigo) {
+  const ing = ingredientes.find(i => i.codigo === codigo);
+  if (!ing) return;
+  
+  alert(`
+DETALLES DEL INGREDIENTE
+
+Código: ${ing.codigo}
+Nombre: ${ing.nombre}
+Categoría: ${ing.categoria}
+Costo/kg: $${ing.costo_kg.toFixed(2)}
+Stock: ${ing.stock} kg
+Proveedor: ${ing.proveedor || '-'}
+% Proteína: ${ing.proteina || 0}%
+% Fibra: ${ing.fibra || 0}%
+  `);
+}
+
+function verDetallesFormula(codigo) {
+  const formula = formulas.find(f => f.codigo === codigo);
+  if (!formula) return;
+  
+  let detalles = `DETALLES DE LA FÓRMULA\n\nCódigo: ${formula.codigo}\nNombre: ${formula.nombre}\nEtapa: ${formula.etapa}\nCosto/kg: $${formula.costo_kg.toFixed(2)}\n\nCOMPOSICIÓN:\n\n`;
+  
+  formula.composicion.forEach(comp => {
+    const pct = (comp.cantidad / formula.total_kg * 100).toFixed(1);
+    detalles += `${comp.ingrediente_nombre}: ${comp.cantidad} kg (${pct}%)\n`;
+  });
+  
+  alert(detalles);
+}
+
+function exportarCSVIngredientes() {
+  const headers = ['Código', 'Nombre', 'Categoría', 'Costo/kg', 'Stock', 'Valor Stock'];
+  const rows = ingredientes.map(i => [
+    i.codigo,
+    i.nombre,
+    i.categoria,
+    i.costo_kg,
+    i.stock,
+    i.stock * i.costo_kg
+  ]);
+  
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `ingredientes_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('Archivo CSV exportado', 'success');
+}
+
+// Actualizar función abrirModulo para inicializar módulos 4 y 5
+const abrirModuloOriginal2 = abrirModulo;
+abrirModulo = function(nombreModulo) {
+  if (typeof abrirModuloOriginal2 === 'function') {
+    abrirModuloOriginal2(nombreModulo);
+  } else if (typeof abrirModuloOriginal === 'function') {
+    abrirModuloOriginal(nombreModulo);
+  }
+  
+  if (nombreModulo === 'produccion-leche') {
+    inicializarModuloLeche();
+  } else if (nombreModulo === 'costo-concentrado') {
+    inicializarModuloConcentrado();
+  }
+};
+
+
+
+// Actualizar función abrirModulo para inicializar módulos 2 y 3
+const abrirModuloOriginal = abrirModulo;
+abrirModulo = function(nombreModulo) {
+  abrirModuloOriginal(nombreModulo);
+  
+  if (nombreModulo === 'estructura-costos') {
+    inicializarModuloCostos();
+  } else if (nombreModulo === 'recursos-etapa') {
+    inicializarModuloRecursos();
+  }
+};
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 Sistema de Costos - Hacienda La Montaña');
+      console.log('📦 Sistema cargado correctamente');
+      
+      mostrarDashboard();
+    });
+  </script>
+
+</body>
+</html>
