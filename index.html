@@ -974,14 +974,14 @@
           <div class="stat-icon">✅</div>
           <div class="stat-content">
             <div class="stat-label">Configurados</div>
-            <div class="stat-value">5</div>
+            <div class="stat-value">9</div>
           </div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">⏳</div>
           <div class="stat-content">
             <div class="stat-label">Pendientes</div>
-            <div class="stat-value">4</div>
+            <div class="stat-value">0</div>
           </div>
         </div>
         <div class="stat-card">
@@ -1079,8 +1079,8 @@
           <p class="module-description">Gestión de potreros, fertilización, fumigación y producción de forraje verde.</p>
           <div class="module-meta">
             <div class="module-status">
-              <span class="status-dot pending"></span>
-              <span>Pendiente</span>
+              <span class="status-dot"></span>
+              <span>Activo</span>
             </div>
             <span class="module-arrow">→</span>
           </div>
@@ -1093,8 +1093,8 @@
           <p class="module-description">Presupuesto de costos de personal, nómina, prestaciones y asignación a actividades.</p>
           <div class="module-meta">
             <div class="module-status">
-              <span class="status-dot pending"></span>
-              <span>Pendiente</span>
+              <span class="status-dot"></span>
+              <span>Activo</span>
             </div>
             <span class="module-arrow">→</span>
           </div>
@@ -1107,8 +1107,8 @@
           <p class="module-description">Plan sanitario, vacunación, desparasitación, control reproductivo e inseminación.</p>
           <div class="module-meta">
             <div class="module-status">
-              <span class="status-dot pending"></span>
-              <span>Pendiente</span>
+              <span class="status-dot"></span>
+              <span>Activo</span>
             </div>
             <span class="module-arrow">→</span>
           </div>
@@ -1121,8 +1121,8 @@
           <p class="module-description">Dashboard ejecutivo, indicadores de gestión, comparativos y exportación de datos.</p>
           <div class="module-meta">
             <div class="module-status">
-              <span class="status-dot pending"></span>
-              <span>Pendiente</span>
+              <span class="status-dot"></span>
+              <span>Activo</span>
             </div>
             <span class="module-arrow">→</span>
           </div>
@@ -2775,54 +2775,1441 @@
          ========================================== -->
 
     <!-- Módulo 6: Potreros y Pastos -->
-    <div id="modulo-potreros" class="hidden">
-      <div class="card">
-        <h2 class="card-title">🌱 Potreros y Pastos</h2>
-        <div class="empty-state">
-          <div class="empty-state-icon">🌱</div>
-          <h3>Módulo en Construcción</h3>
-          <p>Este módulo incluirá la gestión de potreros y pastos.</p>
-        </div>
+<div id="modulo-potreros" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">🌱</div>
+      <div class="stat-content">
+        <div class="stat-label">Potreros Totales</div>
+        <div class="stat-value" id="stat-potreros-total">0</div>
+        <div class="stat-subtitle">Registrados</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon">🐄</div>
+      <div class="stat-content">
+        <div class="stat-label">En Uso</div>
+        <div class="stat-value" id="stat-potreros-uso">0</div>
+        <div class="stat-subtitle">Con ganado</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🌾</div>
+      <div class="stat-content">
+        <div class="stat-label">En Descanso</div>
+        <div class="stat-value" id="stat-potreros-descanso">0</div>
+        <div class="stat-subtitle">Recuperándose</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📏</div>
+      <div class="stat-content">
+        <div class="stat-label">Área Total</div>
+        <div class="stat-value" id="stat-area-total">0</div>
+        <div class="stat-subtitle">Hectáreas</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabPotreros('registro')">
+      ➕ Registrar Potrero
+    </button>
+    <button class="tab-button" onclick="cambiarTabPotreros('listado')">
+      📋 Listado
+    </button>
+    <button class="tab-button" onclick="cambiarTabPotreros('rotacion')">
+      🔄 Rotación
+    </button>
+    <button class="tab-button" onclick="cambiarTabPotreros('manejo')">
+      🌾 Manejo
+    </button>
+  </div>
+
+  <!-- Tab 1: Registro -->
+  <div id="tab-potreros-registro" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Potrero</h2>
+      
+      <form id="form-potrero">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Código <span class="required">*</span></label>
+            <input type="text" id="potrero-codigo" name="codigo" placeholder="P001" required>
+          </div>
+
+          <div class="form-group">
+            <label>Nombre del Potrero <span class="required">*</span></label>
+            <input type="text" id="potrero-nombre" name="nombre" placeholder="Ej: Potrero Las Palmas" required>
+          </div>
+
+          <div class="form-group">
+            <label>Área (Hectáreas) <span class="required">*</span></label>
+            <input type="number" id="potrero-area" name="area" step="0.1" placeholder="0.0" required>
+          </div>
+
+          <div class="form-group">
+            <label>Estado <span class="required">*</span></label>
+            <select id="potrero-estado" name="estado" required>
+              <option value="">Seleccione...</option>
+              <option value="Disponible">Disponible</option>
+              <option value="En Uso">En Uso</option>
+              <option value="Descanso">En Descanso</option>
+              <option value="Mantenimiento">En Mantenimiento</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Pasto</label>
+            <input type="text" id="potrero-pasto" name="tipo_pasto" placeholder="Ej: Brachiaria, Guinea">
+          </div>
+
+          <div class="form-group">
+            <label>Capacidad (Cabezas)</label>
+            <input type="number" id="potrero-capacidad" name="capacidad" placeholder="0">
+          </div>
+
+          <div class="form-group">
+            <label>Días de Descanso</label>
+            <input type="number" id="potrero-descanso" name="dias_descanso" placeholder="30">
+          </div>
+
+          <div class="form-group">
+            <label>Última Rotación</label>
+            <input type="date" id="potrero-ultima-rotacion" name="ultima_rotacion">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="potrero-observaciones" name="observaciones" rows="3" placeholder="Características, ubicación, estado general..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Potrero</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tab 2: Listado -->
+  <div id="tab-potreros-listado" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Potreros Registrados</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Estado</label>
+          <select id="filter-potrero-estado" onchange="filtrarPotreros()">
+            <option value="">Todos</option>
+            <option value="Disponible">Disponible</option>
+            <option value="En Uso">En Uso</option>
+            <option value="Descanso">En Descanso</option>
+            <option value="Mantenimiento">En Mantenimiento</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Buscar</label>
+          <input type="text" id="filter-potrero-buscar" placeholder="Código o nombre..." oninput="filtrarPotreros()">
+        </div>
+
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" onclick="exportarCSVPotreros()">
+            📥 Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Área (ha)</th>
+              <th>Estado</th>
+              <th>Tipo Pasto</th>
+              <th>Capacidad</th>
+              <th>Última Rotación</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-potreros">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-potreros" class="empty-state hidden">
+        <div class="empty-state-icon">🌱</div>
+        <h3>No hay potreros registrados</h3>
+        <p>Comienza registrando tu primer potrero</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Rotación -->
+  <div id="tab-potreros-rotacion" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Registrar Rotación de Ganado</h2>
+      
+      <form id="form-rotacion-potrero">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="rotacion-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Potrero <span class="required">*</span></label>
+            <select id="rotacion-potrero" name="potrero_codigo" required>
+              <option value="">Seleccione un potrero...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Número de Animales <span class="required">*</span></label>
+            <input type="number" id="rotacion-animales" name="num_animales" placeholder="0" required>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Movimiento <span class="required">*</span></label>
+            <select id="rotacion-tipo" name="tipo" required>
+              <option value="">Seleccione...</option>
+              <option value="Entrada">Entrada al potrero</option>
+              <option value="Salida">Salida del potrero</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="rotacion-observaciones" name="observaciones" rows="2" placeholder="Notas sobre la rotación..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Rotación</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Historial de Rotaciones</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Potrero</th>
+              <th>Movimiento</th>
+              <th>Animales</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-rotaciones">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-rotaciones" class="empty-state hidden">
+        <div class="empty-state-icon">🔄</div>
+        <h3>No hay rotaciones registradas</h3>
+        <p>Registra movimientos de ganado entre potreros</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Manejo -->
+  <div id="tab-potreros-manejo" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Registrar Actividad de Manejo</h2>
+      
+      <form id="form-manejo-potrero">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="manejo-potrero-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Potrero <span class="required">*</span></label>
+            <select id="manejo-potrero-select" name="potrero_codigo" required>
+              <option value="">Seleccione un potrero...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Actividad <span class="required">*</span></label>
+            <select id="manejo-potrero-tipo" name="tipo_actividad" required>
+              <option value="">Seleccione...</option>
+              <option value="Fertilización">Fertilización</option>
+              <option value="Fumigación">Fumigación</option>
+              <option value="Corte">Corte de pasto</option>
+              <option value="Resiembra">Resiembra</option>
+              <option value="Drenaje">Drenaje</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Costo</label>
+            <input type="number" id="manejo-potrero-costo" name="costo" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Descripción <span class="required">*</span></label>
+            <textarea id="manejo-potrero-descripcion" name="descripcion" rows="3" placeholder="Detalles de la actividad, productos utilizados, etc." required></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Actividad</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Historial de Manejo</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Potrero</th>
+              <th>Actividad</th>
+              <th>Costo</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-manejo-potreros">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-manejo-potreros" class="empty-state hidden">
+        <div class="empty-state-icon">🌾</div>
+        <h3>No hay actividades de manejo registradas</h3>
+        <p>Registra fertilización, fumigación y otras actividades</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
 
     <!-- Módulo 7: Personal -->
-    <div id="modulo-personal" class="hidden">
-      <div class="card">
-        <h2 class="card-title">👥 Personal</h2>
-        <div class="empty-state">
-          <div class="empty-state-icon">👥</div>
-          <h3>Módulo en Construcción</h3>
-          <p>Este módulo incluirá la gestión de personal.</p>
-        </div>
+  <div id="modulo-personal" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-content">
+        <div class="stat-label">Total Empleados</div>
+        <div class="stat-value" id="stat-empleados-total">0</div>
+        <div class="stat-subtitle">Registrados</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon">✅</div>
+      <div class="stat-content">
+        <div class="stat-label">Activos</div>
+        <div class="stat-value" id="stat-empleados-activos">0</div>
+        <div class="stat-subtitle">En nómina</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">💰</div>
+      <div class="stat-content">
+        <div class="stat-label">Nómina Mensual</div>
+        <div class="stat-value" id="stat-nomina-mes">$0</div>
+        <div class="stat-subtitle">Total mes actual</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📊</div>
+      <div class="stat-content">
+        <div class="stat-label">Tareas Asignadas</div>
+        <div class="stat-value" id="stat-tareas-mes">0</div>
+        <div class="stat-subtitle">Este mes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabPersonal('registro')">
+      ➕ Registrar Empleado
+    </button>
+    <button class="tab-button" onclick="cambiarTabPersonal('listado')">
+      📋 Listado
+    </button>
+    <button class="tab-button" onclick="cambiarTabPersonal('tareas')">
+      📝 Tareas
+    </button>
+    <button class="tab-button" onclick="cambiarTabPersonal('nomina')">
+      💰 Nómina
+    </button>
+  </div>
+
+  <!-- Tab 1: Registro -->
+  <div id="tab-personal-registro" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Empleado</h2>
+      
+      <form id="form-empleado">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Código <span class="required">*</span></label>
+            <input type="text" id="empleado-codigo" name="codigo" placeholder="E001" required>
+          </div>
+
+          <div class="form-group">
+            <label>Nombre Completo <span class="required">*</span></label>
+            <input type="text" id="empleado-nombre" name="nombre" placeholder="Nombre completo" required>
+          </div>
+
+          <div class="form-group">
+            <label>Identificación <span class="required">*</span></label>
+            <input type="text" id="empleado-cedula" name="cedula" placeholder="Cédula" required>
+          </div>
+
+          <div class="form-group">
+            <label>Cargo <span class="required">*</span></label>
+            <select id="empleado-cargo" name="cargo" required>
+              <option value="">Seleccione...</option>
+              <option value="Administrador">Administrador</option>
+              <option value="Mayordomo">Mayordomo</option>
+              <option value="Vaquero">Vaquero</option>
+              <option value="Ordeñador">Ordeñador</option>
+              <option value="Veterinario">Veterinario</option>
+              <option value="Operario">Operario</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Salario Mensual <span class="required">*</span></label>
+            <input type="number" id="empleado-salario" name="salario" step="0.01" placeholder="0.00" required>
+          </div>
+
+          <div class="form-group">
+            <label>Fecha de Ingreso <span class="required">*</span></label>
+            <input type="date" id="empleado-fecha-ingreso" name="fecha_ingreso" required>
+          </div>
+
+          <div class="form-group">
+            <label>Estado <span class="required">*</span></label>
+            <select id="empleado-estado" name="estado" required>
+              <option value="">Seleccione...</option>
+              <option value="Activo">Activo</option>
+              <option value="Inactivo">Inactivo</option>
+              <option value="Vacaciones">En Vacaciones</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="tel" id="empleado-telefono" name="telefono" placeholder="Teléfono">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="empleado-observaciones" name="observaciones" rows="3" placeholder="Experiencia, habilidades, notas..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Guardar Empleado</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Tab 2: Listado -->
+  <div id="tab-personal-listado" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Empleados Registrados</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Cargo</label>
+          <select id="filter-empleado-cargo" onchange="filtrarEmpleados()">
+            <option value="">Todos</option>
+            <option value="Administrador">Administrador</option>
+            <option value="Mayordomo">Mayordomo</option>
+            <option value="Vaquero">Vaquero</option>
+            <option value="Ordeñador">Ordeñador</option>
+            <option value="Veterinario">Veterinario</option>
+            <option value="Operario">Operario</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Estado</label>
+          <select id="filter-empleado-estado" onchange="filtrarEmpleados()">
+            <option value="">Todos</option>
+            <option value="Activo">Activo</option>
+            <option value="Inactivo">Inactivo</option>
+            <option value="Vacaciones">En Vacaciones</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Buscar</label>
+          <input type="text" id="filter-empleado-buscar" placeholder="Nombre o cédula..." oninput="filtrarEmpleados()">
+        </div>
+
+        <div style="margin-left: auto;">
+          <button class="btn btn-secondary btn-small" onclick="exportarCSVEmpleados()">
+            📥 Exportar CSV
+          </button>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Código</th>
+              <th>Nombre</th>
+              <th>Cargo</th>
+              <th>Salario</th>
+              <th>Estado</th>
+              <th>Ingreso</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-empleados">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-empleados" class="empty-state hidden">
+        <div class="empty-state-icon">👥</div>
+        <h3>No hay empleados registrados</h3>
+        <p>Comienza registrando tu primer empleado</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Tareas -->
+  <div id="tab-personal-tareas" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Asignar Tarea</h2>
+      
+      <form id="form-tarea">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="tarea-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Empleado <span class="required">*</span></label>
+            <select id="tarea-empleado" name="empleado_codigo" required>
+              <option value="">Seleccione un empleado...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Tarea <span class="required">*</span></label>
+            <select id="tarea-tipo" name="tipo" required>
+              <option value="">Seleccione...</option>
+              <option value="Ordeño">Ordeño</option>
+              <option value="Alimentación">Alimentación</option>
+              <option value="Limpieza">Limpieza</option>
+              <option value="Mantenimiento">Mantenimiento</option>
+              <option value="Vacunación">Vacunación</option>
+              <option value="Manejo Potrero">Manejo de Potrero</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Horas Trabajadas</label>
+            <input type="number" id="tarea-horas" name="horas" step="0.5" placeholder="0.0">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Descripción <span class="required">*</span></label>
+            <textarea id="tarea-descripcion" name="descripcion" rows="3" placeholder="Detalles de la tarea asignada..." required></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Asignar Tarea</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Tareas Asignadas</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Desde</label>
+          <input type="date" id="filter-tarea-desde" onchange="filtrarTareas()">
+        </div>
+
+        <div class="filter-group">
+          <label>Hasta</label>
+          <input type="date" id="filter-tarea-hasta" onchange="filtrarTareas()">
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Empleado</th>
+              <th>Tipo</th>
+              <th>Horas</th>
+              <th>Descripción</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tareas">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Nómina -->
+  <div id="tab-personal-nomina" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Resumen de Nómina</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Mes</label>
+          <select id="nomina-mes" onchange="renderizarNomina()">
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Año</label>
+          <select id="nomina-anio" onchange="renderizarNomina()">
+            <!-- Se llenará con JavaScript -->
+          </select>
+        </div>
+      </div>
+
+      <div id="nomina-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
 
     <!-- Módulo 8: Sanidad y Reproducción -->
-    <div id="modulo-sanidad" class="hidden">
-      <div class="card">
-        <h2 class="card-title">💉 Sanidad y Reproducción</h2>
-        <div class="empty-state">
-          <div class="empty-state-icon">💉</div>
-          <h3>Módulo en Construcción</h3>
-          <p>Este módulo incluirá sanidad y reproducción.</p>
-        </div>
+  <div id="modulo-sanidad" class="hidden">
+  
+  <!-- Estadísticas del módulo -->
+  <div class="stats-bar">
+    <div class="stat-card">
+      <div class="stat-icon">💉</div>
+      <div class="stat-content">
+        <div class="stat-label">Eventos Este Mes</div>
+        <div class="stat-value" id="stat-sanidad-mes">0</div>
+        <div class="stat-subtitle">Vacunas y tratamientos</div>
       </div>
     </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-content">
+        <div class="stat-label">Próximos 30 Días</div>
+        <div class="stat-value" id="stat-sanidad-proximos">0</div>
+        <div class="stat-subtitle">Eventos programados</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🤰</div>
+      <div class="stat-content">
+        <div class="stat-label">Preñadas</div>
+        <div class="stat-value" id="stat-prenadas">0</div>
+        <div class="stat-subtitle">Animales en gestación</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">🐄</div>
+      <div class="stat-content">
+        <div class="stat-label">Partos Este Año</div>
+        <div class="stat-value" id="stat-partos-anio">0</div>
+        <div class="stat-subtitle">Total registrados</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabSanidad('vacunacion')">
+      💉 Vacunación
+    </button>
+    <button class="tab-button" onclick="cambiarTabSanidad('tratamientos')">
+      🏥 Tratamientos
+    </button>
+    <button class="tab-button" onclick="cambiarTabSanidad('reproduccion')">
+      🤰 Reproducción
+    </button>
+    <button class="tab-button" onclick="cambiarTabSanidad('calendario')">
+      📅 Calendario
+    </button>
+  </div>
+
+  <!-- Tab 1: Vacunación -->
+  <div id="tab-sanidad-vacunacion" class="content-section active">
+    <div class="card">
+      <h2 class="card-title">Registrar Vacunación</h2>
+      
+      <form id="form-vacunacion">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="vacuna-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Animal <span class="required">*</span></label>
+            <select id="vacuna-animal" name="animal_id" required>
+              <option value="">Seleccione...</option>
+              <option value="TODOS">Todos los animales (vacunación masiva)</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Vacuna <span class="required">*</span></label>
+            <select id="vacuna-tipo" name="tipo_vacuna" required>
+              <option value="">Seleccione...</option>
+              <option value="Aftosa">Fiebre Aftosa</option>
+              <option value="Brucelosis">Brucelosis</option>
+              <option value="Carbón">Carbón Sintomático</option>
+              <option value="Rabia">Rabia</option>
+              <option value="IBR">IBR</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Próxima Dosis</label>
+            <input type="date" id="vacuna-proxima" name="proxima_dosis">
+          </div>
+
+          <div class="form-group">
+            <label>Lote/Marca</label>
+            <input type="text" id="vacuna-lote" name="lote" placeholder="Lote del producto">
+          </div>
+
+          <div class="form-group">
+            <label>Costo</label>
+            <input type="number" id="vacuna-costo" name="costo" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="vacuna-observaciones" name="observaciones" rows="2" placeholder="Reacciones, notas adicionales..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Vacuna</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Historial de Vacunación</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Animal</label>
+          <select id="filter-vacuna-animal" onchange="filtrarVacunas()">
+            <option value="">Todos</option>
+            <!-- Se llenará con JavaScript -->
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Tipo</label>
+          <select id="filter-vacuna-tipo" onchange="filtrarVacunas()">
+            <option value="">Todas</option>
+            <option value="Aftosa">Aftosa</option>
+            <option value="Brucelosis">Brucelosis</option>
+            <option value="Carbón">Carbón</option>
+            <option value="Rabia">Rabia</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Animal</th>
+              <th>Vacuna</th>
+              <th>Próxima Dosis</th>
+              <th>Costo</th>
+              <th>Observaciones</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-vacunas">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-vacunas" class="empty-state hidden">
+        <div class="empty-state-icon">💉</div>
+        <h3>No hay vacunaciones registradas</h3>
+        <p>Registra el primer evento de vacunación</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: Tratamientos -->
+  <div id="tab-sanidad-tratamientos" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Registrar Tratamiento Médico</h2>
+      
+      <form id="form-tratamiento">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="tratamiento-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Animal <span class="required">*</span></label>
+            <select id="tratamiento-animal" name="animal_id" required>
+              <option value="">Seleccione un animal...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Tratamiento <span class="required">*</span></label>
+            <select id="tratamiento-tipo" name="tipo" required>
+              <option value="">Seleccione...</option>
+              <option value="Desparasitación">Desparasitación</option>
+              <option value="Antibiótico">Antibiótico</option>
+              <option value="Antiinflamatorio">Antiinflamatorio</option>
+              <option value="Vitaminas">Vitaminas/Suplementos</option>
+              <option value="Mastitis">Mastitis</option>
+              <option value="Cojera">Cojera</option>
+              <option value="Otro">Otro</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Medicamento</label>
+            <input type="text" id="tratamiento-medicamento" name="medicamento" placeholder="Nombre del medicamento">
+          </div>
+
+          <div class="form-group">
+            <label>Dosis</label>
+            <input type="text" id="tratamiento-dosis" name="dosis" placeholder="Ej: 10ml, 2 tabletas">
+          </div>
+
+          <div class="form-group">
+            <label>Días de Retiro</label>
+            <input type="number" id="tratamiento-retiro" name="dias_retiro" placeholder="0">
+          </div>
+
+          <div class="form-group">
+            <label>Costo</label>
+            <input type="number" id="tratamiento-costo" name="costo" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group">
+            <label>Veterinario</label>
+            <input type="text" id="tratamiento-veterinario" name="veterinario" placeholder="Nombre del veterinario">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Diagnóstico/Observaciones <span class="required">*</span></label>
+            <textarea id="tratamiento-diagnostico" name="diagnostico" rows="3" placeholder="Síntomas, diagnóstico y notas del tratamiento..." required></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Tratamiento</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Historial de Tratamientos</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Animal</th>
+              <th>Tipo</th>
+              <th>Medicamento</th>
+              <th>Días Retiro</th>
+              <th>Costo</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-tratamientos">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-tratamientos" class="empty-state hidden">
+        <div class="empty-state-icon">🏥</div>
+        <h3>No hay tratamientos registrados</h3>
+        <p>Registra el primer tratamiento médico</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Reproducción -->
+  <div id="tab-sanidad-reproduccion" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Registrar Evento Reproductivo</h2>
+      
+      <form id="form-reproduccion">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Fecha <span class="required">*</span></label>
+            <input type="date" id="repro-fecha" name="fecha" required>
+          </div>
+
+          <div class="form-group">
+            <label>Animal <span class="required">*</span></label>
+            <select id="repro-animal" name="animal_id" required>
+              <option value="">Seleccione...</option>
+              <!-- Se llenará con JavaScript -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Tipo de Evento <span class="required">*</span></label>
+            <select id="repro-tipo" name="tipo_evento" required onchange="toggleCamposReproduccion()">
+              <option value="">Seleccione...</option>
+              <option value="Inseminación">Inseminación</option>
+              <option value="Monta Natural">Monta Natural</option>
+              <option value="Diagnóstico Preñez">Diagnóstico de Preñez</option>
+              <option value="Parto">Parto</option>
+              <option value="Aborto">Aborto</option>
+              <option value="Secado">Secado</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="campo-toro">
+            <label>Toro/Semen</label>
+            <input type="text" id="repro-toro" name="toro" placeholder="Identificación del toro o semen">
+          </div>
+
+          <div class="form-group" id="campo-resultado">
+            <label>Resultado</label>
+            <select id="repro-resultado" name="resultado">
+              <option value="">Seleccione...</option>
+              <option value="Positivo">Positivo/Preñada</option>
+              <option value="Negativo">Negativo/Vacía</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="campo-fecha-parto">
+            <label>Fecha Probable Parto</label>
+            <input type="date" id="repro-fecha-parto" name="fecha_probable_parto">
+          </div>
+
+          <div class="form-group" id="campo-sexo-cria">
+            <label>Sexo de la Cría</label>
+            <select id="repro-sexo-cria" name="sexo_cria">
+              <option value="">Seleccione...</option>
+              <option value="Macho">Macho</option>
+              <option value="Hembra">Hembra</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Costo</label>
+            <input type="number" id="repro-costo" name="costo" step="0.01" placeholder="0.00">
+          </div>
+
+          <div class="form-group full-width">
+            <label>Observaciones</label>
+            <textarea id="repro-observaciones" name="observaciones" rows="3" placeholder="Detalles del evento reproductivo..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Limpiar</button>
+          <button type="submit" class="btn btn-primary">💾 Registrar Evento</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Historial Reproductivo</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Animal</th>
+              <th>Evento</th>
+              <th>Resultado</th>
+              <th>Detalles</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-reproduccion">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty-reproduccion" class="empty-state hidden">
+        <div class="empty-state-icon">🤰</div>
+        <h3>No hay eventos reproductivos</h3>
+        <p>Registra inseminaciones, partos y diagnósticos</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Calendario -->
+  <div id="tab-sanidad-calendario" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Calendario Sanitario</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Próximos</label>
+          <select id="filter-calendario-dias" onchange="renderizarCalendario()">
+            <option value="30">30 días</option>
+            <option value="60">60 días</option>
+            <option value="90">90 días</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="calendario-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card-title">Alertas Importantes</h2>
+      <div id="alertas-sanidad-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
+
+</div>
+
 
     <!-- Módulo 9: Reportes y Análisis -->
-    <div id="modulo-reportes" class="hidden">
-      <div class="card">
-        <h2 class="card-title">📈 Reportes y Análisis</h2>
-        <div class="empty-state">
-          <div class="empty-state-icon">📈</div>
-          <h3>Módulo en Construcción</h3>
-          <p>Este módulo incluirá reportes completos y dashboard ejecutivo.</p>
+<div id="modulo-reportes" class="hidden">
+  
+  <!-- Dashboard Ejecutivo -->
+  <div class="card" style="margin-bottom: 2rem;">
+    <h2 class="card-title">Dashboard Ejecutivo</h2>
+    <p style="color: var(--gris-medio); margin-bottom: 2rem;">Resumen general de la operación</p>
+
+    <!-- Stats principales -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-icon">🐄</div>
+        <div class="stat-content">
+          <div class="stat-label">Total Animales</div>
+          <div class="stat-value" id="report-total-animales">0</div>
+          <div class="stat-subtitle">En inventario</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🥛</div>
+        <div class="stat-content">
+          <div class="stat-label">Producción Hoy</div>
+          <div class="stat-value" id="report-produccion-hoy">0</div>
+          <div class="stat-subtitle">Litros de leche</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">💰</div>
+        <div class="stat-content">
+          <div class="stat-label">Costos Este Mes</div>
+          <div class="stat-value" id="report-costos-mes">$0</div>
+          <div class="stat-subtitle">Total invertido</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌱</div>
+        <div class="stat-content">
+          <div class="stat-label">Potreros Activos</div>
+          <div class="stat-value" id="report-potreros-uso">0</div>
+          <div class="stat-subtitle">En uso</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs de reportes -->
+  <div class="tabs">
+    <button class="tab-button active" onclick="cambiarTabReportes('resumen')">
+      📊 Resumen General
+    </button>
+    <button class="tab-button" onclick="cambiarTabReportes('produccion')">
+      🥛 Producción
+    </button>
+    <button class="tab-button" onclick="cambiarTabReportes('costos')">
+      💰 Costos
+    </button>
+    <button class="tab-button" onclick="cambiarTabReportes('exportar')">
+      📥 Exportar Datos
+    </button>
+  </div>
+
+  <!-- Tab 1: Resumen General -->
+  <div id="tab-reportes-resumen" class="content-section active">
+    
+    <!-- Por Etapa -->
+    <div class="card">
+      <h2 class="card-title">Distribución por Etapa Productiva</h2>
+      
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Cría</div>
+          <div class="stat-value" id="resumen-cria">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Recría</div>
+          <div class="stat-value" id="resumen-recria">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Levante</div>
+          <div class="stat-value" id="resumen-levante">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Novilla</div>
+          <div class="stat-value" id="resumen-novilla">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Producción</div>
+          <div class="stat-value" id="resumen-produccion">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Secas</div>
+          <div class="stat-value" id="resumen-secas">0</div>
         </div>
       </div>
     </div>
 
-  </main>
+    <!-- Recursos -->
+    <div class="card">
+      <h2 class="card-title">Estado de Recursos</h2>
+      
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Recurso</th>
+              <th>Stock Actual</th>
+              <th>Valor</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-recursos-resumen">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Personal -->
+    <div class="card">
+      <h2 class="card-title">Personal Activo</h2>
+      
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-label">Total Empleados</div>
+          <div class="stat-value" id="resumen-empleados">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Nómina Mensual</div>
+          <div class="stat-value" id="resumen-nomina">$0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Tareas Este Mes</div>
+          <div class="stat-value" id="resumen-tareas">0</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Tab 2: Producción -->
+  <div id="tab-reportes-produccion" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Análisis de Producción de Leche</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Período</label>
+          <select id="filter-prod-periodo" onchange="renderizarReporteProduccion()">
+            <option value="7">Última semana</option>
+            <option value="30">Último mes</option>
+            <option value="90">Últimos 3 meses</option>
+            <option value="365">Último año</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon">🥛</div>
+          <div class="stat-content">
+            <div class="stat-label">Producción Total</div>
+            <div class="stat-value" id="prod-total">0</div>
+            <div class="stat-subtitle">Litros</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <div class="stat-label">Promedio Diario</div>
+            <div class="stat-value" id="prod-promedio">0</div>
+            <div class="stat-subtitle">Litros/día</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-content">
+            <div class="stat-label">Costo por Litro</div>
+            <div class="stat-value" id="prod-costo-litro">$0</div>
+            <div class="stat-subtitle">Promedio</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🐄</div>
+          <div class="stat-content">
+            <div class="stat-label">Vacas en Producción</div>
+            <div class="stat-value" id="prod-vacas">0</div>
+            <div class="stat-subtitle">Activas</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="prod-detalles-container">
+        <!-- Se llenará con JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 3: Costos -->
+  <div id="tab-reportes-costos" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Análisis de Costos</h2>
+      
+      <div class="filters">
+        <div class="filter-group">
+          <label>Mes</label>
+          <select id="filter-costo-mes" onchange="renderizarReporteCostos()">
+            <option value="1">Enero</option>
+            <option value="2">Febrero</option>
+            <option value="3">Marzo</option>
+            <option value="4">Abril</option>
+            <option value="5">Mayo</option>
+            <option value="6">Junio</option>
+            <option value="7">Julio</option>
+            <option value="8">Agosto</option>
+            <option value="9">Septiembre</option>
+            <option value="10">Octubre</option>
+            <option value="11">Noviembre</option>
+            <option value="12">Diciembre</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Año</label>
+          <select id="filter-costo-anio" onchange="renderizarReporteCostos()">
+            <!-- Se llenará con JavaScript -->
+          </select>
+        </div>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon">💰</div>
+          <div class="stat-content">
+            <div class="stat-label">Total del Mes</div>
+            <div class="stat-value" id="costo-total-mes">$0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">📊</div>
+          <div class="stat-content">
+            <div class="stat-label">Promedio Diario</div>
+            <div class="stat-value" id="costo-promedio-dia">$0</div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin: 2rem 0 1rem; font-family: var(--font-display); font-size: 1.25rem;">Desglose por Categoría</h3>
+
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Categoría</th>
+              <th>Monto</th>
+              <th>% del Total</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-costos-categoria">
+            <!-- Se llenará con JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 4: Exportar -->
+  <div id="tab-reportes-exportar" class="content-section">
+    <div class="card">
+      <h2 class="card-title">Exportar Datos</h2>
+      <p style="color: var(--gris-medio); margin-bottom: 2rem;">Descarga los datos del sistema en formato CSV</p>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+        
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('inventario')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">🐄</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Inventario de Animales</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Todos los animales registrados</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('produccion')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">🥛</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Producción de Leche</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Historial de producción</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('costos')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">💰</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Conceptos de Costos</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Estructura de costos</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('recursos')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">📦</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Inventario de Recursos</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Stock y valores</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('potreros')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">🌱</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Potreros</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Gestión de potreros</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('personal')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">👥</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Personal</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Empleados y nómina</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('sanidad')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">💉</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Sanidad</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Vacunas y tratamientos</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar CSV</button>
+        </div>
+
+        <div class="card" style="background: var(--crema); cursor: pointer;" onclick="exportarDatos('completo')">
+          <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+            <div style="font-size: 2rem;">📊</div>
+            <div>
+              <h3 style="font-family: var(--font-display); font-size: 1.25rem; margin-bottom: 0.25rem;">Reporte Completo</h3>
+              <p style="font-size: 0.875rem; color: var(--gris-medio);">Todos los módulos</p>
+            </div>
+          </div>
+          <button class="btn btn-primary" style="width: 100%;">📥 Descargar Todo</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
 
   <!-- ==========================================
        MODALES
@@ -5272,6 +6659,1555 @@ abrirModulo = function(nombreModulo) {
   }
 };
 
+
+// ==========================================
+// MÓDULO 6: POTREROS Y PASTOS - JAVASCRIPT
+// ==========================================
+
+let potreros = [];
+let rotaciones = [];
+let manejoPotreros = [];
+
+function inicializarModuloPotreros() {
+  potreros = DataStore.load('potreros') || [];
+  rotaciones = DataStore.load('rotaciones') || [];
+  manejoPotreros = DataStore.load('manejo_potreros') || [];
+  
+  configurarFormularioPotreros();
+  actualizarEstadisticasPotreros();
+  renderizarPotreros();
+  actualizarSelectsPotreros();
+  
+  const codigoInput = document.getElementById('potrero-codigo');
+  if (codigoInput) {
+    codigoInput.value = generarCodigoPotrero();
+  }
+}
+
+function generarCodigoPotrero() {
+  const num = potreros.length + 1;
+  return `P${num.toString().padStart(3, '0')}`;
+}
+
+function configurarFormularioPotreros() {
+  const form = document.getElementById('form-potrero');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      if (potreros.find(p => p.codigo === datos.codigo)) {
+        mostrarNotificacion('Ya existe un potrero con ese código', 'error');
+        return;
+      }
+      
+      const nuevoPotrero = {
+        ...datos,
+        fecha_registro: obtenerFechaHoy(),
+        area: parseFloat(datos.area),
+        capacidad: parseInt(datos.capacidad) || 0,
+        dias_descanso: parseInt(datos.dias_descanso) || 30
+      };
+      
+      potreros.push(nuevoPotrero);
+      DataStore.save('potreros', potreros);
+      
+      mostrarNotificacion(`Potrero ${datos.codigo} registrado`, 'success');
+      this.reset();
+      document.getElementById('potrero-codigo').value = generarCodigoPotrero();
+      actualizarEstadisticasPotreros();
+      renderizarPotreros();
+      actualizarSelectsPotreros();
+    };
+  }
+  
+  const formRotacion = document.getElementById('form-rotacion-potrero');
+  if (formRotacion) {
+    formRotacion.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const rotacion = {
+        id: Date.now(),
+        ...datos,
+        num_animales: parseInt(datos.num_animales)
+      };
+      
+      rotaciones.push(rotacion);
+      DataStore.save('rotaciones', rotaciones);
+      
+      // Actualizar estado del potrero
+      const potrero = potreros.find(p => p.codigo === datos.potrero_codigo);
+      if (potrero) {
+        if (datos.tipo === 'Entrada') {
+          potrero.estado = 'En Uso';
+          potrero.ultima_rotacion = datos.fecha;
+        } else if (datos.tipo === 'Salida') {
+          potrero.estado = 'Descanso';
+        }
+        DataStore.save('potreros', potreros);
+      }
+      
+      mostrarNotificacion('Rotación registrada', 'success');
+      this.reset();
+      document.getElementById('rotacion-fecha').value = obtenerFechaHoy();
+      renderizarRotaciones();
+      renderizarPotreros();
+      actualizarEstadisticasPotreros();
+    };
+  }
+  
+  const formManejo = document.getElementById('form-manejo-potrero');
+  if (formManejo) {
+    formManejo.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const manejo = {
+        id: Date.now(),
+        ...datos,
+        costo: parseFloat(datos.costo) || 0
+      };
+      
+      manejoPotreros.push(manejo);
+      DataStore.save('manejo_potreros', manejoPotreros);
+      
+      mostrarNotificacion('Actividad de manejo registrada', 'success');
+      this.reset();
+      document.getElementById('manejo-potrero-fecha').value = obtenerFechaHoy();
+      renderizarManejoPotreros();
+    };
+  }
+  
+  // Inicializar fechas
+  const fechaRotacion = document.getElementById('rotacion-fecha');
+  const fechaManejo = document.getElementById('manejo-potrero-fecha');
+  const hoy = obtenerFechaHoy();
+  
+  if (fechaRotacion) fechaRotacion.value = hoy;
+  if (fechaManejo) fechaManejo.value = hoy;
+}
+
+function cambiarTabPotreros(tabName) {
+  document.querySelectorAll('#modulo-potreros .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-potreros .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-potreros-${tabName}`).classList.add('active');
+  
+  if (tabName === 'listado') {
+    renderizarPotreros();
+  } else if (tabName === 'rotacion') {
+    renderizarRotaciones();
+  } else if (tabName === 'manejo') {
+    renderizarManejoPotreros();
+  }
+}
+
+function renderizarPotreros(datos = null) {
+  const tbody = document.getElementById('tabla-potreros');
+  const empty = document.getElementById('empty-potreros');
+  
+  if (!tbody) return;
+  
+  const pots = datos || potreros;
+  
+  if (pots.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = pots.map(pot => `
+    <tr>
+      <td><strong>${pot.codigo}</strong></td>
+      <td>${pot.nombre}</td>
+      <td>${pot.area} ha</td>
+      <td><span class="badge ${obtenerBadgeEstadoPotrero(pot.estado)}">${pot.estado}</span></td>
+      <td>${pot.tipo_pasto || '-'}</td>
+      <td>${pot.capacidad}</td>
+      <td>${pot.ultima_rotacion ? formatearFecha(pot.ultima_rotacion) : '-'}</td>
+      <td class="table-actions">
+        <button class="btn-icon" onclick="verDetallesPotrero('${pot.codigo}')" title="Ver detalles">
+          👁️
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function obtenerBadgeEstadoPotrero(estado) {
+  const badges = {
+    'Disponible': 'badge-produccion',
+    'En Uso': 'badge-levante',
+    'Descanso': 'badge-novilla',
+    'Mantenimiento': 'badge-secas'
+  };
+  return badges[estado] || 'badge-cria';
+}
+
+function filtrarPotreros() {
+  const estado = document.getElementById('filter-potrero-estado')?.value;
+  const buscar = document.getElementById('filter-potrero-buscar')?.value.toLowerCase();
+  
+  let filtrados = potreros;
+  
+  if (estado) filtrados = filtrados.filter(p => p.estado === estado);
+  if (buscar) {
+    filtrados = filtrados.filter(p => 
+      p.codigo.toLowerCase().includes(buscar) ||
+      p.nombre.toLowerCase().includes(buscar)
+    );
+  }
+  
+  renderizarPotreros(filtrados);
+}
+
+function renderizarRotaciones() {
+  const tbody = document.getElementById('tabla-rotaciones');
+  const empty = document.getElementById('empty-rotaciones');
+  
+  if (!tbody) return;
+  
+  const rots = rotaciones.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  if (rots.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = rots.map(rot => {
+    const potrero = potreros.find(p => p.codigo === rot.potrero_codigo);
+    return `
+      <tr>
+        <td>${formatearFecha(rot.fecha)}</td>
+        <td>${potrero ? potrero.nombre : rot.potrero_codigo}</td>
+        <td><span class="badge ${rot.tipo === 'Entrada' ? 'badge-produccion' : 'badge-secas'}">${rot.tipo}</span></td>
+        <td>${rot.num_animales}</td>
+        <td>${rot.observaciones || '-'}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function renderizarManejoPotreros() {
+  const tbody = document.getElementById('tabla-manejo-potreros');
+  const empty = document.getElementById('empty-manejo-potreros');
+  
+  if (!tbody) return;
+  
+  const manejos = manejoPotreros.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  if (manejos.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = manejos.map(man => {
+    const potrero = potreros.find(p => p.codigo === man.potrero_codigo);
+    return `
+      <tr>
+        <td>${formatearFecha(man.fecha)}</td>
+        <td>${potrero ? potrero.nombre : man.potrero_codigo}</td>
+        <td><span class="badge badge-cria">${man.tipo_actividad}</span></td>
+        <td>$${parseFloat(man.costo).toLocaleString()}</td>
+        <td>${man.descripcion}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function actualizarSelectsPotreros() {
+  const selects = [
+    document.getElementById('rotacion-potrero'),
+    document.getElementById('manejo-potrero-select')
+  ];
+  
+  const opciones = '<option value="">Seleccione un potrero...</option>' +
+    potreros.map(p => `
+      <option value="${p.codigo}">${p.nombre} (${p.codigo})</option>
+    `).join('');
+  
+  selects.forEach(select => {
+    if (select) select.innerHTML = opciones;
+  });
+}
+
+function actualizarEstadisticasPotreros() {
+  const total = potreros.length;
+  const enUso = potreros.filter(p => p.estado === 'En Uso').length;
+  const descanso = potreros.filter(p => p.estado === 'Descanso').length;
+  const areaTotal = potreros.reduce((sum, p) => sum + parseFloat(p.area), 0);
+  
+  const elemTotal = document.getElementById('stat-potreros-total');
+  const elemUso = document.getElementById('stat-potreros-uso');
+  const elemDescanso = document.getElementById('stat-potreros-descanso');
+  const elemArea = document.getElementById('stat-area-total');
+  
+  if (elemTotal) elemTotal.textContent = total;
+  if (elemUso) elemUso.textContent = enUso;
+  if (elemDescanso) elemDescanso.textContent = descanso;
+  if (elemArea) elemArea.textContent = areaTotal.toFixed(1);
+}
+
+function verDetallesPotrero(codigo) {
+  const pot = potreros.find(p => p.codigo === codigo);
+  if (!pot) return;
+  
+  alert(`
+DETALLES DEL POTRERO
+
+Código: ${pot.codigo}
+Nombre: ${pot.nombre}
+Área: ${pot.area} hectáreas
+Estado: ${pot.estado}
+Tipo de Pasto: ${pot.tipo_pasto || '-'}
+Capacidad: ${pot.capacidad} cabezas
+Días de Descanso: ${pot.dias_descanso}
+Última Rotación: ${pot.ultima_rotacion ? formatearFecha(pot.ultima_rotacion) : '-'}
+Observaciones: ${pot.observaciones || '-'}
+  `);
+}
+
+function exportarCSVPotreros() {
+  const headers = ['Código', 'Nombre', 'Área (ha)', 'Estado', 'Tipo Pasto', 'Capacidad'];
+  const rows = potreros.map(p => [
+    p.codigo,
+    p.nombre,
+    p.area,
+    p.estado,
+    p.tipo_pasto || '',
+    p.capacidad
+  ]);
+  
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `potreros_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('Archivo CSV exportado', 'success');
+}
+
+// Actualizar función openModule para módulo de potreros
+if (typeof openModule !== 'undefined') {
+  const openModuleOriginalPotreros = openModule;
+  openModule = function(moduleId) {
+    openModuleOriginalPotreros(moduleId);
+    
+    if (moduleId === 'potreros') {
+      inicializarModuloPotreros();
+    }
+  };
+}
+
+// ==========================================
+// MÓDULO 7: PERSONAL - JAVASCRIPT
+// ==========================================
+
+let empleados = [];
+let tareas = [];
+
+function inicializarModuloPersonal() {
+  empleados = DataStore.load('empleados') || [];
+  tareas = DataStore.load('tareas') || [];
+  
+  configurarFormularioPersonal();
+  actualizarEstadisticasPersonal();
+  renderizarEmpleados();
+  actualizarSelectsPersonal();
+  inicializarSelectAños();
+  
+  document.getElementById('empleado-codigo').value = generarCodigoEmpleado();
+}
+
+function generarCodigoEmpleado() {
+  const num = empleados.length + 1;
+  return `E${num.toString().padStart(3, '0')}`;
+}
+
+function configurarFormularioPersonal() {
+  const form = document.getElementById('form-empleado');
+  if (form) {
+    form.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      if (empleados.find(e => e.codigo === datos.codigo)) {
+        mostrarNotificacion('Ya existe un empleado con ese código', 'error');
+        return;
+      }
+      
+      const nuevoEmpleado = {
+        ...datos,
+        fecha_registro: obtenerFechaHoy(),
+        salario: parseFloat(datos.salario)
+      };
+      
+      empleados.push(nuevoEmpleado);
+      DataStore.save('empleados', empleados);
+      
+      mostrarNotificacion(`Empleado ${datos.codigo} registrado`, 'success');
+      this.reset();
+      document.getElementById('empleado-codigo').value = generarCodigoEmpleado();
+      actualizarEstadisticasPersonal();
+      renderizarEmpleados();
+      actualizarSelectsPersonal();
+    };
+  }
+  
+  const formTarea = document.getElementById('form-tarea');
+  if (formTarea) {
+    formTarea.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const tarea = {
+        id: Date.now(),
+        ...datos,
+        horas: parseFloat(datos.horas) || 0
+      };
+      
+      tareas.push(tarea);
+      DataStore.save('tareas', tareas);
+      
+      mostrarNotificacion('Tarea asignada', 'success');
+      this.reset();
+      document.getElementById('tarea-fecha').value = obtenerFechaHoy();
+      renderizarTareas();
+      actualizarEstadisticasPersonal();
+    };
+  }
+  
+  document.getElementById('tarea-fecha').value = obtenerFechaHoy();
+}
+
+function cambiarTabPersonal(tabName) {
+  document.querySelectorAll('#modulo-personal .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-personal .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-personal-${tabName}`).classList.add('active');
+  
+  if (tabName === 'listado') {
+    renderizarEmpleados();
+  } else if (tabName === 'tareas') {
+    renderizarTareas();
+  } else if (tabName === 'nomina') {
+    renderizarNomina();
+  }
+}
+
+function renderizarEmpleados(datos = null) {
+  const tbody = document.getElementById('tabla-empleados');
+  const empty = document.getElementById('empty-empleados');
+  
+  if (!tbody) return;
+  
+  const emps = datos || empleados;
+  
+  if (emps.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = emps.map(emp => `
+    <tr>
+      <td><strong>${emp.codigo}</strong></td>
+      <td>${emp.nombre}</td>
+      <td><span class="badge badge-cria">${emp.cargo}</span></td>
+      <td>$${parseFloat(emp.salario).toLocaleString()}</td>
+      <td><span class="badge ${obtenerBadgeEstadoEmpleado(emp.estado)}">${emp.estado}</span></td>
+      <td>${formatearFecha(emp.fecha_ingreso)}</td>
+      <td class="table-actions">
+        <button class="btn-icon" onclick="verDetallesEmpleado('${emp.codigo}')" title="Ver detalles">
+          👁️
+        </button>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function obtenerBadgeEstadoEmpleado(estado) {
+  const badges = {
+    'Activo': 'badge-produccion',
+    'Inactivo': 'badge-secas',
+    'Vacaciones': 'badge-novilla'
+  };
+  return badges[estado] || 'badge-cria';
+}
+
+function filtrarEmpleados() {
+  const cargo = document.getElementById('filter-empleado-cargo')?.value;
+  const estado = document.getElementById('filter-empleado-estado')?.value;
+  const buscar = document.getElementById('filter-empleado-buscar')?.value.toLowerCase();
+  
+  let filtrados = empleados;
+  
+  if (cargo) filtrados = filtrados.filter(e => e.cargo === cargo);
+  if (estado) filtrados = filtrados.filter(e => e.estado === estado);
+  if (buscar) {
+    filtrados = filtrados.filter(e => 
+      e.nombre.toLowerCase().includes(buscar) ||
+      e.cedula.includes(buscar)
+    );
+  }
+  
+  renderizarEmpleados(filtrados);
+}
+
+function renderizarTareas() {
+  const tbody = document.getElementById('tabla-tareas');
+  if (!tbody) return;
+  
+  const tareasOrdenadas = tareas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  tbody.innerHTML = tareasOrdenadas.map(tarea => {
+    const empleado = empleados.find(e => e.codigo === tarea.empleado_codigo);
+    return `
+      <tr>
+        <td>${formatearFecha(tarea.fecha)}</td>
+        <td>${empleado ? empleado.nombre : tarea.empleado_codigo}</td>
+        <td><span class="badge badge-levante">${tarea.tipo}</span></td>
+        <td>${tarea.horas}</td>
+        <td>${tarea.descripcion}</td>
+      </tr>
+    `;
+  }).join('');
+}
+
+function filtrarTareas() {
+  const desde = document.getElementById('filter-tarea-desde')?.value;
+  const hasta = document.getElementById('filter-tarea-hasta')?.value;
+  
+  let filtradas = tareas;
+  
+  if (desde) filtradas = filtradas.filter(t => t.fecha >= desde);
+  if (hasta) filtradas = filtradas.filter(t => t.fecha <= hasta);
+  
+  renderizarTareas();
+}
+
+function inicializarSelectAños() {
+  const select = document.getElementById('nomina-anio');
+  if (!select) return;
+  
+  const añoActual = new Date().getFullYear();
+  select.innerHTML = '';
+  for (let i = añoActual; i >= añoActual - 5; i--) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    if (i === añoActual) option.selected = true;
+    select.appendChild(option);
+  }
+  
+  const mesActual = new Date().getMonth() + 1;
+  const mesSelect = document.getElementById('nomina-mes');
+  if (mesSelect) mesSelect.value = mesActual;
+}
+
+function renderizarNomina() {
+  const mes = parseInt(document.getElementById('nomina-mes')?.value);
+  const anio = parseInt(document.getElementById('nomina-anio')?.value);
+  const container = document.getElementById('nomina-container');
+  
+  if (!container) return;
+  
+  const empleadosActivos = empleados.filter(e => e.estado === 'Activo');
+  const totalNomina = empleadosActivos.reduce((sum, e) => sum + parseFloat(e.salario), 0);
+  
+  let html = `
+    <div class="stats-bar" style="margin-bottom: 2rem;">
+      <div class="stat-card">
+        <div class="stat-label">Total Nómina</div>
+        <div class="stat-value">$${totalNomina.toLocaleString()}</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Empleados</div>
+        <div class="stat-value">${empleadosActivos.length}</div>
+      </div>
+    </div>
+    
+    <div class="table-container">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Empleado</th>
+            <th>Cargo</th>
+            <th>Salario Base</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${empleadosActivos.map(e => `
+            <tr>
+              <td><strong>${e.nombre}</strong></td>
+              <td>${e.cargo}</td>
+              <td>$${parseFloat(e.salario).toLocaleString()}</td>
+              <td><span class="badge badge-produccion">${e.estado}</span></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    </div>
+  `;
+  
+  container.innerHTML = html;
+}
+
+function actualizarSelectsPersonal() {
+  const select = document.getElementById('tarea-empleado');
+  if (!select) return;
+  
+  select.innerHTML = '<option value="">Seleccione un empleado...</option>' +
+    empleados.filter(e => e.estado === 'Activo').map(e => `
+      <option value="${e.codigo}">${e.nombre} (${e.cargo})</option>
+    `).join('');
+}
+
+function actualizarEstadisticasPersonal() {
+  const total = empleados.length;
+  const activos = empleados.filter(e => e.estado === 'Activo').length;
+  const nominaMensual = empleados.filter(e => e.estado === 'Activo')
+    .reduce((sum, e) => sum + parseFloat(e.salario), 0);
+  
+  const mesActual = new Date().getMonth() + 1;
+  const anioActual = new Date().getFullYear();
+  const tareasEsteMes = tareas.filter(t => {
+    const fecha = new Date(t.fecha);
+    return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === anioActual;
+  }).length;
+  
+  document.getElementById('stat-empleados-total').textContent = total;
+  document.getElementById('stat-empleados-activos').textContent = activos;
+  document.getElementById('stat-nomina-mes').textContent = `$${nominaMensual.toLocaleString()}`;
+  document.getElementById('stat-tareas-mes').textContent = tareasEsteMes;
+}
+
+function verDetallesEmpleado(codigo) {
+  const emp = empleados.find(e => e.codigo === codigo);
+  if (!emp) return;
+  
+  alert(`
+DETALLES DEL EMPLEADO
+
+Código: ${emp.codigo}
+Nombre: ${emp.nombre}
+Cédula: ${emp.cedula}
+Cargo: ${emp.cargo}
+Salario: $${parseFloat(emp.salario).toLocaleString()}
+Estado: ${emp.estado}
+Fecha Ingreso: ${formatearFecha(emp.fecha_ingreso)}
+Teléfono: ${emp.telefono || '-'}
+Observaciones: ${emp.observaciones || '-'}
+  `);
+}
+
+function exportarCSVEmpleados() {
+  const headers = ['Código', 'Nombre', 'Cédula', 'Cargo', 'Salario', 'Estado'];
+  const rows = empleados.map(e => [
+    e.codigo,
+    e.nombre,
+    e.cedula,
+    e.cargo,
+    e.salario,
+    e.estado
+  ]);
+  
+  const csv = [headers, ...rows]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `empleados_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion('Archivo CSV exportado', 'success');
+}
+
+// Función auxiliar para obtener fecha de hoy
+function obtenerFechaHoy() {
+  return new Date().toISOString().split('T')[0];
+}
+
+// Actualizar función openModule
+if (typeof openModule !== 'undefined') {
+  const openModuleOriginal = openModule;
+  openModule = function(moduleId) {
+    openModuleOriginal(moduleId);
+    
+    if (moduleId === 'potreros-pastos') {
+      inicializarModuloPotreros();
+    } else if (moduleId === 'personal') {
+      inicializarModuloPersonal();
+    }
+  };
+}
+
+
+// ==========================================
+// MÓDULO 8: SANIDAD Y REPRODUCCIÓN - JAVASCRIPT
+// ==========================================
+
+let vacunaciones = [];
+let tratamientos = [];
+let eventosReproductivos = [];
+
+function inicializarModuloSanidad() {
+  vacunaciones = DataStore.load('vacunaciones') || [];
+  tratamientos = DataStore.load('tratamientos') || [];
+  eventosReproductivos = DataStore.load('eventos_reproductivos') || [];
+  
+  configurarFormulariosSanidad();
+  actualizarEstadisticasSanidad();
+  renderizarVacunas();
+  actualizarSelectsAnimalesSanidad();
+  
+  const hoy = obtenerFechaHoy();
+  const fechaVacuna = document.getElementById('vacuna-fecha');
+  const fechaTratamiento = document.getElementById('tratamiento-fecha');
+  const fechaRepro = document.getElementById('repro-fecha');
+  
+  if (fechaVacuna) fechaVacuna.value = hoy;
+  if (fechaTratamiento) fechaTratamiento.value = hoy;
+  if (fechaRepro) fechaRepro.value = hoy;
+}
+
+function configurarFormulariosSanidad() {
+  // Formulario de vacunación
+  const formVacuna = document.getElementById('form-vacunacion');
+  if (formVacuna) {
+    formVacuna.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      if (datos.animal_id === 'TODOS') {
+        // Vacunación masiva
+        const animalesActivos = (inventario || []).filter(a => a.estado === 'Activo');
+        animalesActivos.forEach(animal => {
+          const vacuna = {
+            id: Date.now() + Math.random(),
+            ...datos,
+            animal_id: animal.id,
+            animal_nombre: animal.nombre || animal.id,
+            costo: parseFloat(datos.costo) || 0
+          };
+          vacunaciones.push(vacuna);
+        });
+        mostrarNotificacion(`Vacunación masiva registrada para ${animalesActivos.length} animales`, 'success');
+      } else {
+        const animal = (inventario || []).find(a => a.id === datos.animal_id);
+        const vacuna = {
+          id: Date.now(),
+          ...datos,
+          animal_nombre: animal ? (animal.nombre || animal.id) : datos.animal_id,
+          costo: parseFloat(datos.costo) || 0
+        };
+        vacunaciones.push(vacuna);
+        mostrarNotificacion('Vacunación registrada', 'success');
+      }
+      
+      DataStore.save('vacunaciones', vacunaciones);
+      this.reset();
+      document.getElementById('vacuna-fecha').value = obtenerFechaHoy();
+      renderizarVacunas();
+      actualizarEstadisticasSanidad();
+    };
+  }
+  
+  // Formulario de tratamiento
+  const formTratamiento = document.getElementById('form-tratamiento');
+  if (formTratamiento) {
+    formTratamiento.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const animal = (inventario || []).find(a => a.id === datos.animal_id);
+      const tratamiento = {
+        id: Date.now(),
+        ...datos,
+        animal_nombre: animal ? (animal.nombre || animal.id) : datos.animal_id,
+        costo: parseFloat(datos.costo) || 0,
+        dias_retiro: parseInt(datos.dias_retiro) || 0
+      };
+      
+      tratamientos.push(tratamiento);
+      DataStore.save('tratamientos', tratamientos);
+      
+      mostrarNotificacion('Tratamiento registrado', 'success');
+      this.reset();
+      document.getElementById('tratamiento-fecha').value = obtenerFechaHoy();
+      renderizarTratamientos();
+      actualizarEstadisticasSanidad();
+    };
+  }
+  
+  // Formulario de reproducción
+  const formRepro = document.getElementById('form-reproduccion');
+  if (formRepro) {
+    formRepro.onsubmit = function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const datos = Object.fromEntries(formData);
+      
+      const animal = (inventario || []).find(a => a.id === datos.animal_id);
+      const evento = {
+        id: Date.now(),
+        ...datos,
+        animal_nombre: animal ? (animal.nombre || animal.id) : datos.animal_id,
+        costo: parseFloat(datos.costo) || 0
+      };
+      
+      eventosReproductivos.push(evento);
+      DataStore.save('eventos_reproductivos', eventosReproductivos);
+      
+      mostrarNotificacion('Evento reproductivo registrado', 'success');
+      this.reset();
+      document.getElementById('repro-fecha').value = obtenerFechaHoy();
+      renderizarReproduccion();
+      actualizarEstadisticasSanidad();
+    };
+  }
+}
+
+function cambiarTabSanidad(tabName) {
+  document.querySelectorAll('#modulo-sanidad .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-sanidad .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-sanidad-${tabName}`).classList.add('active');
+  
+  if (tabName === 'vacunacion') renderizarVacunas();
+  else if (tabName === 'tratamientos') renderizarTratamientos();
+  else if (tabName === 'reproduccion') renderizarReproduccion();
+  else if (tabName === 'calendario') renderizarCalendario();
+}
+
+function renderizarVacunas() {
+  const tbody = document.getElementById('tabla-vacunas');
+  const empty = document.getElementById('empty-vacunas');
+  
+  if (!tbody) return;
+  
+  const vacunas = vacunaciones.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  if (vacunas.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = vacunas.map(v => `
+    <tr>
+      <td>${formatearFecha(v.fecha)}</td>
+      <td>${v.animal_nombre}</td>
+      <td><span class="badge badge-levante">${v.tipo_vacuna}</span></td>
+      <td>${v.proxima_dosis ? formatearFecha(v.proxima_dosis) : '-'}</td>
+      <td>$${parseFloat(v.costo).toLocaleString()}</td>
+      <td>${v.observaciones || '-'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderizarTratamientos() {
+  const tbody = document.getElementById('tabla-tratamientos');
+  const empty = document.getElementById('empty-tratamientos');
+  
+  if (!tbody) return;
+  
+  const trats = tratamientos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  if (trats.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = trats.map(t => `
+    <tr>
+      <td>${formatearFecha(t.fecha)}</td>
+      <td>${t.animal_nombre}</td>
+      <td><span class="badge badge-cria">${t.tipo}</span></td>
+      <td>${t.medicamento || '-'}</td>
+      <td>${t.dias_retiro || 0}</td>
+      <td>$${parseFloat(t.costo).toLocaleString()}</td>
+    </tr>
+  `).join('');
+}
+
+function renderizarReproduccion() {
+  const tbody = document.getElementById('tabla-reproduccion');
+  const empty = document.getElementById('empty-reproduccion');
+  
+  if (!tbody) return;
+  
+  const eventos = eventosReproductivos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
+  
+  if (eventos.length === 0) {
+    tbody.innerHTML = '';
+    if (empty) empty.classList.remove('hidden');
+    return;
+  }
+  
+  if (empty) empty.classList.add('hidden');
+  
+  tbody.innerHTML = eventos.map(e => `
+    <tr>
+      <td>${formatearFecha(e.fecha)}</td>
+      <td>${e.animal_nombre}</td>
+      <td><span class="badge badge-novilla">${e.tipo_evento}</span></td>
+      <td>${e.resultado || '-'}</td>
+      <td>${e.observaciones || '-'}</td>
+    </tr>
+  `).join('');
+}
+
+function renderizarCalendario() {
+  const container = document.getElementById('calendario-container');
+  if (!container) return;
+  
+  const dias = parseInt(document.getElementById('filter-calendario-dias')?.value) || 30;
+  const hoy = new Date();
+  const fechaLimite = new Date(hoy.getTime() + dias * 24 * 60 * 60 * 1000);
+  
+  const proximasVacunas = vacunaciones.filter(v => {
+    if (!v.proxima_dosis) return false;
+    const fecha = new Date(v.proxima_dosis);
+    return fecha >= hoy && fecha <= fechaLimite;
+  }).sort((a, b) => new Date(a.proxima_dosis) - new Date(b.proxima_dosis));
+  
+  const proximosPartos = eventosReproductivos.filter(e => {
+    if (!e.fecha_probable_parto) return false;
+    const fecha = new Date(e.fecha_probable_parto);
+    return fecha >= hoy && fecha <= fechaLimite;
+  }).sort((a, b) => new Date(a.fecha_probable_parto) - new Date(b.fecha_probable_parto));
+  
+  let html = '<h3 style="margin-bottom: 1rem; font-family: var(--font-display);">Próximas Vacunaciones</h3>';
+  
+  if (proximasVacunas.length === 0) {
+    html += '<p style="color: var(--gris-medio);">No hay vacunaciones programadas</p>';
+  } else {
+    html += '<div class="table-container"><table class="data-table"><thead><tr><th>Fecha</th><th>Animal</th><th>Vacuna</th></tr></thead><tbody>';
+    proximasVacunas.forEach(v => {
+      html += `<tr><td>${formatearFecha(v.proxima_dosis)}</td><td>${v.animal_nombre}</td><td>${v.tipo_vacuna}</td></tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  
+  html += '<h3 style="margin: 2rem 0 1rem; font-family: var(--font-display);">Próximos Partos</h3>';
+  
+  if (proximosPartos.length === 0) {
+    html += '<p style="color: var(--gris-medio);">No hay partos programados</p>';
+  } else {
+    html += '<div class="table-container"><table class="data-table"><thead><tr><th>Fecha Probable</th><th>Animal</th></tr></thead><tbody>';
+    proximosPartos.forEach(p => {
+      html += `<tr><td>${formatearFecha(p.fecha_probable_parto)}</td><td>${p.animal_nombre}</td></tr>`;
+    });
+    html += '</tbody></table></div>';
+  }
+  
+  container.innerHTML = html;
+  
+  // Alertas
+  const alertasContainer = document.getElementById('alertas-sanidad-container');
+  if (alertasContainer) {
+    const alertas = [];
+    
+    const vacunasUrgentes = proximasVacunas.filter(v => {
+      const dias = Math.floor((new Date(v.proxima_dosis) - hoy) / (1000 * 60 * 60 * 24));
+      return dias <= 7;
+    });
+    
+    if (vacunasUrgentes.length > 0) {
+      alertas.push(`⚠️ ${vacunasUrgentes.length} vacuna(s) programada(s) para esta semana`);
+    }
+    
+    const partosProximos = proximosPartos.filter(p => {
+      const dias = Math.floor((new Date(p.fecha_probable_parto) - hoy) / (1000 * 60 * 60 * 24));
+      return dias <= 30;
+    });
+    
+    if (partosProximos.length > 0) {
+      alertas.push(`🤰 ${partosProximos.length} parto(s) esperado(s) en los próximos 30 días`);
+    }
+    
+    if (alertas.length === 0) {
+      alertasContainer.innerHTML = '<p style="color: var(--gris-medio);">No hay alertas en este momento</p>';
+    } else {
+      alertasContainer.innerHTML = alertas.map(a => `
+        <div style="padding: 1rem; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; margin-bottom: 1rem;">
+          ${a}
+        </div>
+      `).join('');
+    }
+  }
+}
+
+function actualizarSelectsAnimalesSanidad() {
+  const animalesActivos = (inventario || []).filter(a => a.estado === 'Activo');
+  
+  const selectVacuna = document.getElementById('vacuna-animal');
+  const selectTratamiento = document.getElementById('tratamiento-animal');
+  const selectRepro = document.getElementById('repro-animal');
+  
+  const opciones = animalesActivos.map(a => 
+    `<option value="${a.id}">${a.nombre || a.id} (${a.etapa})</option>`
+  ).join('');
+  
+  if (selectVacuna) {
+    selectVacuna.innerHTML = '<option value="">Seleccione...</option><option value="TODOS">Todos los animales (vacunación masiva)</option>' + opciones;
+  }
+  if (selectTratamiento) {
+    selectTratamiento.innerHTML = '<option value="">Seleccione un animal...</option>' + opciones;
+  }
+  if (selectRepro) {
+    selectRepro.innerHTML = '<option value="">Seleccione...</option>' + opciones;
+  }
+  
+  // Filtros
+  const filterVacuna = document.getElementById('filter-vacuna-animal');
+  if (filterVacuna) {
+    filterVacuna.innerHTML = '<option value="">Todos</option>' + opciones;
+  }
+}
+
+function actualizarEstadisticasSanidad() {
+  const hoy = new Date();
+  const mesActual = hoy.getMonth();
+  const anioActual = hoy.getFullYear();
+  
+  const eventosEsteMes = [
+    ...vacunaciones.filter(v => {
+      const fecha = new Date(v.fecha);
+      return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
+    }),
+    ...tratamientos.filter(t => {
+      const fecha = new Date(t.fecha);
+      return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
+    })
+  ];
+  
+  const fechaLimite = new Date(hoy.getTime() + 30 * 24 * 60 * 60 * 1000);
+  const proximosEventos = vacunaciones.filter(v => {
+    if (!v.proxima_dosis) return false;
+    const fecha = new Date(v.proxima_dosis);
+    return fecha >= hoy && fecha <= fechaLimite;
+  }).length;
+  
+  const prenadas = eventosReproductivos.filter(e => 
+    e.tipo_evento === 'Diagnóstico Preñez' && e.resultado === 'Positivo'
+  ).length;
+  
+  const partosEsteanio = eventosReproductivos.filter(e => {
+    if (e.tipo_evento !== 'Parto') return false;
+    const fecha = new Date(e.fecha);
+    return fecha.getFullYear() === anioActual;
+  }).length;
+  
+  document.getElementById('stat-sanidad-mes').textContent = eventosEsteMes.length;
+  document.getElementById('stat-sanidad-proximos').textContent = proximosEventos;
+  document.getElementById('stat-prenadas').textContent = prenadas;
+  document.getElementById('stat-partos-anio').textContent = partosEsteanio;
+}
+
+function toggleCamposReproduccion() {
+  const tipo = document.getElementById('repro-tipo')?.value;
+  
+  const campoToro = document.getElementById('campo-toro');
+  const campoResultado = document.getElementById('campo-resultado');
+  const campoFechaParto = document.getElementById('campo-fecha-parto');
+  const campoSexoCria = document.getElementById('campo-sexo-cria');
+  
+  // Ocultar todos
+  [campoToro, campoResultado, campoFechaParto, campoSexoCria].forEach(campo => {
+    if (campo) campo.style.display = 'none';
+  });
+  
+  // Mostrar según tipo
+  if (tipo === 'Inseminación' || tipo === 'Monta Natural') {
+    if (campoToro) campoToro.style.display = 'block';
+  } else if (tipo === 'Diagnóstico Preñez') {
+    if (campoResultado) campoResultado.style.display = 'block';
+    if (campoFechaParto) campoFechaParto.style.display = 'block';
+  } else if (tipo === 'Parto') {
+    if (campoSexoCria) campoSexoCria.style.display = 'block';
+  }
+}
+
+function filtrarVacunas() {
+  const animalId = document.getElementById('filter-vacuna-animal')?.value;
+  const tipo = document.getElementById('filter-vacuna-tipo')?.value;
+  
+  let filtradas = vacunaciones;
+  
+  if (animalId) filtradas = filtradas.filter(v => v.animal_id === animalId);
+  if (tipo) filtradas = filtradas.filter(v => v.tipo_vacuna === tipo);
+  
+  renderizarVacunas();
+}
+
+// ==========================================
+// MÓDULO 9: REPORTES Y ANÁLISIS - JAVASCRIPT
+// ==========================================
+
+function inicializarModuloReportes() {
+  actualizarDashboardEjecutivo();
+  renderizarResumenGeneral();
+  inicializarSelectAñosCostos();
+}
+
+function cambiarTabReportes(tabName) {
+  document.querySelectorAll('#modulo-reportes .tab-button').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  document.querySelectorAll('#modulo-reportes .content-section').forEach(section => {
+    section.classList.remove('active');
+  });
+  document.getElementById(`tab-reportes-${tabName}`).classList.add('active');
+  
+  if (tabName === 'resumen') renderizarResumenGeneral();
+  else if (tabName === 'produccion') renderizarReporteProduccion();
+  else if (tabName === 'costos') renderizarReporteCostos();
+}
+
+function actualizarDashboardEjecutivo() {
+  // Total animales
+  const totalAnimales = (inventario || []).filter(a => a.estado === 'Activo').length;
+  document.getElementById('report-total-animales').textContent = totalAnimales;
+  
+  // Producción hoy
+  const hoy = obtenerFechaHoy();
+  const produccionHoy = (typeof produccionLeche !== 'undefined' ? produccionLeche : [])
+    .filter(p => p.fecha === hoy)
+    .reduce((sum, p) => sum + parseFloat(p.total || 0), 0);
+  document.getElementById('report-produccion-hoy').textContent = produccionHoy.toFixed(1);
+  
+  // Costos este mes
+  const fechaActual = new Date();
+  const mesActual = fechaActual.getMonth();
+  const anioActual = fechaActual.getFullYear();
+  
+  let costosDelMes = 0;
+  
+  // Sumar de recursos
+  if (typeof consumosRecursos !== 'undefined') {
+    costosDelMes += consumosRecursos.filter(c => {
+      const fecha = new Date(c.fecha);
+      return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
+    }).reduce((sum, c) => sum + parseFloat(c.costo_total || 0), 0);
+  }
+  
+  // Sumar nómina
+  if (typeof empleados !== 'undefined') {
+    costosDelMes += empleados.filter(e => e.estado === 'Activo')
+      .reduce((sum, e) => sum + parseFloat(e.salario || 0), 0);
+  }
+  
+  document.getElementById('report-costos-mes').textContent = `$${costosDelMes.toLocaleString()}`;
+  
+  // Potreros en uso
+  const potrerosEnUso = (typeof potreros !== 'undefined' ? potreros : [])
+    .filter(p => p.estado === 'En Uso').length;
+  document.getElementById('report-potreros-uso').textContent = potrerosEnUso;
+}
+
+function renderizarResumenGeneral() {
+  // Por etapa
+  const activos = (inventario || []).filter(a => a.estado === 'Activo');
+  const porEtapa = {
+    'Cría': activos.filter(a => a.etapa === 'Cría').length,
+    'Recría': activos.filter(a => a.etapa === 'Recría').length,
+    'Levante': activos.filter(a => a.etapa === 'Levante').length,
+    'Novilla Vientre': activos.filter(a => a.etapa === 'Novilla Vientre').length,
+    'Producción': activos.filter(a => a.etapa === 'Producción').length,
+    'Secas': activos.filter(a => a.etapa === 'Secas').length
+  };
+  
+  document.getElementById('resumen-cria').textContent = porEtapa['Cría'];
+  document.getElementById('resumen-recria').textContent = porEtapa['Recría'];
+  document.getElementById('resumen-levante').textContent = porEtapa['Levante'];
+  document.getElementById('resumen-novilla').textContent = porEtapa['Novilla Vientre'];
+  document.getElementById('resumen-produccion').textContent = porEtapa['Producción'];
+  document.getElementById('resumen-secas').textContent = porEtapa['Secas'];
+  
+  // Recursos
+  const tbody = document.getElementById('tabla-recursos-resumen');
+  if (tbody && typeof recursos !== 'undefined') {
+    const recursosConStock = recursos.filter(r => parseFloat(r.stock) > 0);
+    
+    if (recursosConStock.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--gris-medio);">No hay recursos con stock</td></tr>';
+    } else {
+      tbody.innerHTML = recursosConStock.slice(0, 10).map(r => {
+        const stock = parseFloat(r.stock);
+        const stockMinimo = parseFloat(r.stock_minimo) || 0;
+        const estado = stock <= stockMinimo ? 
+          '<span class="badge badge-vendido">Bajo</span>' : 
+          '<span class="badge badge-produccion">OK</span>';
+        
+        return `
+          <tr>
+            <td>${r.nombre}</td>
+            <td>${stock} ${r.unidad}</td>
+            <td>$${parseFloat(r.valor_unitario * stock).toLocaleString()}</td>
+            <td>${estado}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+  }
+  
+  // Personal
+  if (typeof empleados !== 'undefined') {
+    const empleadosActivos = empleados.filter(e => e.estado === 'Activo');
+    const nominaTotal = empleadosActivos.reduce((sum, e) => sum + parseFloat(e.salario), 0);
+    
+    document.getElementById('resumen-empleados').textContent = empleadosActivos.length;
+    document.getElementById('resumen-nomina').textContent = `$${nominaTotal.toLocaleString()}`;
+  }
+  
+  if (typeof tareas !== 'undefined') {
+    const hoy = new Date();
+    const mesActual = hoy.getMonth();
+    const anioActual = hoy.getFullYear();
+    
+    const tareasEsteMes = tareas.filter(t => {
+      const fecha = new Date(t.fecha);
+      return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
+    }).length;
+    
+    document.getElementById('resumen-tareas').textContent = tareasEsteMes;
+  }
+}
+
+function renderizarReporteProduccion() {
+  const dias = parseInt(document.getElementById('filter-prod-periodo')?.value) || 30;
+  const hoy = new Date();
+  const fechaInicio = new Date(hoy.getTime() - dias * 24 * 60 * 60 * 1000);
+  
+  if (typeof produccionLeche === 'undefined') {
+    document.getElementById('prod-total').textContent = '0';
+    document.getElementById('prod-promedio').textContent = '0';
+    document.getElementById('prod-costo-litro').textContent = '$0';
+    document.getElementById('prod-vacas').textContent = '0';
+    return;
+  }
+  
+  const produccionPeriodo = produccionLeche.filter(p => {
+    const fecha = new Date(p.fecha);
+    return fecha >= fechaInicio && fecha <= hoy;
+  });
+  
+  const totalLitros = produccionPeriodo.reduce((sum, p) => sum + parseFloat(p.total || 0), 0);
+  const promedioDiario = produccionPeriodo.length > 0 ? totalLitros / produccionPeriodo.length : 0;
+  
+  const vacasProduccion = (inventario || []).filter(a => a.etapa === 'Producción' && a.estado === 'Activo').length;
+  
+  document.getElementById('prod-total').textContent = totalLitros.toFixed(1);
+  document.getElementById('prod-promedio').textContent = promedioDiario.toFixed(1);
+  document.getElementById('prod-costo-litro').textContent = `$${(typeof costoPromedioPorLitro !== 'undefined' ? costoPromedioPorLitro : 0).toFixed(2)}`;
+  document.getElementById('prod-vacas').textContent = vacasProduccion;
+}
+
+function renderizarReporteCostos() {
+  const mes = parseInt(document.getElementById('filter-costo-mes')?.value) || new Date().getMonth() + 1;
+  const anio = parseInt(document.getElementById('filter-costo-anio')?.value) || new Date().getFullYear();
+  
+  let totalMes = 0;
+  const categorias = {};
+  
+  // Consumos de recursos
+  if (typeof consumosRecursos !== 'undefined') {
+    consumosRecursos.filter(c => {
+      const fecha = new Date(c.fecha);
+      return fecha.getMonth() + 1 === mes && fecha.getFullYear() === anio;
+    }).forEach(c => {
+      const costo = parseFloat(c.costo_total || 0);
+      totalMes += costo;
+      categorias['Recursos'] = (categorias['Recursos'] || 0) + costo;
+    });
+  }
+  
+  // Nómina
+  if (typeof empleados !== 'undefined') {
+    const nominaMes = empleados.filter(e => e.estado === 'Activo')
+      .reduce((sum, e) => sum + parseFloat(e.salario || 0), 0);
+    totalMes += nominaMes;
+    categorias['Personal'] = nominaMes;
+  }
+  
+  // Sanidad
+  if (typeof vacunaciones !== 'undefined' && typeof tratamientos !== 'undefined') {
+    const costosanidad = [
+      ...vacunaciones.filter(v => {
+        const fecha = new Date(v.fecha);
+        return fecha.getMonth() + 1 === mes && fecha.getFullYear() === anio;
+      }),
+      ...tratamientos.filter(t => {
+        const fecha = new Date(t.fecha);
+        return fecha.getMonth() + 1 === mes && fecha.getFullYear() === anio;
+      })
+    ].reduce((sum, e) => sum + parseFloat(e.costo || 0), 0);
+    
+    totalMes += costosanidad;
+    categorias['Sanidad'] = costosanidad;
+  }
+  
+  // Manejo de potreros
+  if (typeof manejoPotreros !== 'undefined') {
+    const costoPotreros = manejoPotreros.filter(m => {
+      const fecha = new Date(m.fecha);
+      return fecha.getMonth() + 1 === mes && fecha.getFullYear() === anio;
+    }).reduce((sum, m) => sum + parseFloat(m.costo || 0), 0);
+    
+    totalMes += costoPotreros;
+    categorias['Potreros'] = costoPotreros;
+  }
+  
+  document.getElementById('costo-total-mes').textContent = `$${totalMes.toLocaleString()}`;
+  
+  const diasDelMes = new Date(anio, mes, 0).getDate();
+  const promedioDia = totalMes / diasDelMes;
+  document.getElementById('costo-promedio-dia').textContent = `$${promedioDia.toLocaleString()}`;
+  
+  // Tabla por categoría
+  const tbody = document.getElementById('tabla-costos-categoria');
+  if (tbody) {
+    tbody.innerHTML = Object.keys(categorias).map(cat => {
+      const monto = categorias[cat];
+      const porcentaje = totalMes > 0 ? (monto / totalMes * 100).toFixed(1) : 0;
+      
+      return `
+        <tr>
+          <td><strong>${cat}</strong></td>
+          <td>$${monto.toLocaleString()}</td>
+          <td>${porcentaje}%</td>
+        </tr>
+      `;
+    }).join('');
+  }
+}
+
+function inicializarSelectAñosCostos() {
+  const select = document.getElementById('filter-costo-anio');
+  if (!select) return;
+  
+  const añoActual = new Date().getFullYear();
+  select.innerHTML = '';
+  for (let i = añoActual; i >= añoActual - 5; i--) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    if (i === añoActual) option.selected = true;
+    select.appendChild(option);
+  }
+  
+  const mesActual = new Date().getMonth() + 1;
+  const mesSelect = document.getElementById('filter-costo-mes');
+  if (mesSelect) mesSelect.value = mesActual;
+}
+
+function exportarDatos(tipo) {
+  let datos = [];
+  let headers = [];
+  let filename = '';
+  
+  switch(tipo) {
+    case 'inventario':
+      if (typeof inventario !== 'undefined') {
+        headers = ['ID', 'Nombre', 'Etapa', 'Edad', 'Estado', 'Fecha Nacimiento'];
+        datos = inventario.map(a => [
+          a.id,
+          a.nombre || '',
+          a.etapa,
+          calcularEdad(a.fecha_nacimiento),
+          a.estado,
+          a.fecha_nacimiento
+        ]);
+        filename = 'inventario';
+      }
+      break;
+      
+    case 'produccion':
+      if (typeof produccionLeche !== 'undefined') {
+        headers = ['Fecha', 'Total Litros', 'AM', 'PM', 'Precio/Litro'];
+        datos = produccionLeche.map(p => [
+          p.fecha,
+          p.total || 0,
+          p.litros_am || 0,
+          p.litros_pm || 0,
+          p.precio_litro || 0
+        ]);
+        filename = 'produccion_leche';
+      }
+      break;
+      
+    case 'costos':
+      if (typeof conceptosCostos !== 'undefined') {
+        headers = ['Concepto', 'Categoría', 'Tipo', 'Clasificación', 'Monto'];
+        datos = conceptosCostos.map(c => [
+          c.concepto,
+          c.categoria,
+          c.tipo,
+          c.clasificacion,
+          c.monto || 0
+        ]);
+        filename = 'conceptos_costos';
+      }
+      break;
+      
+    case 'recursos':
+      if (typeof recursos !== 'undefined') {
+        headers = ['Código', 'Nombre', 'Tipo', 'Stock', 'Unidad', 'Valor Unitario'];
+        datos = recursos.map(r => [
+          r.codigo,
+          r.nombre,
+          r.tipo,
+          r.stock || 0,
+          r.unidad,
+          r.valor_unitario || 0
+        ]);
+        filename = 'recursos';
+      }
+      break;
+      
+    case 'potreros':
+      if (typeof potreros !== 'undefined') {
+        headers = ['Código', 'Nombre', 'Área (ha)', 'Estado', 'Tipo Pasto', 'Capacidad'];
+        datos = potreros.map(p => [
+          p.codigo,
+          p.nombre,
+          p.area,
+          p.estado,
+          p.tipo_pasto || '',
+          p.capacidad || 0
+        ]);
+        filename = 'potreros';
+      }
+      break;
+      
+    case 'personal':
+      if (typeof empleados !== 'undefined') {
+        headers = ['Código', 'Nombre', 'Cargo', 'Salario', 'Estado', 'Fecha Ingreso'];
+        datos = empleados.map(e => [
+          e.codigo,
+          e.nombre,
+          e.cargo,
+          e.salario || 0,
+          e.estado,
+          e.fecha_ingreso
+        ]);
+        filename = 'personal';
+      }
+      break;
+      
+    case 'sanidad':
+      if (typeof vacunaciones !== 'undefined' && typeof tratamientos !== 'undefined') {
+        headers = ['Fecha', 'Animal', 'Tipo', 'Evento', 'Costo'];
+        datos = [
+          ...vacunaciones.map(v => [v.fecha, v.animal_nombre, 'Vacuna', v.tipo_vacuna, v.costo || 0]),
+          ...tratamientos.map(t => [t.fecha, t.animal_nombre, 'Tratamiento', t.tipo, t.costo || 0])
+        ];
+        filename = 'sanidad';
+      }
+      break;
+      
+    case 'completo':
+      mostrarNotificacion('Exportando todos los datos...', 'info');
+      ['inventario', 'produccion', 'costos', 'recursos', 'potreros', 'personal', 'sanidad'].forEach(t => {
+        setTimeout(() => exportarDatos(t), 500);
+      });
+      return;
+  }
+  
+  if (datos.length === 0) {
+    mostrarNotificacion('No hay datos para exportar', 'warning');
+    return;
+  }
+  
+  const csv = [headers, ...datos]
+    .map(row => row.map(cell => `"${cell}"`).join(','))
+    .join('\n');
+  
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `${filename}_${obtenerFechaHoy()}.csv`;
+  link.click();
+  URL.revokeObjectURL(url);
+  
+  mostrarNotificacion(`Datos de ${filename} exportados`, 'success');
+}
+
+// Actualizar función abrirModulo
+if (typeof abrirModulo !== 'undefined') {
+  const abrirModuloOriginal = abrirModulo;
+  window.abrirModulo = function(nombreModulo) {
+    abrirModuloOriginal(nombreModulo);
+    
+    if (nombreModulo === 'sanidad') {
+      inicializarModuloSanidad();
+    } else if (nombreModulo === 'reportes') {
+      inicializarModuloReportes();
+    }
+  };
+}
 
     document.addEventListener('DOMContentLoaded', function() {
       console.log('🚀 Sistema de Costos - Hacienda La Montaña');
